@@ -1,26 +1,54 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* OM brand palette — water + well-being */
+  --om-blue: #4aa7d0;
+  --om-blue-dark: #2e7fa3;
+  --om-blue-soft: #e8f4fa;
+  --om-sand: #f5f0e6;
+  --om-cream: #faf7f1;
+  --om-ink: #1a2d3a;
+  --om-muted: #6b7d89;
+  --om-green: #5a8c6b;
+  --om-coral: #e07a5f;
+
+  --background: var(--om-cream);
+  --foreground: var(--om-ink);
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-om-blue: var(--om-blue);
+  --color-om-blue-dark: var(--om-blue-dark);
+  --color-om-blue-soft: var(--om-blue-soft);
+  --color-om-sand: var(--om-sand);
+  --color-om-cream: var(--om-cream);
+  --color-om-ink: var(--om-ink);
+  --color-om-muted: var(--om-muted);
+  --color-om-green: var(--om-green);
+  --color-om-coral: var(--om-coral);
+  --font-sans: var(--font-inter);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
-body {
+html, body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-inter), -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+.container-xl {
+  max-width: 1280px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+}
+
+@media (min-width: 768px) {
+  .container-xl {
+    padding-left: 2.5rem;
+    padding-right: 2.5rem;
+  }
 }
