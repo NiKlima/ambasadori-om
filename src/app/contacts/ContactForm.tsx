@@ -3,6 +3,16 @@
 import { useState, useTransition } from "react";
 import { submitContact } from "./actions";
 
+const FIELD_LABEL_STYLE: React.CSSProperties = {
+  fontFamily: "var(--font-display)",
+  fontSize: 11,
+  fontWeight: 800,
+  letterSpacing: "0.08em",
+  textTransform: "uppercase",
+  color: "var(--om-ink-500)",
+  marginBottom: 8,
+};
+
 export function ContactForm() {
   const [pending, start] = useTransition();
   const [error, setError] = useState<string | null>(null);
@@ -16,37 +26,87 @@ export function ContactForm() {
   }
 
   return (
-    <form action={handle} className="rounded-3xl bg-white p-8 space-y-4">
-      <div>
-        <label className="block text-sm font-medium mb-2">Имя</label>
-        <input name="name" required className="w-full rounded-xl border border-black/10 px-4 py-3" />
+    <form
+      action={handle}
+      className="bg-[var(--om-ink-50)] border border-[var(--om-ink-100)]"
+      style={{ padding: "32px 36px" }}
+    >
+      <div className="eyebrow">форма обратной связи</div>
+      <div className="grid mt-4" style={{ gap: 12 }}>
+        <div>
+          <div style={FIELD_LABEL_STYLE}>имя</div>
+          <input className="input" name="name" required placeholder="как тебя зовут" />
+        </div>
+        <div>
+          <div style={FIELD_LABEL_STYLE}>email</div>
+          <input className="input" name="email" type="email" required placeholder="you@email.md" />
+        </div>
+        <div>
+          <div style={FIELD_LABEL_STYLE}>сообщение</div>
+          <textarea
+            className="input"
+            name="message"
+            rows={6}
+            required
+            placeholder="о чём хочешь поговорить"
+            style={{ resize: "none", fontFamily: "var(--font-body)" }}
+          />
+        </div>
+        <label
+          className="flex items-start gap-3 cursor-pointer font-mono"
+          style={{
+            fontSize: 11,
+            color: "var(--om-ink-500)",
+            textTransform: "uppercase",
+            letterSpacing: "0.06em",
+            lineHeight: 1.55,
+          }}
+        >
+          <input
+            type="checkbox"
+            name="consent"
+            required
+            style={{ marginTop: 3 }}
+          />
+          <span>
+            согласен на обработку персональных данных по{" "}
+            <a
+              href="/privacy"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="lk"
+              style={{ display: "inline" }}
+            >
+              политике конфиденциальности
+            </a>
+            .
+          </span>
+        </label>
+        {error && (
+          <div
+            className="font-mono"
+            style={{
+              padding: "12px 16px",
+              border: "1px solid var(--om-magenta)",
+              color: "var(--om-magenta)",
+              fontSize: 12,
+              textTransform: "uppercase",
+              letterSpacing: "0.06em",
+              background: "rgba(232,55,150,0.06)",
+            }}
+          >
+            {error}
+          </div>
+        )}
+        <button
+          type="submit"
+          disabled={pending}
+          className="btn btn-blue"
+          style={{ marginTop: 6, alignSelf: "flex-start" }}
+        >
+          {pending ? "отправляем…" : "отправить →"}
+        </button>
       </div>
-      <div>
-        <label className="block text-sm font-medium mb-2">Email</label>
-        <input name="email" type="email" required className="w-full rounded-xl border border-black/10 px-4 py-3" />
-      </div>
-      <div>
-        <label className="block text-sm font-medium mb-2">Сообщение</label>
-        <textarea name="message" rows={5} required className="w-full rounded-xl border border-black/10 px-4 py-3" />
-      </div>
-      <label className="flex items-start gap-3 cursor-pointer">
-        <input type="checkbox" name="consent" required className="mt-1" />
-        <span className="text-sm text-om-muted">
-          Я согласен на обработку персональных данных согласно{" "}
-          <a href="/privacy" target="_blank" rel="noopener noreferrer" className="underline text-om-ink">
-            политике конфиденциальности
-          </a>
-          .
-        </span>
-      </label>
-      {error && <div className="rounded-2xl bg-om-coral/10 text-om-coral p-4 text-sm">{error}</div>}
-      <button
-        type="submit"
-        disabled={pending}
-        className="rounded-full bg-om-ink text-om-cream px-8 py-3 font-medium hover:bg-om-blue-dark transition disabled:opacity-50"
-      >
-        {pending ? "Отправляем…" : "Отправить"}
-      </button>
     </form>
   );
 }

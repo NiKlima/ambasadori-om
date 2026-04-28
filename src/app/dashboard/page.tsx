@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Avatar } from "@/components/Avatar";
+import { Kpi } from "@/components/ui/Kpi";
 import { createClient } from "@/lib/supabase/server";
 import { formatDate } from "@/lib/utils";
 import type { PointTransaction } from "@/lib/types";
@@ -15,7 +16,10 @@ export default async function DashboardPage() {
     .eq("id", user.id)
     .single();
 
-  const { data: lbAll } = await supabase.from("leaderboard").select("id,total_points");
+  const { data: lbAll } = await supabase
+    .from("leaderboard")
+    .select("id,total_points")
+    .order("total_points", { ascending: false });
   const totalPoints = (lbAll?.find((r) => r.id === user.id)?.total_points as number | undefined) ?? 0;
   const position = lbAll ? lbAll.findIndex((r) => r.id === user.id) + 1 : 0;
 
@@ -34,88 +38,189 @@ export default async function DashboardPage() {
 
   if (!profile) {
     return (
-      <div className="rounded-3xl bg-white p-8">
-        <h2 className="text-xl font-semibold mb-2">Профиль не настроен</h2>
-        <p className="text-om-muted">
-          Обратись к админу OM — нужно добавить тебя в программу.
-        </p>
+      <div className="container-om py-10">
+        <div className="bg-white border border-[var(--om-ink-100)] p-8">
+          <div className="eyebrow">профиль не настроен</div>
+          <h2
+            className="font-display mt-3"
+            style={{ fontWeight: 900, fontSize: 32, letterSpacing: "-0.03em" }}
+          >
+            обратись к админу OM.
+          </h2>
+          <p
+            className="mt-3"
+            style={{ color: "var(--om-ink-500)" }}
+          >
+            нужно добавить тебя в программу. напиши на{" "}
+            <a href="mailto:ambasadori@om.md" style={{ color: "var(--om-blue)" }}>
+              ambasadori@om.md
+            </a>
+            .
+          </p>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="space-y-6">
-      <div className="grid md:grid-cols-[2fr_1fr] gap-6">
-        <div className="rounded-3xl bg-white p-8">
-          <div className="flex items-start justify-between gap-4">
-            <div className="flex items-center gap-4">
-              <Avatar name={profile.full_name} photoUrl={profile.photo_url} size="lg" />
-              <div>
-                <div className="text-om-muted text-sm">Привет,</div>
-                <div className="text-2xl md:text-3xl font-semibold">{profile.full_name}</div>
-                <div className="text-om-muted text-sm mt-1">
-                  {profile.club ?? ""}{profile.sport ? ` · ${profile.sport}` : ""}
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="grid grid-cols-3 gap-4 mt-8">
-            <div>
-              <div className="text-xs uppercase text-om-muted tracking-wider">Баллы</div>
-              <div className="text-4xl font-semibold mt-1">{totalPoints}</div>
-            </div>
-            <div>
-              <div className="text-xs uppercase text-om-muted tracking-wider">Место</div>
-              <div className="text-4xl font-semibold mt-1">
-                {position ? `№${position}` : "—"}
-              </div>
-            </div>
-            <div>
-              <div className="text-xs uppercase text-om-muted tracking-wider">На модерации</div>
-              <div className="text-4xl font-semibold mt-1">{pendingSubs?.length ?? 0}</div>
+    <div className="container-om py-8 grid gap-4">
+      {/* Profile + promo code */}
+      <div className="grid md:grid-cols-[1.6fr_1fr] gap-4">
+        <div className="bg-white border border-[var(--om-ink-100)] p-8 sm:p-10 flex items-center gap-6">
+          <Avatar
+            name={profile.full_name}
+            photoUrl={profile.photo_url}
+            size="xl"
+            variant="blue"
+          />
+          <div>
+            <div className="eyebrow eyebrow-ink">привет,</div>
+            <h1
+              className="font-display"
+              style={{
+                fontWeight: 900,
+                fontSize: "clamp(36px, 5vw, 56px)",
+                letterSpacing: "-0.04em",
+                lineHeight: 0.95,
+                margin: "8px 0 6px",
+              }}
+            >
+              {profile.full_name?.toLowerCase() ?? ""}.
+            </h1>
+            <div
+              className="font-mono"
+              style={{
+                fontSize: 12,
+                color: "var(--om-ink-500)",
+                textTransform: "uppercase",
+                letterSpacing: "0.06em",
+              }}
+            >
+              {profile.club ?? "—"}
+              {profile.sport ? ` · ${profile.sport}` : ""}
+              {" · амбассадор"}
             </div>
           </div>
         </div>
 
-        <div className="rounded-3xl bg-om-ink text-om-cream p-8">
-          <div className="text-xs uppercase tracking-wider text-om-cream/60 mb-3">
-            Твой промокод
+        <div className="bg-[var(--om-ink-900)] text-white p-8 relative overflow-hidden">
+          <div className="om-stripes-white-soft" style={{ position: "absolute", inset: 0 }} />
+          <div className="relative">
+            <div className="eyebrow eyebrow-w">твой промокод</div>
+            <div
+              className="font-display mt-3"
+              style={{ fontWeight: 900, fontSize: 44, letterSpacing: "-0.02em" }}
+            >
+              {profile.promo_code ?? "—"}
+            </div>
+            <div
+              className="font-mono mt-3"
+              style={{ fontSize: 12, opacity: 0.7, lineHeight: 1.55 }}
+            >
+              клиенты вводят код при покупке OM. баллы начисляются автоматически.
+            </div>
           </div>
-          <div className="text-3xl md:text-4xl font-mono tracking-wider mb-6">
-            {profile.promo_code ?? "—"}
-          </div>
-          <p className="text-sm text-om-cream/70">
-            Подопечные вводят этот код при покупке OM. Баллы начисляются автоматически.
-          </p>
         </div>
       </div>
 
-      <div className="rounded-3xl bg-white p-8">
-        <div className="flex items-center justify-between mb-4">
-          <h2 className="text-xl font-semibold">Последние начисления</h2>
-          <Link href="/dashboard/history" className="text-om-blue-dark text-sm hover:text-om-ink">
-            Вся история →
+      {/* KPI row */}
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <Kpi label="всего баллов" value={totalPoints} variant="blue" />
+        <Kpi label="место" value={position ? `№${position}` : "—"} />
+        <Kpi
+          label="на модерации"
+          value={
+            <span style={{ color: "var(--om-magenta)" }}>
+              {pendingSubs?.length ?? 0}
+            </span>
+          }
+        />
+        <Kpi label="всего записей" value={recentTxs?.length ?? 0} />
+      </div>
+
+      {/* Recent activity */}
+      <div className="bg-white border border-[var(--om-ink-100)] p-7 sm:p-8">
+        <div className="flex justify-between items-baseline mb-5">
+          <div>
+            <div className="eyebrow">последние начисления</div>
+            <h2
+              className="font-display mt-2"
+              style={{
+                fontWeight: 900,
+                fontSize: 28,
+                letterSpacing: "-0.03em",
+                margin: 0,
+              }}
+            >
+              недавняя активность.
+            </h2>
+          </div>
+          <Link href="/dashboard/history" className="lk">
+            вся история →
           </Link>
         </div>
         {recentTxs && recentTxs.length > 0 ? (
-          <div className="divide-y divide-black/5">
-            {(recentTxs as PointTransaction[]).map((t) => (
-              <div key={t.id} className="flex items-center justify-between py-4">
+          <div>
+            {(recentTxs as PointTransaction[]).map((t, i) => (
+              <div
+                key={t.id}
+                className="flex justify-between items-center py-3"
+                style={{
+                  borderBottom:
+                    i < recentTxs.length - 1
+                      ? "1px solid var(--om-ink-100)"
+                      : "none",
+                }}
+              >
                 <div>
-                  <div className="font-medium">{t.reason}</div>
-                  <div className="text-om-muted text-xs mt-1">{formatDate(t.created_at)}</div>
+                  <div
+                    className="font-display"
+                    style={{
+                      fontWeight: 800,
+                      fontSize: 14,
+                      letterSpacing: "-0.01em",
+                    }}
+                  >
+                    {t.reason}
+                  </div>
+                  <div
+                    className="font-mono mt-1"
+                    style={{
+                      fontSize: 11,
+                      color: "var(--om-ink-500)",
+                      textTransform: "uppercase",
+                      letterSpacing: "0.06em",
+                    }}
+                  >
+                    {formatDate(t.created_at)}
+                  </div>
                 </div>
-                <div className={`text-lg font-semibold tabular-nums ${t.amount >= 0 ? "text-om-green" : "text-om-coral"}`}>
-                  {t.amount >= 0 ? "+" : ""}{t.amount}
+                <div
+                  className="font-display"
+                  style={{
+                    fontWeight: 900,
+                    fontSize: 22,
+                    letterSpacing: "-0.02em",
+                    color:
+                      t.amount >= 0 ? "var(--om-blue)" : "var(--om-magenta)",
+                  }}
+                >
+                  {t.amount >= 0 ? "+" : ""}
+                  {t.amount}
                 </div>
               </div>
             ))}
           </div>
         ) : (
-          <p className="text-om-muted">
-            Пока тихо. Начни с челленджа — загрузи фото и получишь первые баллы.{" "}
-            <Link href="/dashboard/challenges" className="underline hover:text-om-ink">
-              К челленджам →
+          <p style={{ color: "var(--om-ink-500)" }}>
+            пока тихо. начни с челленджа — загрузи фото и получишь первые
+            баллы.{" "}
+            <Link
+              href="/dashboard/challenges"
+              className="lk"
+              style={{ display: "inline" }}
+            >
+              к челленджам →
             </Link>
           </p>
         )}

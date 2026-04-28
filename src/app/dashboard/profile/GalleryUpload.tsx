@@ -4,10 +4,16 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 
-const MAX_PHOTOS = 5;
+const MAX_PHOTOS = 12;
 const MAX_BYTES = 2 * 1024 * 1024;
 
-export function GalleryUpload({ userId, current }: { userId: string; current: string[] }) {
+export function GalleryUpload({
+  userId,
+  current,
+}: {
+  userId: string;
+  current: string[];
+}) {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [items, setItems] = useState<string[]>(current);
@@ -28,13 +34,13 @@ export function GalleryUpload({ userId, current }: { userId: string; current: st
     setError(null);
     const slots = MAX_PHOTOS - items.length;
     if (slots <= 0) {
-      setError(`Максимум ${MAX_PHOTOS} фото`);
+      setError(`максимум ${MAX_PHOTOS} фото`);
       return;
     }
     const toUpload = Array.from(files).slice(0, slots);
     for (const f of toUpload) {
       if (f.size > MAX_BYTES) {
-        setError(`Файл ${f.name} больше 2МБ`);
+        setError(`файл ${f.name} больше 2 мб`);
         return;
       }
     }
@@ -54,7 +60,7 @@ export function GalleryUpload({ userId, current }: { userId: string; current: st
       }
       await persist(next);
     } catch (e) {
-      setError(e instanceof Error ? e.message : "Ошибка загрузки");
+      setError(e instanceof Error ? e.message : "ошибка загрузки");
     } finally {
       setBusy(false);
     }
@@ -65,32 +71,33 @@ export function GalleryUpload({ userId, current }: { userId: string; current: st
     try {
       await persist(items.filter((u) => u !== url));
     } catch (e) {
-      setError(e instanceof Error ? e.message : "Ошибка");
+      setError(e instanceof Error ? e.message : "ошибка");
     } finally {
       setBusy(false);
     }
   }
 
   return (
-    <div className="space-y-2">
-      <label className="block text-sm font-medium">Галерея (до {MAX_PHOTOS} фото, до 2МБ)</label>
-      <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-        {items.map((url) => (
-          <div key={url} className="relative group">
-            <img src={url} alt="" className="w-full aspect-square object-cover rounded-xl" />
-            <button
-              type="button"
-              onClick={() => remove(url)}
-              disabled={busy}
-              className="absolute top-2 right-2 rounded-full bg-black/60 text-white text-xs px-2 py-1 opacity-0 group-hover:opacity-100 transition"
-            >
-              Удалить
-            </button>
-          </div>
-        ))}
+    <div>
+      <div className="flex justify-between items-baseline">
+        <div
+          className="font-display"
+          style={{
+            fontSize: 11,
+            fontWeight: 800,
+            letterSpacing: "0.08em",
+            textTransform: "uppercase",
+            color: "var(--om-ink-500)",
+          }}
+        >
+          галерея · {items.length} из {MAX_PHOTOS}
+        </div>
         {items.length < MAX_PHOTOS && (
-          <label className={`flex items-center justify-center aspect-square rounded-xl border-2 border-dashed border-black/15 cursor-pointer text-sm text-om-muted ${busy ? "opacity-50" : "hover:bg-om-cream"}`}>
-            {busy ? "Загрузка…" : "+ Добавить"}
+          <label
+            className="lk"
+            style={{ fontSize: 12, cursor: busy ? "not-allowed" : "pointer" }}
+          >
+            {busy ? "загрузка…" : "+ загрузить"}
             <input
               type="file"
               accept="image/*"
@@ -105,7 +112,82 @@ export function GalleryUpload({ userId, current }: { userId: string; current: st
           </label>
         )}
       </div>
-      {error && <p className="text-xs text-red-600">{error}</p>}
+      <div
+        className="grid mt-3"
+        style={{ gridTemplateColumns: "repeat(3, 1fr)", gap: 4 }}
+      >
+        {items.map((url) => (
+          <div
+            key={url}
+            className="bg-img relative group"
+            style={{ aspectRatio: "1/1", backgroundImage: `url(${url})` }}
+          >
+            <button
+              type="button"
+              onClick={() => remove(url)}
+              disabled={busy}
+              className="font-display absolute opacity-0 group-hover:opacity-100 transition"
+              style={{
+                top: 4,
+                right: 4,
+                width: 20,
+                height: 20,
+                background: "rgba(35,31,32,0.7)",
+                color: "#fff",
+                display: "grid",
+                placeItems: "center",
+                fontSize: 12,
+                fontWeight: 800,
+                border: 0,
+              }}
+              aria-label="удалить"
+            >
+              ×
+            </button>
+          </div>
+        ))}
+        {items.length < MAX_PHOTOS && (
+          <label
+            className={`flex items-center justify-center font-mono ${busy ? "opacity-50" : ""}`}
+            style={{
+              aspectRatio: "1/1",
+              border: "1.5px dashed var(--om-ink-100)",
+              cursor: busy ? "not-allowed" : "pointer",
+              fontSize: 11,
+              color: "var(--om-ink-500)",
+              textTransform: "uppercase",
+              letterSpacing: "0.08em",
+              background: "var(--om-ink-50)",
+            }}
+          >
+            +
+            <input
+              type="file"
+              accept="image/*"
+              multiple
+              disabled={busy}
+              className="hidden"
+              onChange={(e) => {
+                if (e.target.files?.length) handleFiles(e.target.files);
+                e.target.value = "";
+              }}
+            />
+          </label>
+        )}
+      </div>
+      {error && (
+        <p
+          className="font-mono mt-2"
+          style={{
+            fontSize: 11,
+            color: "var(--om-magenta)",
+            textTransform: "uppercase",
+            letterSpacing: "0.06em",
+          }}
+        >
+          {error}
+        </p>
+      )}
     </div>
   );
 }

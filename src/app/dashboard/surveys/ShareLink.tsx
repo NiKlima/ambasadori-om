@@ -23,13 +23,21 @@ export function ShareLink({ url }: Props) {
         readOnly
         value={url}
         onFocus={(e) => e.currentTarget.select()}
-        className="flex-1 rounded-lg border border-black/10 bg-om-cream px-3 py-2 text-xs font-mono"
+        className="input"
+        style={{
+          flex: 1,
+          fontFamily: "var(--font-mono)",
+          fontSize: 13,
+          background: "var(--om-ink-50)",
+        }}
       />
       <button
+        type="button"
         onClick={copy}
-        className="rounded-full bg-om-ink text-om-cream px-4 py-2 text-xs whitespace-nowrap"
+        className="btn btn-blue"
+        style={{ whiteSpace: "nowrap" }}
       >
-        {copied ? "Скопировано" : "Копировать"}
+        {copied ? "скопировано" : "копировать"}
       </button>
     </div>
   );

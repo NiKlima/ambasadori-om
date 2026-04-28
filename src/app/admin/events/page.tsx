@@ -4,98 +4,205 @@ import type { Event } from "@/lib/types";
 import { createEvent, toggleEvent, deleteEvent } from "./actions";
 
 const KIND_LABEL: Record<string, string> = {
-  race: "Забег",
-  live: "Live",
-  workshop: "Воркшоп",
-  community: "Комьюнити",
+  race: "забег",
+  live: "live",
+  workshop: "воркшоп",
+  community: "комьюнити",
 };
 
 export default async function AdminEventsPage() {
   const supabase = await createClient();
-  const { data } = await supabase.from("events").select("*").order("starts_at", { ascending: false });
+  const { data } = await supabase
+    .from("events")
+    .select("*")
+    .order("starts_at", { ascending: false });
   const list = (data ?? []) as Event[];
 
   return (
-    <div className="space-y-8">
+    <div className="grid gap-8">
       <div>
-        <h1 className="text-3xl md:text-4xl font-semibold">События</h1>
-        <p className="text-om-muted mt-2">Забеги, лайвы, воркшопы — всё, что попадёт в публичный календарь.</p>
+        <div className="eyebrow">события</div>
+        <h1
+          className="font-display"
+          style={{
+            fontWeight: 900,
+            fontSize: "clamp(40px, 5vw, 56px)",
+            letterSpacing: "-0.04em",
+            lineHeight: 0.95,
+            margin: "8px 0 0",
+          }}
+        >
+          забеги, лайвы, воркшопы.
+        </h1>
       </div>
 
-      <form action={createEvent} className="rounded-3xl bg-white border border-black/5 p-6 grid md:grid-cols-2 gap-4">
+      <form
+        action={createEvent}
+        className="bg-white border border-[var(--om-ink-100)] grid md:grid-cols-2 gap-4"
+        style={{ padding: "28px 32px" }}
+      >
         <div className="md:col-span-2">
-          <label className="text-xs uppercase text-om-muted block mb-1">Название</label>
-          <input name="title" required className="w-full rounded-lg border border-black/10 px-3 py-2" />
+          <div className="eyebrow eyebrow-ink">название</div>
+          <input className="input mt-2" name="title" required />
         </div>
         <div className="md:col-span-2">
-          <label className="text-xs uppercase text-om-muted block mb-1">Описание</label>
-          <textarea name="description" rows={2} className="w-full rounded-lg border border-black/10 px-3 py-2" />
+          <div className="eyebrow eyebrow-ink">описание</div>
+          <textarea
+            className="input mt-2"
+            name="description"
+            rows={3}
+            style={{
+              resize: "none",
+              fontFamily: "var(--font-body)",
+              fontSize: 14,
+            }}
+          />
         </div>
         <div>
-          <label className="text-xs uppercase text-om-muted block mb-1">Тип</label>
-          <select name="kind" defaultValue="community" className="w-full rounded-lg border border-black/10 px-3 py-2">
+          <div className="eyebrow eyebrow-ink">тип</div>
+          <select className="input mt-2" name="kind" defaultValue="community">
             {Object.entries(KIND_LABEL).map(([k, v]) => (
-              <option key={k} value={k}>{v}</option>
+              <option key={k} value={k}>
+                {v}
+              </option>
             ))}
           </select>
         </div>
         <div>
-          <label className="text-xs uppercase text-om-muted block mb-1">Локация</label>
-          <input name="location" className="w-full rounded-lg border border-black/10 px-3 py-2" />
+          <div className="eyebrow eyebrow-ink">локация</div>
+          <input className="input mt-2" name="location" />
         </div>
         <div>
-          <label className="text-xs uppercase text-om-muted block mb-1">Старт</label>
-          <input name="starts_at" type="datetime-local" required className="w-full rounded-lg border border-black/10 px-3 py-2" />
+          <div className="eyebrow eyebrow-ink">старт</div>
+          <input
+            className="input mt-2"
+            name="starts_at"
+            type="datetime-local"
+            required
+          />
         </div>
         <div>
-          <label className="text-xs uppercase text-om-muted block mb-1">Конец (опц.)</label>
-          <input name="ends_at" type="datetime-local" className="w-full rounded-lg border border-black/10 px-3 py-2" />
+          <div className="eyebrow eyebrow-ink">конец · опц</div>
+          <input
+            className="input mt-2"
+            name="ends_at"
+            type="datetime-local"
+          />
         </div>
         <div>
-          <label className="text-xs uppercase text-om-muted block mb-1">Ссылка</label>
-          <input name="link" type="url" placeholder="https://..." className="w-full rounded-lg border border-black/10 px-3 py-2" />
+          <div className="eyebrow eyebrow-ink">ссылка</div>
+          <input
+            className="input mt-2"
+            name="link"
+            type="url"
+            placeholder="https://…"
+          />
         </div>
         <div>
-          <label className="text-xs uppercase text-om-muted block mb-1">Cover URL</label>
-          <input name="cover_url" type="url" placeholder="https://..." className="w-full rounded-lg border border-black/10 px-3 py-2" />
+          <div className="eyebrow eyebrow-ink">cover url</div>
+          <input
+            className="input mt-2"
+            name="cover_url"
+            type="url"
+            placeholder="https://…"
+          />
         </div>
         <div className="md:col-span-2">
-          <button className="rounded-full bg-om-ink text-om-cream px-5 py-2 text-sm">Добавить</button>
+          <button type="submit" className="btn btn-blue">
+            добавить
+          </button>
         </div>
       </form>
 
-      <div className="space-y-3">
+      <div className="grid gap-3">
         {list.map((ev) => (
-          <div key={ev.id} className={`rounded-3xl bg-white border border-black/5 p-5 flex items-start justify-between gap-4 ${ev.active ? "" : "opacity-60"}`}>
+          <div
+            key={ev.id}
+            className="bg-white border border-[var(--om-ink-100)] flex items-start justify-between gap-4"
+            style={{
+              padding: "20px 24px",
+              opacity: ev.active ? 1 : 0.55,
+            }}
+          >
             <div className="min-w-0">
               <div className="flex items-center gap-2 flex-wrap">
-                <div className="text-lg font-semibold truncate">{ev.title}</div>
-                <span className="rounded-full bg-om-blue-soft text-om-blue-dark text-xs px-2 py-0.5">{KIND_LABEL[ev.kind]}</span>
-                {!ev.active && <span className="rounded-full bg-black/10 text-om-muted text-xs px-2 py-0.5">скрыто</span>}
+                <div
+                  className="font-display truncate"
+                  style={{
+                    fontWeight: 800,
+                    fontSize: 17,
+                    letterSpacing: "-0.01em",
+                  }}
+                >
+                  {ev.title}
+                </div>
+                <span className="chip chip-blue">{KIND_LABEL[ev.kind] ?? ev.kind}</span>
+                {!ev.active && <span className="chip">скрыто</span>}
               </div>
-              <div className="text-sm text-om-muted mt-1">
-                {formatDate(ev.starts_at)} {ev.location ? `· ${ev.location}` : ""}
+              <div
+                className="font-mono mt-2"
+                style={{
+                  fontSize: 11,
+                  color: "var(--om-ink-500)",
+                  textTransform: "uppercase",
+                  letterSpacing: "0.06em",
+                }}
+              >
+                {formatDate(ev.starts_at)}
+                {ev.location ? ` · ${ev.location}` : ""}
               </div>
-              {ev.description && <p className="text-sm mt-2 line-clamp-2">{ev.description}</p>}
+              {ev.description && (
+                <p
+                  className="font-body mt-2 line-clamp-2"
+                  style={{
+                    fontSize: 13,
+                    color: "var(--om-ink-500)",
+                    lineHeight: 1.55,
+                  }}
+                >
+                  {ev.description}
+                </p>
+              )}
             </div>
             <div className="flex flex-col gap-2 shrink-0">
               <form action={toggleEvent}>
                 <input type="hidden" name="id" value={ev.id} />
                 <input type="hidden" name="active" value={String(ev.active)} />
-                <button className="text-xs rounded-full border border-black/10 px-3 py-1 hover:border-om-ink">
-                  {ev.active ? "Скрыть" : "Показать"}
+                <button type="submit" className="btn btn-outline btn-sm">
+                  {ev.active ? "скрыть" : "показать"}
                 </button>
               </form>
               <form action={deleteEvent}>
                 <input type="hidden" name="id" value={ev.id} />
-                <button className="text-xs rounded-full border border-om-coral/40 text-om-coral px-3 py-1 hover:bg-om-coral/10">
-                  Удалить
+                <button
+                  type="submit"
+                  className="btn btn-outline btn-sm"
+                  style={{
+                    borderColor: "var(--om-magenta)",
+                    color: "var(--om-magenta)",
+                  }}
+                >
+                  удалить
                 </button>
               </form>
             </div>
           </div>
         ))}
-        {list.length === 0 && <p className="text-om-muted text-sm">Событий пока нет.</p>}
+        {list.length === 0 && (
+          <p
+            className="font-mono"
+            style={{
+              padding: "24px 0",
+              textAlign: "center",
+              color: "var(--om-ink-500)",
+              fontSize: 12,
+              textTransform: "uppercase",
+              letterSpacing: "0.06em",
+            }}
+          >
+            событий пока нет.
+          </p>
+        )}
       </div>
     </div>
   );

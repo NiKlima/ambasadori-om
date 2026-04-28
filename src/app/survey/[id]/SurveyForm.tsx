@@ -10,6 +10,16 @@ type Props = {
   questions: SurveyQuestion[];
 };
 
+const FIELD_LABEL_STYLE: React.CSSProperties = {
+  fontFamily: "var(--font-display)",
+  fontSize: 11,
+  fontWeight: 800,
+  letterSpacing: "0.08em",
+  textTransform: "uppercase",
+  color: "var(--om-ink-500)",
+  marginBottom: 8,
+};
+
 export function SurveyForm({ challengeId, ref, questions }: Props) {
   const [pending, startTransition] = useTransition();
   const [error, setError] = useState<string | null>(null);
@@ -25,61 +35,111 @@ export function SurveyForm({ challengeId, ref, questions }: Props) {
   }
 
   return (
-    <form action={handle} className="space-y-6">
-      <div className="rounded-3xl bg-white p-6 space-y-4">
+    <form action={handle} className="grid gap-4">
+      <div
+        className="bg-white border border-[var(--om-ink-100)] grid gap-4"
+        style={{ padding: "24px 28px" }}
+      >
         <div>
-          <label className="block text-xs uppercase tracking-wider text-om-muted mb-1">Имя</label>
-          <input name="name" required className="w-full rounded-lg border border-black/10 px-3 py-2" />
+          <div style={FIELD_LABEL_STYLE}>имя</div>
+          <input className="input" name="name" required />
         </div>
         <div>
-          <label className="block text-xs uppercase tracking-wider text-om-muted mb-1">Email</label>
+          <div style={FIELD_LABEL_STYLE}>email</div>
           <input
+            className="input"
             name="email"
             type="email"
             required
             placeholder="you@example.com"
-            className="w-full rounded-lg border border-black/10 px-3 py-2"
           />
-          <p className="text-xs text-om-muted mt-1">
-            Email нужен только чтобы исключить повторное прохождение.
+          <p
+            className="font-mono mt-2"
+            style={{
+              fontSize: 11,
+              color: "var(--om-ink-500)",
+              textTransform: "uppercase",
+              letterSpacing: "0.06em",
+            }}
+          >
+            email нужен только чтобы исключить повторное прохождение
           </p>
         </div>
       </div>
 
       {questions.map((q, i) => (
-        <div key={q.id} className="rounded-3xl bg-white p-6 space-y-3">
-          <div className="text-xs uppercase tracking-wider text-om-muted">Вопрос {i + 1}</div>
-          <div className="font-semibold text-lg">{q.text}</div>
+        <div
+          key={q.id}
+          className="bg-white border border-[var(--om-ink-100)] grid gap-3"
+          style={{ padding: "24px 28px" }}
+        >
+          <div className="eyebrow">вопрос {i + 1}</div>
+          <div
+            className="font-display"
+            style={{
+              fontWeight: 800,
+              fontSize: 18,
+              letterSpacing: "-0.01em",
+              lineHeight: 1.3,
+            }}
+          >
+            {q.text}
+          </div>
           {q.options.length > 0 ? (
-            <div className="space-y-2">
+            <div className="grid gap-2">
               {q.options.map((opt, idx) => (
-                <label key={idx} className="flex items-center gap-3 rounded-lg border border-black/10 px-3 py-2 cursor-pointer hover:border-om-ink">
+                <label
+                  key={idx}
+                  className="flex items-center gap-3 cursor-pointer font-body"
+                  style={{
+                    padding: "12px 14px",
+                    border: "1px solid var(--om-ink-100)",
+                    fontSize: 14,
+                  }}
+                >
                   <input
                     type="radio"
                     name={`q_${q.id}`}
                     value={opt.label}
                     required
                   />
-                  <span className="text-sm">{opt.label}</span>
+                  <span>{opt.label}</span>
                 </label>
               ))}
             </div>
           ) : (
             <textarea
+              className="input"
               name={`q_${q.id}`}
               rows={3}
               required
-              className="w-full rounded-lg border border-black/10 px-3 py-2"
+              style={{ resize: "none", fontFamily: "var(--font-body)" }}
             />
           )}
         </div>
       ))}
 
-      <label className="flex items-start gap-3 rounded-2xl bg-white p-4 cursor-pointer">
-        <input type="checkbox" name="consent" required className="mt-1" />
-        <span className="text-sm text-om-muted">
-          Я согласен на обработку персональных данных согласно{" "}
-          <a href="/privacy" target="_blank" rel="noopener noreferrer" className="underline text-om-ink">
+      <label
+        className="flex items-start gap-3 bg-white border border-[var(--om-ink-100)] cursor-pointer font-mono"
+        style={{
+          padding: "16px 20px",
+          fontSize: 12,
+          color: "var(--om-ink-500)",
+          textTransform: "uppercase",
+          letterSpacing: "0.06em",
+          lineHeight: 1.55,
+        }}
+      >
+        <input type="checkbox" name="consent" required style={{ marginTop: 3 }} />
+        <span>
+          согласен на обработку персональных данных по{" "}
+          <a
+            href="/privacy"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="lk"
+            style={{ display: "inline" }}
+          >
             политике конфиденциальности
           </a>
           .
@@ -87,15 +147,29 @@ export function SurveyForm({ challengeId, ref, questions }: Props) {
       </label>
 
       {error && (
-        <div className="rounded-2xl bg-om-coral/10 text-om-coral p-4 text-sm">{error}</div>
+        <div
+          className="font-mono"
+          style={{
+            padding: "12px 16px",
+            border: "1px solid var(--om-magenta)",
+            color: "var(--om-magenta)",
+            fontSize: 12,
+            textTransform: "uppercase",
+            letterSpacing: "0.06em",
+            background: "rgba(232,55,150,0.06)",
+          }}
+        >
+          {error}
+        </div>
       )}
 
       <button
         type="submit"
         disabled={pending}
-        className="rounded-full bg-om-ink text-om-cream px-8 py-3 text-base font-medium hover:bg-om-blue-dark transition disabled:opacity-50"
+        className="btn btn-blue"
+        style={{ alignSelf: "flex-start" }}
       >
-        {pending ? "Отправляем…" : "Отправить ответы"}
+        {pending ? "отправляем…" : "отправить ответы →"}
       </button>
     </form>
   );

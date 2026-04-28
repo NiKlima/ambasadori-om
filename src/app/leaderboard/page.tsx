@@ -7,22 +7,17 @@ import type { LeaderboardRow } from "@/lib/types";
 const STORYTELLING_DEFAULTS = { quote: null, story: null, intro_video_url: null, gallery: [] };
 
 const FALLBACK: LeaderboardRow[] = [
-  { id: "1", full_name: "Алина Руссу", club: "Bigsport", sport: "Бег", photo_url: null, total_points: 145, birthdate: "1992-04-12", bio: "Беговой тренер. Готовлю к 10К, полу- и марафонам.", socials: { instagram: "alina.runs", telegram: "alinaruns" }, achievements: ["Berlin Marathon 2024", "Тренер года Bigsport 2023"], ...STORYTELLING_DEFAULTS },
-  { id: "2", full_name: "Михаил Чобану", club: "Martz Fitness", sport: "Кроссфит", photo_url: null, total_points: 128, birthdate: "1988-09-03", bio: "10 лет в кроссфите.", socials: { instagram: "mihai.crossfit" }, achievements: ["CrossFit Level 2 Trainer"], ...STORYTELLING_DEFAULTS },
-  { id: "3", full_name: "Ирина Балан", club: "Jiva Yoga", sport: "Йога", photo_url: null, total_points: 110, birthdate: "1990-07-20", bio: "Хатха и виньяса.", socials: { instagram: "irina.yoga" }, achievements: ["RYT-500 Yoga Alliance"], ...STORYTELLING_DEFAULTS },
-  { id: "4", full_name: "Виктор Морару", club: "Premier Fitness", sport: "Силовой", photo_url: null, total_points: 92, birthdate: "1985-02-14", bio: "Пауэрлифтинг, гипертрофия.", socials: { instagram: "viktor.lift" }, achievements: ["КМС по пауэрлифтингу"], ...STORYTELLING_DEFAULTS },
-  { id: "5", full_name: "Оксана Лупу", club: "Alexia", sport: "Пилатес", photo_url: null, total_points: 84, birthdate: "1993-11-05", bio: "Пилатес-реформер.", socials: { instagram: "oxana.pilates" }, achievements: ["Polestar Pilates Comprehensive"], ...STORYTELLING_DEFAULTS },
-  { id: "6", full_name: "Андрей Попеску", club: "Aquaterra", sport: "Триатлон", photo_url: null, total_points: 71, birthdate: "1986-06-18", bio: "Триатлон и плавание.", socials: { instagram: "andrei.tri" }, achievements: ["IRONMAN 70.3 finisher"], ...STORYTELLING_DEFAULTS },
-  { id: "7", full_name: "Наталья Гынку", club: "Bigsport", sport: "Функциональный", photo_url: null, total_points: 60, birthdate: "1991-03-09", bio: "Функциональные тренировки.", socials: {}, achievements: [], ...STORYTELLING_DEFAULTS },
-  { id: "8", full_name: "Дмитрий Унгуряну", club: "Martz Fitness", sport: "Бокс", photo_url: null, total_points: 48, birthdate: "1989-08-25", bio: "Бокс для любителей.", socials: { instagram: "dim.box" }, achievements: ["МС по боксу"], ...STORYTELLING_DEFAULTS },
-  { id: "9", full_name: "Елена Цуркан", club: "Jiva Yoga", sport: "Йога", photo_url: null, total_points: 35, birthdate: "1995-12-30", bio: "Йога-нидра.", socials: {}, achievements: [], ...STORYTELLING_DEFAULTS },
-  { id: "10", full_name: "Сергей Врабие", club: "Pilates Club", sport: "Пилатес", photo_url: null, total_points: 22, birthdate: "1994-01-15", bio: "Мужской пилатес.", socials: {}, achievements: [], ...STORYTELLING_DEFAULTS },
+  { id: "1", full_name: "Алина Руссу", club: "Bigsport", sport: "бег", photo_url: "/brand/imagery/runner-asphalt-line.jpg", total_points: 145, birthdate: "1992-04-12", bio: "беговой тренер.", socials: {}, achievements: [], ...STORYTELLING_DEFAULTS },
+  { id: "2", full_name: "Михаил Чобану", club: "Martz Fitness", sport: "кроссфит", photo_url: "/brand/imagery/runner-overhead.jpg", total_points: 128, birthdate: "1988-09-03", bio: "10 лет в кроссфите.", socials: {}, achievements: [], ...STORYTELLING_DEFAULTS },
+  { id: "3", full_name: "Ирина Балан", club: "Jiva Yoga", sport: "йога", photo_url: "/brand/imagery/yoga-rooftop.jpg", total_points: 110, birthdate: "1990-07-20", bio: "хатха и виньяса.", socials: {}, achievements: [], ...STORYTELLING_DEFAULTS },
+  { id: "4", full_name: "Виктор Морару", club: "Premier Fitness", sport: "силовой", photo_url: "/brand/imagery/runner-forest.jpg", total_points: 92, birthdate: "1985-02-14", bio: "пауэрлифтинг.", socials: {}, achievements: [], ...STORYTELLING_DEFAULTS },
+  { id: "5", full_name: "Оксана Лупу", club: "Alexia", sport: "пилатес", photo_url: "/brand/imagery/golf-sunset.jpg", total_points: 84, birthdate: "1993-11-05", bio: "пилатес-реформер.", socials: {}, achievements: [], ...STORYTELLING_DEFAULTS },
+  { id: "6", full_name: "Андрей Попеску", club: "Aquaterra", sport: "триатлон", photo_url: "/brand/imagery/runner-asphalt-line.jpg", total_points: 71, birthdate: "1986-06-18", bio: "триатлон.", socials: {}, achievements: [], ...STORYTELLING_DEFAULTS },
+  { id: "7", full_name: "Наталья Гынку", club: "Bigsport", sport: "функциональный", photo_url: "/brand/imagery/park-crowd.jpg", total_points: 60, birthdate: "1991-03-09", bio: "функциональные тренировки.", socials: {}, achievements: [], ...STORYTELLING_DEFAULTS },
+  { id: "8", full_name: "Дмитрий Унгуряну", club: "Martz Fitness", sport: "бокс", photo_url: "/brand/imagery/runner-overhead.jpg", total_points: 48, birthdate: "1989-08-25", bio: "бокс.", socials: {}, achievements: [], ...STORYTELLING_DEFAULTS },
 ];
 
-type SearchParams = Promise<{ sport?: string }>;
-
-export default async function LeaderboardPage({ searchParams }: { searchParams: SearchParams }) {
-  const { sport } = await searchParams;
+export default async function LeaderboardPage() {
   let rows: LeaderboardRow[] = FALLBACK;
   try {
     const supabase = await createClient();
@@ -30,48 +25,59 @@ export default async function LeaderboardPage({ searchParams }: { searchParams: 
     if (data && data.length > 0) rows = data as LeaderboardRow[];
   } catch {}
 
-  const sports = Array.from(new Set(rows.map((r) => r.sport).filter(Boolean))) as string[];
-  const filtered = sport ? rows.filter((r) => r.sport === sport) : rows;
-
   return (
     <>
       <SiteHeader />
-      <section className="container-xl pt-16 pb-24">
-        <div className="max-w-3xl mb-10">
-          <div className="text-xs uppercase tracking-[0.2em] text-om-blue-dark mb-4">
-            Лидерборд сезона · 2026
-          </div>
-          <h1 className="text-4xl md:text-6xl font-semibold leading-tight">
-            Каждый амбассадор — твой путь к сообществу.
-          </h1>
-        </div>
 
-        <div className="flex flex-wrap gap-2 mb-8">
-          <a
-            href="/leaderboard"
-            className={`rounded-full px-4 py-2 text-sm transition ${
-              !sport ? "bg-om-ink text-om-cream" : "bg-white border border-black/10 text-om-muted hover:text-om-ink"
-            }`}
+      {/* HERO */}
+      <section
+        className="bg-[var(--om-blue)] text-white relative overflow-hidden"
+        style={{ padding: "72px 0 56px" }}
+      >
+        <div
+          className="om-stripes-band"
+          style={{
+            position: "absolute",
+            inset: 0,
+            opacity: 0.4,
+            pointerEvents: "none",
+          }}
+        />
+        <div className="container-om relative">
+          <div className="eyebrow eyebrow-w">лидерборд · сезон 2026</div>
+          <h1
+            className="font-display"
+            style={{
+              fontWeight: 900,
+              fontSize: "clamp(56px, 9vw, 128px)",
+              letterSpacing: "-0.04em",
+              lineHeight: 0.9,
+              margin: "16px 0 0",
+              maxWidth: 1100,
+            }}
           >
-            Все виды
-          </a>
-          {sports.map((s) => (
-            <a
-              key={s}
-              href={`/leaderboard?sport=${encodeURIComponent(s)}`}
-              className={`rounded-full px-4 py-2 text-sm transition ${
-                sport === s
-                  ? "bg-om-ink text-om-cream"
-                  : "bg-white border border-black/10 text-om-muted hover:text-om-ink"
-              }`}
-            >
-              {s}
-            </a>
-          ))}
+            каждый амбассадор,
+            <br />
+            каждый балл.
+          </h1>
+          <div
+            className="font-mono mt-8 flex flex-wrap gap-x-8 gap-y-2"
+            style={{
+              fontSize: 12,
+              opacity: 0.85,
+              textTransform: "uppercase",
+              letterSpacing: "0.08em",
+            }}
+          >
+            <span>{rows.length} активных тренеров</span>
+            <span>· 8 клубов-партнёров</span>
+            <span>· обновляется в реальном времени</span>
+          </div>
         </div>
-
-        <LeaderboardClient rows={filtered} />
       </section>
+
+      <LeaderboardClient rows={rows} />
+
       <SiteFooter />
     </>
   );

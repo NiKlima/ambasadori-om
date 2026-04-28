@@ -1,5 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
+import { Avatar } from "@/components/Avatar";
+import { Kpi } from "@/components/ui/Kpi";
 import { createClient } from "@/lib/supabase/server";
 import { formatDate } from "@/lib/utils";
 import { moderateSubmission } from "../actions";
@@ -11,7 +13,13 @@ type Row = {
   note: string | null;
   status: string;
   created_at: string;
-  trainer: { id: string; full_name: string; club: string | null; sport: string | null } | null;
+  trainer: {
+    id: string;
+    full_name: string;
+    club: string | null;
+    sport: string | null;
+    photo_url: string | null;
+  } | null;
   challenge: { id: string; title: string; points: number } | null;
 };
 
@@ -19,69 +27,227 @@ export default async function ModerationPage() {
   const supabase = await createClient();
   const { data } = await supabase
     .from("submissions")
-    .select("id, photo_url, link, note, status, created_at, trainer:profiles!submissions_trainer_id_fkey(id, full_name, club, sport), challenge:challenges(id, title, points)")
+    .select(
+      "id, photo_url, link, note, status, created_at, trainer:profiles!submissions_trainer_id_fkey(id, full_name, club, sport, photo_url), challenge:challenges(id, title, points)",
+    )
     .eq("status", "pending")
     .order("created_at", { ascending: true });
 
   const list = (data ?? []) as unknown as Row[];
+  const ptsAtStake = list.reduce(
+    (sum, r) => sum + (r.challenge?.points ?? 0),
+    0,
+  );
 
   return (
-    <div className="space-y-6">
-      <div>
-        <h1 className="text-3xl md:text-4xl font-semibold">Модерация</h1>
-        <p className="text-om-muted mt-2">Очередь: {list.length}</p>
-      </div>
+    <>
+      {/* Section hero */}
+      <section className="bg-white border-b border-[var(--om-ink-100)]">
+        <div
+          className="grid items-end gap-4"
+          style={{
+            padding: "0",
+            gridTemplateColumns: "1.5fr 1fr 1fr 1fr",
+          }}
+        >
+          <div>
+            <div className="eyebrow">очередь модерации</div>
+            <h1
+              className="font-display"
+              style={{
+                fontWeight: 900,
+                fontSize: "clamp(40px, 6vw, 64px)",
+                letterSpacing: "-0.04em",
+                lineHeight: 0.95,
+                margin: "8px 0 0",
+              }}
+            >
+              {list.length === 0
+                ? "очередь пуста."
+                : `${list.length} на проверку.`}
+            </h1>
+          </div>
+          <Kpi label="на модерации" value={list.length} />
+          <Kpi
+            label="баллов в очереди"
+            value={
+              <span style={{ color: "var(--om-blue)" }}>+{ptsAtStake}</span>
+            }
+          />
+          <Kpi label="среднее ожидание" value="—" />
+        </div>
+      </section>
 
-      <div className="space-y-4">
+      <div className="grid gap-3" style={{ padding: "24px 0 80px" }}>
         {list.map((s) => (
-          <div key={s.id} className="rounded-3xl bg-white border border-black/5 p-6 grid md:grid-cols-[200px_1fr_auto] gap-6">
-            <div className="relative rounded-2xl overflow-hidden bg-om-blue-soft aspect-square">
+          <div
+            key={s.id}
+            className="bg-white border border-[var(--om-ink-100)] grid items-stretch"
+            style={{
+              gridTemplateColumns: "240px 1fr 280px",
+            }}
+          >
+            <div
+              className="relative bg-[var(--om-ink-50)] overflow-hidden"
+              style={{ minHeight: 220 }}
+            >
               {s.photo_url ? (
-                <Image src={s.photo_url} alt="подтверждение" fill className="object-cover" sizes="200px" unoptimized />
+                <Image
+                  src={s.photo_url}
+                  alt="подтверждение"
+                  fill
+                  className="object-cover"
+                  sizes="240px"
+                  unoptimized
+                />
               ) : (
-                <div className="h-full flex items-center justify-center text-om-muted text-sm p-4 text-center">
-                  Без фото
+                <div
+                  className="h-full flex items-center justify-center font-mono"
+                  style={{
+                    fontSize: 11,
+                    color: "var(--om-ink-500)",
+                    textTransform: "uppercase",
+                    letterSpacing: "0.06em",
+                    padding: 16,
+                    textAlign: "center",
+                  }}
+                >
+                  без фото
+                </div>
+              )}
+              <span
+                className="chip absolute"
+                style={{
+                  top: 12,
+                  left: 12,
+                  background: "rgba(255,255,255,.95)",
+                  borderColor: "transparent",
+                }}
+              >
+                подтверждение
+              </span>
+            </div>
+
+            <div
+              style={{
+                padding: "22px 28px",
+                borderRight: "1px solid var(--om-ink-100)",
+              }}
+            >
+              <div
+                className="font-mono"
+                style={{
+                  fontSize: 11,
+                  color: "var(--om-ink-500)",
+                  textTransform: "uppercase",
+                  letterSpacing: "0.06em",
+                }}
+              >
+                {formatDate(s.created_at)}
+              </div>
+              <div
+                className="flex items-center gap-3"
+                style={{ marginTop: 8 }}
+              >
+                <Avatar
+                  name={s.trainer?.full_name ?? "?"}
+                  photoUrl={s.trainer?.photo_url ?? null}
+                  size="sm"
+                  variant="blue"
+                />
+                <div>
+                  <div
+                    className="font-display"
+                    style={{
+                      fontWeight: 800,
+                      fontSize: 16,
+                      letterSpacing: "-0.01em",
+                    }}
+                  >
+                    {s.trainer?.full_name ?? "неизвестный"}
+                  </div>
+                  <div
+                    className="font-mono"
+                    style={{
+                      fontSize: 11,
+                      color: "var(--om-ink-500)",
+                      textTransform: "uppercase",
+                      letterSpacing: "0.06em",
+                    }}
+                  >
+                    {s.trainer?.club ?? "—"}
+                    {s.trainer?.sport ? ` · ${s.trainer.sport}` : ""}
+                  </div>
+                </div>
+              </div>
+
+              <div
+                className="flex gap-2 items-center flex-wrap"
+                style={{ marginTop: 18 }}
+              >
+                <span className="chip">{s.challenge?.title ?? "—"}</span>
+                <span className="chip chip-blue">
+                  +{s.challenge?.points ?? 0} баллов
+                </span>
+              </div>
+
+              {s.note && (
+                <div
+                  className="font-body"
+                  style={{
+                    fontSize: 14,
+                    color: "var(--om-ink-500)",
+                    marginTop: 14,
+                    lineHeight: 1.55,
+                  }}
+                >
+                  &laquo;{s.note}&raquo;
+                </div>
+              )}
+              {s.link && (
+                <div style={{ marginTop: 8 }}>
+                  <Link
+                    href={s.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="lk"
+                    style={{ fontSize: 13, wordBreak: "break-all" }}
+                  >
+                    {s.link} →
+                  </Link>
                 </div>
               )}
             </div>
 
-            <div className="min-w-0">
-              <div className="text-sm text-om-muted">{formatDate(s.created_at)}</div>
-              <div className="font-semibold mt-1">
-                {s.trainer?.full_name ?? "Неизвестный"} — {s.challenge?.title ?? "—"}{" "}
-                <span className="text-om-blue-dark">+{s.challenge?.points ?? 0}</span>
-              </div>
-              {s.trainer && (
-                <div className="text-om-muted text-sm">{s.trainer.club ?? ""}{s.trainer.sport ? ` · ${s.trainer.sport}` : ""}</div>
-              )}
-              {s.note && <p className="text-sm mt-3">{s.note}</p>}
-              {s.link && (
-                <p className="mt-2 text-sm">
-                  <Link href={s.link} target="_blank" className="text-om-blue-dark underline break-all">
-                    {s.link}
-                  </Link>
-                </p>
-              )}
-            </div>
-
-            <div className="flex flex-col gap-2">
+            <div
+              className="bg-[var(--om-ink-50)] flex flex-col gap-2 justify-center"
+              style={{ padding: "22px 24px" }}
+            >
               <form action={moderateSubmission}>
                 <input type="hidden" name="id" value={s.id} />
                 <input type="hidden" name="action" value="approve" />
-                <button className="w-full rounded-full bg-om-green text-white px-5 py-2 text-sm hover:opacity-90">
-                  Одобрить +{s.challenge?.points ?? 0}
+                <button
+                  type="submit"
+                  className="btn btn-blue"
+                  style={{ width: "100%" }}
+                >
+                  одобрить · +{s.challenge?.points ?? 0}
                 </button>
               </form>
-              <form action={moderateSubmission} className="space-y-2">
+              <form action={moderateSubmission} className="flex flex-col gap-2">
                 <input type="hidden" name="id" value={s.id} />
                 <input type="hidden" name="action" value="reject" />
                 <input
                   name="comment"
-                  placeholder="Причина (необязательно)"
-                  className="w-full rounded-lg border border-black/10 px-3 py-2 text-xs"
+                  placeholder="причина (необязательно)"
+                  className="input"
                 />
-                <button className="w-full rounded-full bg-om-coral/15 text-om-coral px-5 py-2 text-sm hover:bg-om-coral/25">
-                  Отклонить
+                <button
+                  type="submit"
+                  className="btn btn-outline"
+                  style={{ width: "100%" }}
+                >
+                  отклонить
                 </button>
               </form>
             </div>
@@ -89,11 +255,20 @@ export default async function ModerationPage() {
         ))}
 
         {list.length === 0 && (
-          <div className="rounded-3xl bg-white p-12 text-center text-om-muted">
-            Очередь пуста. Все подтверждения разобраны ✨
+          <div
+            className="bg-white border border-[var(--om-ink-100)]"
+            style={{ padding: "60px 32px", textAlign: "center" }}
+          >
+            <div className="eyebrow">всё разобрано</div>
+            <p
+              className="font-body mt-3"
+              style={{ fontSize: 15, color: "var(--om-ink-500)" }}
+            >
+              очередь пуста. подтверждения подъедут — увидишь их здесь.
+            </p>
           </div>
         )}
       </div>
-    </div>
+    </>
   );
 }

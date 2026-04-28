@@ -23,7 +23,9 @@ export default async function AdminPointsPage() {
 
   const { data: txs } = await supabase
     .from("point_transactions")
-    .select("id, trainer_id, amount, reason, created_at, trainer:profiles!point_transactions_trainer_id_fkey(full_name)")
+    .select(
+      "id, trainer_id, amount, reason, created_at, trainer:profiles!point_transactions_trainer_id_fkey(full_name)",
+    )
     .order("created_at", { ascending: false })
     .limit(20);
 
@@ -31,50 +33,133 @@ export default async function AdminPointsPage() {
   const rows = (txs ?? []) as unknown as TxRow[];
 
   return (
-    <div className="space-y-6">
+    <div className="grid gap-6">
       <div>
-        <h1 className="text-3xl md:text-4xl font-semibold">Ручные начисления</h1>
-        <p className="text-om-muted mt-2">Начисления и списания вне челленджей (бонусы, корректировки).</p>
+        <div className="eyebrow">ручные начисления</div>
+        <h1
+          className="font-display"
+          style={{
+            fontWeight: 900,
+            fontSize: "clamp(40px, 5vw, 56px)",
+            letterSpacing: "-0.04em",
+            lineHeight: 0.95,
+            margin: "8px 0 0",
+          }}
+        >
+          бонусы и корректировки.
+        </h1>
       </div>
 
-      <form action={awardPoints} className="rounded-3xl bg-white p-6 grid md:grid-cols-[1fr_120px_2fr_auto] gap-3 items-end">
+      <form
+        action={awardPoints}
+        className="bg-white border border-[var(--om-ink-100)] grid md:grid-cols-[1fr_120px_2fr_auto] gap-3 items-end"
+        style={{ padding: "24px 28px" }}
+      >
         <div>
-          <label className="text-xs uppercase text-om-muted block mb-1">Тренер</label>
-          <select name="trainer_id" required className="w-full rounded-lg border border-black/10 px-3 py-2 text-sm bg-white">
+          <div className="eyebrow eyebrow-ink">тренер</div>
+          <select className="input mt-2" name="trainer_id" required>
             <option value="">—</option>
             {list.map((t) => (
-              <option key={t.id} value={t.id}>{t.full_name}</option>
+              <option key={t.id} value={t.id}>
+                {t.full_name}
+              </option>
             ))}
           </select>
         </div>
         <div>
-          <label className="text-xs uppercase text-om-muted block mb-1">Баллы</label>
-          <input name="amount" type="number" required className="w-full rounded-lg border border-black/10 px-3 py-2 text-sm" />
+          <div className="eyebrow eyebrow-ink">баллы</div>
+          <input
+            className="input mt-2"
+            name="amount"
+            type="number"
+            required
+          />
         </div>
         <div>
-          <label className="text-xs uppercase text-om-muted block mb-1">Причина</label>
-          <input name="reason" required placeholder="Например: бонус за участие в забеге" className="w-full rounded-lg border border-black/10 px-3 py-2 text-sm" />
+          <div className="eyebrow eyebrow-ink">причина</div>
+          <input
+            className="input mt-2"
+            name="reason"
+            required
+            placeholder="например: бонус за участие в забеге"
+          />
         </div>
-        <button className="rounded-full bg-om-ink text-om-cream px-5 py-2 text-sm">Начислить</button>
+        <button type="submit" className="btn btn-blue">
+          начислить
+        </button>
       </form>
 
-      <div className="rounded-3xl bg-white p-6">
-        <h2 className="font-semibold mb-4">Последние транзакции</h2>
-        <div className="divide-y divide-black/5">
-          {rows.map((t) => (
-            <div key={t.id} className="flex items-center justify-between py-3">
+      <div
+        className="bg-white border border-[var(--om-ink-100)]"
+        style={{ padding: "24px 28px" }}
+      >
+        <div className="eyebrow">последние транзакции</div>
+        <div className="mt-3">
+          {rows.map((t, i) => (
+            <div
+              key={t.id}
+              className="flex items-center justify-between"
+              style={{
+                padding: "14px 0",
+                borderBottom:
+                  i < rows.length - 1
+                    ? "1px solid var(--om-ink-100)"
+                    : "none",
+              }}
+            >
               <div>
-                <div className="font-medium">{t.trainer?.full_name ?? "—"}</div>
-                <div className="text-om-muted text-xs mt-1">
+                <div
+                  className="font-display"
+                  style={{
+                    fontWeight: 800,
+                    fontSize: 15,
+                    letterSpacing: "-0.01em",
+                  }}
+                >
+                  {t.trainer?.full_name ?? "—"}
+                </div>
+                <div
+                  className="font-mono mt-1"
+                  style={{
+                    fontSize: 11,
+                    color: "var(--om-ink-500)",
+                    textTransform: "uppercase",
+                    letterSpacing: "0.06em",
+                  }}
+                >
                   {t.reason} · {formatDate(t.created_at)}
                 </div>
               </div>
-              <div className={`font-semibold tabular-nums ${t.amount >= 0 ? "text-om-green" : "text-om-coral"}`}>
-                {t.amount >= 0 ? "+" : ""}{t.amount}
+              <div
+                className="font-display tabular-nums"
+                style={{
+                  fontWeight: 900,
+                  fontSize: 22,
+                  letterSpacing: "-0.02em",
+                  color:
+                    t.amount >= 0 ? "var(--om-blue)" : "var(--om-magenta)",
+                }}
+              >
+                {t.amount >= 0 ? "+" : ""}
+                {t.amount}
               </div>
             </div>
           ))}
-          {rows.length === 0 && <p className="text-om-muted text-center py-6">Транзакций пока нет.</p>}
+          {rows.length === 0 && (
+            <p
+              className="font-mono"
+              style={{
+                padding: "24px 0",
+                textAlign: "center",
+                color: "var(--om-ink-500)",
+                fontSize: 12,
+                textTransform: "uppercase",
+                letterSpacing: "0.06em",
+              }}
+            >
+              транзакций пока нет.
+            </p>
+          )}
         </div>
       </div>
     </div>

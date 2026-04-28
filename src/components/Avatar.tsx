@@ -1,20 +1,27 @@
-import { avatarColor, initials } from "@/lib/utils";
+import { initials } from "@/lib/utils";
 
 type Props = {
   name: string;
   photoUrl?: string | null;
   size?: "sm" | "md" | "lg" | "xl";
+  variant?: "default" | "blue" | "ink";
   className?: string;
 };
 
 const sizes: Record<NonNullable<Props["size"]>, string> = {
-  sm: "w-8 h-8 text-xs",
-  md: "w-12 h-12 text-sm",
-  lg: "w-20 h-20 text-lg",
+  sm: "w-8 h-8 text-[11px]",
+  md: "w-11 h-11 text-sm",
+  lg: "w-[72px] h-[72px] text-[22px]",
   xl: "w-32 h-32 text-3xl",
 };
 
-export function Avatar({ name, photoUrl, size = "md", className = "" }: Props) {
+export function Avatar({
+  name,
+  photoUrl,
+  size = "md",
+  variant = "default",
+  className = "",
+}: Props) {
   const sz = sizes[size];
   if (photoUrl) {
     return (
@@ -22,14 +29,16 @@ export function Avatar({ name, photoUrl, size = "md", className = "" }: Props) {
       <img
         src={photoUrl}
         alt={name}
-        className={`rounded-full object-cover ${sz} ${className}`}
+        className={`object-cover ${sz} ${className}`}
+        style={{ border: "1px solid var(--border)" }}
       />
     );
   }
+  const variantClass =
+    variant === "blue" ? "av-blue" : variant === "ink" ? "av-ink" : "";
   return (
     <div
-      className={`rounded-full flex items-center justify-center text-white font-semibold ${sz} ${className}`}
-      style={{ backgroundColor: avatarColor(name) }}
+      className={`av ${variantClass} ${sz} ${className}`}
       aria-label={name}
     >
       {initials(name)}

@@ -23,20 +23,44 @@ export function CookieBanner() {
   if (!show) return null;
 
   return (
-    <div className="fixed bottom-4 left-4 right-4 md:left-6 md:right-auto md:max-w-md z-50 rounded-2xl bg-om-ink text-om-cream shadow-2xl p-5 flex flex-col md:flex-row md:items-center gap-4">
-      <div className="text-sm leading-relaxed flex-1">
-        Используем cookies для аналитики и работы программы.{" "}
-        <a href="/privacy" className="underline opacity-90 hover:opacity-100">
-          Подробнее
+    <div
+      className="fixed bg-[var(--om-blue)] text-white flex flex-col md:flex-row md:items-center gap-4 z-50"
+      style={{
+        bottom: 16,
+        left: 16,
+        right: 16,
+        maxWidth: 520,
+        padding: "20px 24px",
+        boxShadow: "0 16px 40px -12px rgba(0,71,185,0.4)",
+      }}
+    >
+      <div
+        className="om-stripes-band"
+        style={{ position: "absolute", inset: 0, opacity: 0.18 }}
+      />
+      <div
+        className="font-body relative"
+        style={{ flex: 1, fontSize: 13, lineHeight: 1.55 }}
+      >
+        используем cookies для аналитики и работы программы.{" "}
+        <a
+          href="/privacy"
+          style={{
+            textDecoration: "underline",
+            color: "#fff",
+          }}
+        >
+          подробнее
         </a>
         .
       </div>
       <button
         type="button"
         onClick={accept}
-        className="rounded-full bg-om-cream text-om-ink px-5 py-2 text-sm font-medium hover:bg-white transition self-start md:self-auto shrink-0"
+        className="btn btn-white relative shrink-0"
+        style={{ alignSelf: "flex-start" }}
       >
-        Принимаю
+        принимаю →
       </button>
     </div>
   );

@@ -6,17 +6,45 @@ export default function ContactsThanksPage() {
   return (
     <>
       <SiteHeader />
-      <section className="container-xl pt-24 pb-32 text-center max-w-xl mx-auto">
-        <div className="text-xs uppercase tracking-[0.2em] text-om-blue-dark mb-4">
-          Сообщение отправлено
+      <section
+        className="bg-[var(--om-ink-50)]"
+        style={{ padding: "120px 0" }}
+      >
+        <div
+          className="container-om"
+          style={{ maxWidth: 640, textAlign: "center" }}
+        >
+          <div className="eyebrow">сообщение отправлено</div>
+          <h1
+            className="font-display"
+            style={{
+              fontWeight: 900,
+              fontSize: "clamp(48px, 7vw, 88px)",
+              letterSpacing: "-0.04em",
+              lineHeight: 0.95,
+              margin: "16px 0 16px",
+            }}
+          >
+            спасибо.
+          </h1>
+          <p
+            className="font-body"
+            style={{
+              fontSize: 16,
+              lineHeight: 1.55,
+              color: "var(--om-ink-500)",
+              marginBottom: 32,
+              maxWidth: 460,
+              marginLeft: "auto",
+              marginRight: "auto",
+            }}
+          >
+            мы получили твоё сообщение и ответим в течение 1–2 рабочих дней.
+          </p>
+          <Link href="/" className="btn btn-ink" style={{ display: "inline-flex" }}>
+            на главную →
+          </Link>
         </div>
-        <h1 className="text-4xl md:text-5xl font-semibold mb-6">Спасибо!</h1>
-        <p className="text-om-muted mb-8">
-          Мы получили твоё сообщение и ответим в течение 1–2 рабочих дней.
-        </p>
-        <Link href="/" className="inline-flex rounded-full bg-om-ink text-om-cream px-6 py-3 font-medium hover:bg-om-blue-dark transition">
-          На главную
-        </Link>
       </section>
       <SiteFooter />
     </>

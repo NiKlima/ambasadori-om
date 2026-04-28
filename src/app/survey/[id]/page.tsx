@@ -16,7 +16,11 @@ export default async function SurveyPage({ params, searchParams }: Props) {
   const admin = createAdminClient();
 
   const [{ data: challenge }, { data: trainer }, { data: questions }] = await Promise.all([
-    admin.from("challenges").select("id,title,description,kind,active").eq("id", id).single(),
+    admin
+      .from("challenges")
+      .select("id,title,description,kind,active")
+      .eq("id", id)
+      .single(),
     promoCode
       ? admin
           .from("profiles")
@@ -26,7 +30,11 @@ export default async function SurveyPage({ params, searchParams }: Props) {
           .eq("is_active", true)
           .single()
       : Promise.resolve({ data: null }),
-    admin.from("survey_questions").select("*").eq("challenge_id", id).order("position"),
+    admin
+      .from("survey_questions")
+      .select("*")
+      .eq("challenge_id", id)
+      .order("position"),
   ]);
 
   if (!challenge || challenge.kind !== "survey_trainee" || !challenge.active) {
@@ -35,25 +43,83 @@ export default async function SurveyPage({ params, searchParams }: Props) {
 
   if (!trainer) {
     return (
-      <div className="max-w-xl mx-auto rounded-3xl bg-white p-8 text-center">
-        <h1 className="text-2xl font-semibold mb-2">Ссылка некорректна</h1>
-        <p className="text-om-muted">
-          Реф-код тренера не найден. Попроси у тренера актуальную ссылку на опрос.
-        </p>
+      <div
+        className="container-om"
+        style={{ padding: "120px 0", maxWidth: 600 }}
+      >
+        <div
+          className="bg-white border border-[var(--om-ink-100)]"
+          style={{ padding: "40px 32px", textAlign: "center" }}
+        >
+          <div className="eyebrow" style={{ color: "var(--om-magenta)" }}>
+            ссылка некорректна
+          </div>
+          <h1
+            className="font-display"
+            style={{
+              fontWeight: 900,
+              fontSize: 32,
+              letterSpacing: "-0.03em",
+              margin: "12px 0 12px",
+            }}
+          >
+            реф-код тренера не найден.
+          </h1>
+          <p
+            className="font-body"
+            style={{
+              fontSize: 14,
+              color: "var(--om-ink-500)",
+              lineHeight: 1.55,
+            }}
+          >
+            попроси у тренера актуальную ссылку на опрос.
+          </p>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="max-w-2xl mx-auto space-y-6">
-      <div className="rounded-3xl bg-om-ink text-om-cream p-8">
-        <div className="text-xs uppercase tracking-[0.2em] text-om-cream/60 mb-3">
-          Опрос от {trainer.full_name}
+    <div
+      className="container-om grid gap-4"
+      style={{ padding: "48px 0 80px", maxWidth: 720 }}
+    >
+      <div
+        className="bg-[var(--om-ink-900)] text-white relative overflow-hidden"
+        style={{ padding: "32px 36px" }}
+      >
+        <div
+          className="om-stripes-white-soft"
+          style={{ position: "absolute", inset: 0 }}
+        />
+        <div className="relative">
+          <div className="eyebrow eyebrow-w">опрос от {trainer.full_name?.toLowerCase()}</div>
+          <h1
+            className="font-display"
+            style={{
+              fontWeight: 900,
+              fontSize: "clamp(32px, 5vw, 48px)",
+              letterSpacing: "-0.03em",
+              lineHeight: 0.95,
+              margin: "12px 0 0",
+            }}
+          >
+            {challenge.title}
+          </h1>
+          {challenge.description && (
+            <p
+              className="font-body mt-3"
+              style={{
+                fontSize: 14,
+                opacity: 0.75,
+                lineHeight: 1.55,
+              }}
+            >
+              {challenge.description}
+            </p>
+          )}
         </div>
-        <h1 className="text-3xl md:text-4xl font-semibold">{challenge.title}</h1>
-        {challenge.description && (
-          <p className="mt-3 text-om-cream/70">{challenge.description}</p>
-        )}
       </div>
 
       <SurveyForm

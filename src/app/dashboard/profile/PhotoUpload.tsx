@@ -13,7 +13,14 @@ type Props = {
   maxBytes: number;
 };
 
-export function PhotoUpload({ userId, currentUrl, field, label, accept, maxBytes }: Props) {
+export function PhotoUpload({
+  userId,
+  currentUrl,
+  field,
+  label,
+  accept,
+  maxBytes,
+}: Props) {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
@@ -21,7 +28,7 @@ export function PhotoUpload({ userId, currentUrl, field, label, accept, maxBytes
   async function handleFile(file: File) {
     setError(null);
     if (file.size > maxBytes) {
-      setError(`Файл больше ${(maxBytes / 1024 / 1024).toFixed(1)}МБ`);
+      setError(`файл больше ${(maxBytes / 1024 / 1024).toFixed(1)} мб`);
       return;
     }
     setBusy(true);
@@ -42,40 +49,80 @@ export function PhotoUpload({ userId, currentUrl, field, label, accept, maxBytes
       if (dbErr) throw dbErr;
       router.refresh();
     } catch (e) {
-      setError(e instanceof Error ? e.message : "Ошибка загрузки");
+      setError(e instanceof Error ? e.message : "ошибка загрузки");
     } finally {
       setBusy(false);
     }
   }
 
   return (
-    <div className="space-y-2">
-      <label className="block text-sm font-medium">{label}</label>
-      <div className="flex items-center gap-4">
-        {currentUrl && field === "photo_url" && (
-          <img src={currentUrl} alt="" className="w-16 h-16 rounded-full object-cover" />
-        )}
-        {currentUrl && field === "intro_video_url" && (
-          <a href={currentUrl} target="_blank" rel="noreferrer" className="text-sm text-om-blue-dark underline">
-            текущий файл
-          </a>
-        )}
-        <label className={`rounded-full px-4 py-2 text-sm border border-black/10 bg-white cursor-pointer ${busy ? "opacity-50" : "hover:bg-om-cream"}`}>
-          {busy ? "Загрузка…" : currentUrl ? "Заменить" : "Загрузить"}
-          <input
-            type="file"
-            accept={accept}
-            disabled={busy}
-            className="hidden"
-            onChange={(e) => {
-              const f = e.target.files?.[0];
-              if (f) handleFile(f);
-              e.target.value = "";
-            }}
-          />
-        </label>
+    <div>
+      <div
+        className="font-display"
+        style={{
+          fontSize: 11,
+          fontWeight: 800,
+          letterSpacing: "0.08em",
+          textTransform: "uppercase",
+          color: "var(--om-ink-500)",
+        }}
+      >
+        {label}
       </div>
-      {error && <p className="text-xs text-red-600">{error}</p>}
+      {field === "photo_url" && currentUrl && (
+        <div
+          className="bg-img mt-3"
+          style={{
+            aspectRatio: "1/1",
+            backgroundImage: `url(${currentUrl})`,
+          }}
+        />
+      )}
+      {field === "intro_video_url" && currentUrl && (
+        <a
+          href={currentUrl}
+          target="_blank"
+          rel="noreferrer"
+          className="lk mt-3 inline-block"
+          style={{ fontSize: 12 }}
+        >
+          текущий файл →
+        </a>
+      )}
+      <label
+        className={`btn btn-outline mt-3 ${busy ? "opacity-50" : ""}`}
+        style={{ width: "100%", cursor: busy ? "not-allowed" : "pointer" }}
+      >
+        {busy
+          ? "загрузка…"
+          : currentUrl
+            ? "заменить фото"
+            : "загрузить фото"}
+        <input
+          type="file"
+          accept={accept}
+          disabled={busy}
+          className="hidden"
+          onChange={(e) => {
+            const f = e.target.files?.[0];
+            if (f) handleFile(f);
+            e.target.value = "";
+          }}
+        />
+      </label>
+      {error && (
+        <p
+          className="font-mono mt-2"
+          style={{
+            fontSize: 11,
+            color: "var(--om-magenta)",
+            textTransform: "uppercase",
+            letterSpacing: "0.06em",
+          }}
+        >
+          {error}
+        </p>
+      )}
     </div>
   );
 }

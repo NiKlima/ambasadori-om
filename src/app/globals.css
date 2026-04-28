@@ -1,54 +1,382 @@
 @import "tailwindcss";
 
+/* ============================================================================
+   OM Design System — ported from Claude Design handoff
+   Source: design_handoff_om_ambasadori/ds/colors_and_type.css + styles-ds.css
+   Brand voice: lowercase, hard 90° corners, image-first, blue+ink+white ≥80%
+   ============================================================================ */
+
 :root {
-  /* OM brand palette — water + well-being */
-  --om-blue: #4aa7d0;
-  --om-blue-dark: #2e7fa3;
-  --om-blue-soft: #e8f4fa;
-  --om-sand: #f5f0e6;
-  --om-cream: #faf7f1;
-  --om-ink: #1a2d3a;
-  --om-muted: #6b7d89;
-  --om-green: #5a8c6b;
-  --om-coral: #e07a5f;
+  /* ---------- Brand Colors ---------- */
+  --om-blue: #0047b9;
+  --om-white: #ffffff;
+  --om-black: #231f20;
+  --om-magenta: #d6006d;
 
-  --background: var(--om-cream);
-  --foreground: var(--om-ink);
+  /* Blue ramp */
+  --om-blue-50: #eaf0fb;
+  --om-blue-100: #d2dff5;
+  --om-blue-200: #a4bfeb;
+  --om-blue-300: #6f97dd;
+  --om-blue-400: #3870ce;
+  --om-blue-500: #0047b9;
+  --om-blue-600: #003a99;
+  --om-blue-700: #002e78;
+  --om-blue-800: #002257;
+  --om-blue-900: #001637;
+
+  /* Ink (warm neutral) ramp */
+  --om-ink-900: #231f20;
+  --om-ink-700: #3a3637;
+  --om-ink-500: #6b6566;
+  --om-ink-300: #b3afaf;
+  --om-ink-200: #d8d4d4;
+  --om-ink-100: #ececea;
+  --om-ink-50:  #f6f5f2;
+
+  /* Semantic */
+  --bg: var(--om-white);
+  --bg-alt: var(--om-ink-50);
+  --bg-blue: var(--om-blue);
+  --bg-ink: var(--om-ink-900);
+  --fg: var(--om-ink-900);
+  --fg-muted: var(--om-ink-500);
+  --fg-subtle: var(--om-ink-300);
+  --fg-inverse: var(--om-white);
+  --fg-brand: var(--om-blue);
+  --fg-accent: var(--om-magenta);
+  --border: var(--om-ink-200);
+  --border-strong: var(--om-ink-900);
+
+  /* Type */
+  --font-display: var(--font-firs), 'Helvetica Neue', Arial, sans-serif;
+  --font-body:    var(--font-firs), 'Helvetica Neue', Arial, sans-serif;
+  --font-mono:    'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+  --fw-regular: 400;
+  --fw-medium: 500;
+  --fw-semibold: 700;
+  --fw-bold: 800;
+  --fw-black: 900;
+  --ls-display: -0.03em;
+  --ls-heading: -0.02em;
+  --ls-body: -0.005em;
+  --ls-caps: 0.04em;
+  --fs-display-xl: clamp(64px, 9vw, 144px);
+  --fs-display-l:  clamp(48px, 6.5vw, 96px);
+  --fs-display-m:  clamp(40px, 5vw, 72px);
+  --fs-h1: clamp(36px, 4vw, 56px);
+  --fs-h2: clamp(28px, 3vw, 40px);
+  --fs-h3: 22px;
+  --fs-h4: 18px;
+  --fs-body: 16px;
+  --fs-small: 14px;
+  --fs-caption: 12px;
+  --lh-tight: 0.95;
+  --lh-snug: 1.05;
+  --lh-normal: 1.35;
+  --lh-loose: 1.55;
+
+  /* Spacing 8pt grid */
+  --sp-1: 4px;
+  --sp-2: 8px;
+  --sp-3: 12px;
+  --sp-4: 16px;
+  --sp-5: 24px;
+  --sp-6: 32px;
+  --sp-7: 48px;
+  --sp-8: 64px;
+  --sp-9: 96px;
+  --sp-10: 128px;
+
+  /* Radii — hard geometric */
+  --radius-0: 0;
+  --radius-1: 2px;
+  --radius-2: 4px;
+  --radius-pill: 999px;
+
+  /* Shadows */
+  --shadow-1: 0 1px 2px rgba(35,31,32,.06), 0 1px 1px rgba(35,31,32,.04);
+  --shadow-2: 0 6px 16px rgba(35,31,32,.08), 0 2px 4px rgba(35,31,32,.04);
+  --shadow-3: 0 18px 40px rgba(35,31,32,.12), 0 4px 8px rgba(35,31,32,.06);
+  --shadow-blue: 0 18px 40px rgba(0,71,185,.18), 0 4px 8px rgba(0,71,185,.12);
+
+  /* Stripe pattern */
+  --stripe-thickness: 24px;
+  --stripe-gap-1x: 24px;
+  --stripe-gap-2x: 48px;
+  --stripe-gap-3x: 72px;
+
+  /* Motion */
+  --ease-out: cubic-bezier(.2,.8,.2,1);
+  --ease-in: cubic-bezier(.6,.04,.98,.34);
+  --ease-inout: cubic-bezier(.65,.05,.36,1);
+  --dur-fast: 140ms;
+  --dur-base: 220ms;
+  --dur-slow: 420ms;
+
+  /* Layout */
+  --container-max: 1280px;
+  --gutter: 32px;
 }
 
+/* ---------- Tailwind v4 theme tokens ---------- */
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
+  --color-background: var(--bg);
+  --color-foreground: var(--fg);
   --color-om-blue: var(--om-blue);
-  --color-om-blue-dark: var(--om-blue-dark);
-  --color-om-blue-soft: var(--om-blue-soft);
-  --color-om-sand: var(--om-sand);
-  --color-om-cream: var(--om-cream);
-  --color-om-ink: var(--om-ink);
-  --color-om-muted: var(--om-muted);
-  --color-om-green: var(--om-green);
-  --color-om-coral: var(--om-coral);
-  --font-sans: var(--font-inter);
+  --color-om-blue-50: var(--om-blue-50);
+  --color-om-blue-100: var(--om-blue-100);
+  --color-om-blue-200: var(--om-blue-200);
+  --color-om-blue-300: var(--om-blue-300);
+  --color-om-blue-400: var(--om-blue-400);
+  --color-om-blue-500: var(--om-blue-500);
+  --color-om-blue-600: var(--om-blue-600);
+  --color-om-blue-700: var(--om-blue-700);
+  --color-om-blue-800: var(--om-blue-800);
+  --color-om-blue-900: var(--om-blue-900);
+  --color-om-black: var(--om-black);
+  --color-om-magenta: var(--om-magenta);
+  --color-om-white: var(--om-white);
+  --color-om-ink-50: var(--om-ink-50);
+  --color-om-ink-100: var(--om-ink-100);
+  --color-om-ink-200: var(--om-ink-200);
+  --color-om-ink-300: var(--om-ink-300);
+  --color-om-ink-500: var(--om-ink-500);
+  --color-om-ink-700: var(--om-ink-700);
+  --color-om-ink-900: var(--om-ink-900);
+  --color-border: var(--border);
+  --font-sans: var(--font-firs);
+  --font-display: var(--font-firs);
+  --font-mono: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+
+  /* Legacy aliases — old palette keys map to new tokens so existing pages
+     compile during the staged port. Will be removed at end of v4. */
+  --color-om-blue-dark: var(--om-blue-600);
+  --color-om-blue-soft: var(--om-blue-50);
+  --color-om-cream: var(--om-white);
+  --color-om-sand: var(--om-ink-50);
+  --color-om-ink: var(--om-ink-900);
+  --color-om-muted: var(--om-ink-500);
+  --color-om-green: var(--om-blue);
+  --color-om-coral: var(--om-magenta);
 }
 
+/* ---------- Base ---------- */
+* { box-sizing: border-box; }
 html, body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: var(--font-inter), -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  margin: 0;
+  padding: 0;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-body);
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  letter-spacing: var(--ls-body);
 }
 
-.container-xl {
-  max-width: 1280px;
-  margin-left: auto;
-  margin-right: auto;
-  padding-left: 1.5rem;
-  padding-right: 1.5rem;
+/* ============================================================================
+   STRIPE MOTIF — brand signature
+   ============================================================================ */
+.om-stripes-blue-on-white {
+  background-image: repeating-linear-gradient(0deg,
+    var(--om-blue) 0 var(--stripe-thickness),
+    #fff var(--stripe-thickness) calc(var(--stripe-thickness) + var(--stripe-gap-2x)));
+}
+.om-stripes-white-on-blue {
+  background-image: repeating-linear-gradient(0deg,
+    #fff 0 var(--stripe-thickness),
+    var(--om-blue) var(--stripe-thickness) calc(var(--stripe-thickness) + var(--stripe-gap-2x)));
+}
+.om-stripes-blue-soft {
+  background-image: repeating-linear-gradient(0deg, var(--om-blue) 0 18px, #fff 18px 54px);
+  opacity: .06;
+}
+.om-stripes-white-soft {
+  background-image: repeating-linear-gradient(0deg, #fff 0 6px, transparent 6px 24px);
+  opacity: 0.18;
+}
+.om-stripes-band {
+  background-image: repeating-linear-gradient(0deg, #fff 0 22px, transparent 22px 88px);
 }
 
-@media (min-width: 768px) {
-  .container-xl {
-    padding-left: 2.5rem;
-    padding-right: 2.5rem;
-  }
+/* ============================================================================
+   PRIMITIVE COMPONENTS — used as raw classes for handoff fidelity
+   ============================================================================ */
+
+/* Buttons — hard corners */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  padding: 14px 24px; border: 0; cursor: pointer;
+  font-family: var(--font-display); font-weight: 800; font-size: 14px;
+  letter-spacing: -0.005em;
+  transition: background var(--dur-base) var(--ease-out), color var(--dur-base) var(--ease-out);
+  text-decoration: none;
 }
+.btn-blue { background: var(--om-blue); color: #fff; }
+.btn-blue:hover { background: var(--om-blue-600); }
+.btn-white { background: #fff; color: var(--om-blue); }
+.btn-white:hover { background: var(--om-ink-50); }
+.btn-ink { background: var(--om-ink-900); color: #fff; }
+.btn-ink:hover { background: #000; }
+.btn-outline { background: transparent; color: var(--fg); border: 2px solid var(--fg); padding: 12px 22px; }
+.btn-outline:hover { background: var(--fg); color: var(--bg); }
+.btn-outline-w { background: transparent; color: #fff; border: 2px solid #fff; padding: 12px 22px; }
+.btn-outline-w:hover { background: #fff; color: var(--om-blue); }
+.btn-sm { padding: 9px 16px; font-size: 12px; }
+
+/* Chips */
+.chip {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 4px 10px; border: 1px solid var(--border);
+  font-family: var(--font-display); font-weight: 700; font-size: 11px;
+  letter-spacing: 0.04em; text-transform: uppercase; color: var(--fg);
+  background: #fff;
+}
+.chip-blue { background: var(--om-blue); color: #fff; border-color: var(--om-blue); }
+.chip-ink { background: var(--om-ink-900); color: #fff; border-color: var(--om-ink-900); }
+.chip-outline-w { background: transparent; color: #fff; border-color: rgba(255,255,255,.4); }
+.chip-magenta { background: var(--om-magenta); color: #fff; border-color: var(--om-magenta); }
+
+/* Container */
+.container-om {
+  max-width: var(--container-max);
+  margin-left: auto; margin-right: auto;
+  padding-left: var(--gutter); padding-right: var(--gutter);
+}
+
+/* Leaderboard row */
+.lb-row {
+  display: grid;
+  grid-template-columns: 64px 1fr 200px 160px 100px 120px;
+  align-items: center; gap: 24px;
+  padding: 18px 24px;
+  border-bottom: 1px solid var(--border);
+  background: #fff;
+}
+.lb-row.head {
+  font-family: var(--font-display); font-weight: 800; font-size: 11px;
+  letter-spacing: 0.08em; text-transform: uppercase; color: var(--fg-muted);
+  background: var(--om-ink-50);
+  border-bottom: 2px solid var(--om-ink-900);
+  padding: 14px 24px;
+}
+.lb-row .rank {
+  font-family: var(--font-display); font-weight: 900; font-size: 28px;
+  letter-spacing: -0.02em; color: var(--fg-muted);
+}
+.lb-row.top1 .rank { color: var(--om-blue); }
+
+/* Avatar — hard square */
+.av {
+  width: 44px; height: 44px;
+  background: var(--om-ink-50); color: var(--om-blue);
+  display: grid; place-items: center;
+  font-family: var(--font-display); font-weight: 900; font-size: 14px;
+  letter-spacing: 0;
+  flex-shrink: 0;
+  border: 1px solid var(--border);
+}
+.av-blue { background: var(--om-blue); color: #fff; border-color: var(--om-blue); }
+.av-ink { background: var(--om-ink-900); color: #fff; border-color: var(--om-ink-900); }
+.av-lg { width: 72px; height: 72px; font-size: 22px; }
+
+/* Progress bar */
+.bar { height: 4px; background: var(--om-blue-50); position: relative; }
+.bar > i { position: absolute; left: 0; top: 0; bottom: 0; background: var(--om-blue); }
+.bar-on-blue { background: rgba(255,255,255,.25); }
+.bar-on-blue > i { background: #fff; }
+
+/* Input */
+.input {
+  background: #fff; border: 1px solid var(--border);
+  padding: 14px 18px; font-family: var(--font-body); font-size: 14px;
+  color: var(--fg); width: 100%; outline: none;
+  letter-spacing: var(--ls-body);
+}
+.input:focus { border-color: var(--om-blue); }
+.input::placeholder { color: var(--fg-subtle); }
+
+textarea.input { line-height: 1.5; resize: vertical; }
+
+/* Eyebrow */
+.eyebrow {
+  font-family: var(--font-display); font-weight: 800; font-size: 11px;
+  letter-spacing: 0.08em; text-transform: uppercase; color: var(--om-blue);
+}
+.eyebrow-w { color: rgba(255,255,255,.85); }
+.eyebrow-ink { color: var(--fg-muted); }
+
+/* KPI block */
+.kpi {
+  display: flex; flex-direction: column;
+  padding: 24px 28px;
+  background: #fff; border: 1px solid var(--border);
+}
+.kpi .label {
+  font-family: var(--font-display); font-weight: 800; font-size: 11px;
+  letter-spacing: 0.08em; text-transform: uppercase; color: var(--fg-muted);
+}
+.kpi .value {
+  font-family: var(--font-display); font-weight: 900; font-size: 56px;
+  letter-spacing: -0.04em; line-height: 0.95; color: var(--fg);
+  margin-top: 8px;
+}
+.kpi-blue { background: var(--om-blue); border-color: var(--om-blue); color: #fff; }
+.kpi-blue .label { color: rgba(255,255,255,.75); }
+.kpi-blue .value { color: #fff; }
+.kpi-ink { background: var(--om-ink-900); border-color: var(--om-ink-900); color: #fff; }
+.kpi-ink .label { color: rgba(255,255,255,.55); }
+.kpi-ink .value { color: #fff; }
+
+/* Link style */
+.lk {
+  font-family: var(--font-display); font-weight: 800; font-size: 13px;
+  color: var(--om-blue); display: inline-flex; align-items: center; gap: 6px;
+  text-decoration: none;
+}
+.lk:hover { color: var(--om-blue-700); }
+
+/* Background image helper */
+.bg-img { background-size: cover; background-position: center; background-repeat: no-repeat; }
+
+/* ============================================================================
+   TYPOGRAPHY UTILITIES
+   ============================================================================ */
+.om-display-xl,
+.om-display-l,
+.om-display-m {
+  font-family: var(--font-display);
+  font-weight: 900;
+  letter-spacing: var(--ls-display);
+  line-height: 0.88;
+  text-wrap: balance;
+  margin: 0;
+}
+.om-display-xl { font-size: var(--fs-display-xl); }
+.om-display-l  { font-size: var(--fs-display-l); }
+.om-display-m  { font-size: var(--fs-display-m); line-height: 0.92; }
+
+.om-h1 { font-family: var(--font-display); font-size: var(--fs-h1); font-weight: 800; letter-spacing: var(--ls-heading); line-height: var(--lh-snug); margin: 0; }
+.om-h2 { font-family: var(--font-display); font-size: var(--fs-h2); font-weight: 800; letter-spacing: var(--ls-heading); line-height: var(--lh-snug); margin: 0; }
+.om-h3 { font-family: var(--font-display); font-size: var(--fs-h3); font-weight: 800; letter-spacing: var(--ls-heading); line-height: 1.2; margin: 0; }
+.om-h4 { font-family: var(--font-display); font-size: var(--fs-h4); font-weight: 800; line-height: 1.25; margin: 0; }
+
+.om-body {
+  font-family: var(--font-body); font-weight: 400; font-size: var(--fs-body);
+  line-height: var(--lh-loose); color: var(--fg); letter-spacing: var(--ls-body);
+}
+.om-body-lead { font-family: var(--font-body); font-weight: 500; font-size: 18px; line-height: 1.45; color: var(--fg); }
+.om-small { font-size: var(--fs-small); line-height: var(--lh-normal); color: var(--fg-muted); }
+.om-caption { font-size: var(--fs-caption); line-height: var(--lh-normal); color: var(--fg-muted); }
+.om-mono { font-family: var(--font-mono); font-size: 13px; letter-spacing: 0; }
+
+/* Markdown styling for trainer story */
+.om-prose p { margin: 0 0 16px; line-height: 1.65; }
+.om-prose p:last-child { margin-bottom: 0; }
+.om-prose strong { font-weight: 800; }
+.om-prose em { font-style: italic; }
+.om-prose ul, .om-prose ol { margin: 0 0 16px 1.5em; padding: 0; }
+.om-prose li { margin-bottom: 6px; line-height: 1.6; }
+.om-prose a { color: var(--om-blue); text-decoration: underline; }
+.om-prose h1, .om-prose h2, .om-prose h3 { font-family: var(--font-display); font-weight: 800; margin: 24px 0 12px; letter-spacing: var(--ls-heading); }
+.om-prose blockquote { border-left: 3px solid var(--om-blue); padding-left: 16px; margin: 16px 0; color: var(--fg-muted); font-style: italic; }

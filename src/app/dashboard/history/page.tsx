@@ -13,39 +13,137 @@ export default async function HistoryPage() {
     .eq("trainer_id", user.id)
     .order("created_at", { ascending: false });
 
-  const total = (txs ?? []).reduce((s, t) => s + (t.amount as number), 0);
+  const list = (txs ?? []) as PointTransaction[];
+  const total = list.reduce((s, t) => s + t.amount, 0);
 
   return (
-    <div className="space-y-6">
-      <div>
-        <h1 className="text-3xl md:text-4xl font-semibold">История начислений</h1>
-        <p className="text-om-muted mt-2">Всё прозрачно: каждая транзакция видна.</p>
-      </div>
+    <>
+      {/* HERO */}
+      <section
+        className="bg-[var(--om-ink-900)] text-white relative overflow-hidden"
+        style={{ padding: "56px 0" }}
+      >
+        <div
+          className="bg-img"
+          style={{
+            position: "absolute",
+            inset: 0,
+            backgroundImage: "url(/brand/imagery/runner-asphalt-line.jpg)",
+            opacity: 0.18,
+          }}
+        />
+        <div
+          className="container-om relative grid items-end gap-6"
+          style={{ gridTemplateColumns: "1.4fr 1fr" }}
+        >
+          <div>
+            <div className="eyebrow eyebrow-w">история</div>
+            <h1
+              className="font-display"
+              style={{
+                fontWeight: 900,
+                fontSize: "clamp(48px, 8vw, 96px)",
+                letterSpacing: "-0.04em",
+                lineHeight: 0.9,
+                margin: "12px 0 0",
+              }}
+            >
+              каждый балл.
+              <br />
+              каждое движение.
+            </h1>
+          </div>
+          <div
+            className="bg-[var(--om-blue)]"
+            style={{ padding: "22px 26px", textAlign: "right" }}
+          >
+            <div className="eyebrow eyebrow-w">всего</div>
+            <div
+              className="font-display"
+              style={{
+                fontWeight: 900,
+                fontSize: 64,
+                letterSpacing: "-0.04em",
+                lineHeight: 1,
+                marginTop: 6,
+              }}
+            >
+              {total}
+            </div>
+          </div>
+        </div>
+      </section>
 
-      <div className="rounded-3xl bg-white p-8">
-        <div className="flex items-center justify-between pb-4 border-b border-black/5">
-          <div className="text-om-muted text-sm">Всего баллов</div>
-          <div className="text-2xl font-semibold">{total}</div>
-        </div>
-        <div className="divide-y divide-black/5">
-          {((txs ?? []) as PointTransaction[]).map((t) => (
-            <div key={t.id} className="flex items-center justify-between py-4">
-              <div>
-                <div className="font-medium">{t.reason}</div>
-                <div className="text-om-muted text-xs mt-1">{formatDate(t.created_at)}</div>
+      <div className="container-om" style={{ padding: "32px 0 80px" }}>
+        {list.length > 0 ? (
+          <div className="bg-white border border-[var(--om-ink-100)]">
+            {list.map((t, i) => (
+              <div
+                key={t.id}
+                className="grid items-center"
+                style={{
+                  gridTemplateColumns: "1fr auto",
+                  padding: "18px 24px",
+                  borderBottom:
+                    i < list.length - 1
+                      ? "1px solid var(--om-ink-100)"
+                      : "none",
+                }}
+              >
+                <div>
+                  <div
+                    className="font-display"
+                    style={{
+                      fontWeight: 800,
+                      fontSize: 16,
+                      letterSpacing: "-0.01em",
+                    }}
+                  >
+                    {t.reason}
+                  </div>
+                  <div
+                    className="font-mono mt-1"
+                    style={{
+                      fontSize: 11,
+                      color: "var(--om-ink-500)",
+                      textTransform: "uppercase",
+                      letterSpacing: "0.06em",
+                    }}
+                  >
+                    {formatDate(t.created_at)}
+                  </div>
+                </div>
+                <div
+                  className="font-display"
+                  style={{
+                    fontWeight: 900,
+                    fontSize: 26,
+                    letterSpacing: "-0.02em",
+                    color:
+                      t.amount >= 0 ? "var(--om-blue)" : "var(--om-magenta)",
+                  }}
+                >
+                  {t.amount >= 0 ? "+" : ""}
+                  {t.amount}
+                </div>
               </div>
-              <div className={`text-lg font-semibold tabular-nums ${t.amount >= 0 ? "text-om-green" : "text-om-coral"}`}>
-                {t.amount >= 0 ? "+" : ""}{t.amount}
-              </div>
-            </div>
-          ))}
-          {(!txs || txs.length === 0) && (
-            <div className="py-12 text-center text-om-muted">
-              Пока нет начислений.
-            </div>
-          )}
-        </div>
+            ))}
+          </div>
+        ) : (
+          <div
+            className="bg-white border border-[var(--om-ink-100)]"
+            style={{ padding: "48px 32px", textAlign: "center" }}
+          >
+            <div className="eyebrow">тихо</div>
+            <p
+              className="font-body mt-3"
+              style={{ color: "var(--om-ink-500)", fontSize: 15 }}
+            >
+              пока нет начислений. начни с челленджа — баллы появятся здесь.
+            </p>
+          </div>
+        )}
       </div>
-    </div>
+    </>
   );
 }

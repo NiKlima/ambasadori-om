@@ -1,6 +1,10 @@
 import { createClient } from "@/lib/supabase/server";
 import type { Challenge, SurveyQuestion } from "@/lib/types";
-import { addSurveyQuestion, createSurveyChallenge, deleteSurveyQuestion } from "../actions";
+import {
+  addSurveyQuestion,
+  createSurveyChallenge,
+  deleteSurveyQuestion,
+} from "../actions";
 
 export default async function AdminSurveysPage() {
   const supabase = await createClient();
@@ -21,84 +25,220 @@ export default async function AdminSurveysPage() {
   }
 
   return (
-    <div className="space-y-8">
+    <div className="grid gap-8">
       <div>
-        <h1 className="text-3xl md:text-4xl font-semibold">Опросы</h1>
-        <p className="text-om-muted mt-2">
-          Опрос — челлендж типа <code>survey_trainee</code>. Подопечный заполняет публичную форму, тренер получает баллы.
+        <div className="eyebrow">опросы</div>
+        <h1
+          className="font-display"
+          style={{
+            fontWeight: 900,
+            fontSize: "clamp(40px, 5vw, 56px)",
+            letterSpacing: "-0.04em",
+            lineHeight: 0.95,
+            margin: "8px 0 0",
+          }}
+        >
+          ссылки и вопросы.
+        </h1>
+        <p
+          className="font-body mt-3"
+          style={{
+            fontSize: 14,
+            color: "var(--om-ink-500)",
+            lineHeight: 1.55,
+            maxWidth: 600,
+          }}
+        >
+          опрос — челлендж типа <code>survey_trainee</code>. подопечный заполняет публичную форму, тренер получает баллы.
         </p>
       </div>
 
-      <form action={createSurveyChallenge} className="rounded-3xl bg-white p-6 grid md:grid-cols-2 gap-4">
+      <form
+        action={createSurveyChallenge}
+        className="bg-white border border-[var(--om-ink-100)] grid md:grid-cols-2 gap-4"
+        style={{ padding: "28px 32px" }}
+      >
         <div className="md:col-span-2">
-          <label className="text-xs uppercase text-om-muted block mb-1">Название опроса</label>
-          <input name="title" required className="w-full rounded-lg border border-black/10 px-3 py-2" />
+          <div className="eyebrow eyebrow-ink">название опроса</div>
+          <input className="input mt-2" name="title" required />
         </div>
         <div className="md:col-span-2">
-          <label className="text-xs uppercase text-om-muted block mb-1">Описание</label>
-          <textarea name="description" rows={2} className="w-full rounded-lg border border-black/10 px-3 py-2" />
+          <div className="eyebrow eyebrow-ink">описание</div>
+          <textarea
+            className="input mt-2"
+            name="description"
+            rows={3}
+            style={{
+              resize: "none",
+              fontFamily: "var(--font-body)",
+              fontSize: 14,
+            }}
+          />
         </div>
         <div>
-          <label className="text-xs uppercase text-om-muted block mb-1">Баллы тренеру</label>
-          <input name="points" type="number" min={1} defaultValue={10} className="w-full rounded-lg border border-black/10 px-3 py-2" />
+          <div className="eyebrow eyebrow-ink">баллы тренеру</div>
+          <input
+            className="input mt-2"
+            name="points"
+            type="number"
+            min={1}
+            defaultValue={10}
+          />
         </div>
         <div className="md:col-span-2">
-          <button className="rounded-full bg-om-ink text-om-cream px-5 py-2 text-sm">Создать опрос</button>
+          <button type="submit" className="btn btn-blue">
+            создать опрос
+          </button>
         </div>
       </form>
 
-      <div className="space-y-6">
+      <div className="grid gap-6">
         {list.map((ch) => {
           const qs = byChallenge.get(ch.id) ?? [];
           const nextPosition = (qs[qs.length - 1]?.position ?? 0) + 1;
           return (
-            <div key={ch.id} className="rounded-3xl bg-white p-6 space-y-4">
+            <div
+              key={ch.id}
+              className="bg-white border border-[var(--om-ink-100)] grid gap-4"
+              style={{ padding: "28px 32px" }}
+            >
               <div>
-                <div className="text-lg font-semibold">{ch.title}</div>
-                <div className="text-om-muted text-sm mt-1">{ch.description}</div>
+                <div
+                  className="font-display"
+                  style={{
+                    fontWeight: 800,
+                    fontSize: 20,
+                    letterSpacing: "-0.02em",
+                  }}
+                >
+                  {ch.title}
+                </div>
+                {ch.description && (
+                  <div
+                    className="font-body mt-1"
+                    style={{
+                      fontSize: 13,
+                      color: "var(--om-ink-500)",
+                      lineHeight: 1.55,
+                    }}
+                  >
+                    {ch.description}
+                  </div>
+                )}
               </div>
 
-              <div className="space-y-2">
+              <div className="grid gap-2">
                 {qs.map((q) => (
-                  <div key={q.id} className="flex items-start justify-between gap-3 rounded-xl bg-om-cream p-3">
+                  <div
+                    key={q.id}
+                    className="flex items-start justify-between gap-3"
+                    style={{
+                      padding: "12px 14px",
+                      background: "var(--om-ink-50)",
+                      border: "1px solid var(--om-ink-100)",
+                    }}
+                  >
                     <div className="min-w-0">
-                      <div className="text-sm font-medium">{q.position}. {q.text}</div>
+                      <div
+                        className="font-display"
+                        style={{
+                          fontSize: 14,
+                          fontWeight: 700,
+                          letterSpacing: "-0.01em",
+                        }}
+                      >
+                        {q.position}. {q.text}
+                      </div>
                       {q.options.length > 0 && (
-                        <div className="text-xs text-om-muted mt-1">
+                        <div
+                          className="font-mono mt-1"
+                          style={{
+                            fontSize: 11,
+                            color: "var(--om-ink-500)",
+                            textTransform: "uppercase",
+                            letterSpacing: "0.06em",
+                          }}
+                        >
                           {q.options.map((o) => o.label).join(" · ")}
                         </div>
                       )}
                     </div>
                     <form action={deleteSurveyQuestion}>
                       <input type="hidden" name="id" value={q.id} />
-                      <button className="text-xs text-om-coral hover:underline">Удалить</button>
+                      <button
+                        type="submit"
+                        className="font-mono"
+                        style={{
+                          fontSize: 11,
+                          color: "var(--om-magenta)",
+                          textTransform: "uppercase",
+                          letterSpacing: "0.06em",
+                          background: "transparent",
+                          border: 0,
+                          cursor: "pointer",
+                        }}
+                      >
+                        удалить
+                      </button>
                     </form>
                   </div>
                 ))}
                 {qs.length === 0 && (
-                  <div className="text-om-muted text-sm">Вопросов нет — добавь первый.</div>
+                  <div
+                    className="font-mono"
+                    style={{
+                      fontSize: 12,
+                      color: "var(--om-ink-500)",
+                      textTransform: "uppercase",
+                      letterSpacing: "0.06em",
+                    }}
+                  >
+                    вопросов нет — добавь первый.
+                  </div>
                 )}
               </div>
 
-              <form action={addSurveyQuestion} className="grid md:grid-cols-[1fr_1fr_auto] gap-3 items-end">
+              <form
+                action={addSurveyQuestion}
+                className="grid md:grid-cols-[1fr_1fr_auto] gap-3 items-end"
+              >
                 <input type="hidden" name="challenge_id" value={ch.id} />
                 <input type="hidden" name="position" value={nextPosition} />
                 <div>
-                  <label className="text-xs uppercase text-om-muted block mb-1">Текст вопроса</label>
-                  <input name="text" required className="w-full rounded-lg border border-black/10 px-3 py-2" />
+                  <div className="eyebrow eyebrow-ink">текст вопроса</div>
+                  <input className="input mt-2" name="text" required />
                 </div>
                 <div>
-                  <label className="text-xs uppercase text-om-muted block mb-1">Варианты (по строке; пусто = свободный ответ)</label>
-                  <textarea name="options" rows={2} className="w-full rounded-lg border border-black/10 px-3 py-2 text-sm" />
+                  <div className="eyebrow eyebrow-ink">варианты · по строке</div>
+                  <textarea
+                    className="input mt-2"
+                    name="options"
+                    rows={2}
+                    style={{
+                      resize: "none",
+                      fontFamily: "var(--font-mono)",
+                      fontSize: 13,
+                    }}
+                  />
                 </div>
-                <button className="rounded-full bg-om-ink text-om-cream px-5 py-2 text-sm">Добавить</button>
+                <button type="submit" className="btn btn-blue">
+                  добавить
+                </button>
               </form>
             </div>
           );
         })}
         {list.length === 0 && (
-          <div className="rounded-3xl bg-white p-8 text-center text-om-muted">
-            Опросов нет. Создай первый через форму выше.
+          <div
+            className="bg-white border border-[var(--om-ink-100)]"
+            style={{
+              padding: "40px 28px",
+              textAlign: "center",
+              color: "var(--om-ink-500)",
+              fontSize: 14,
+            }}
+          >
+            опросов нет. создай первый через форму выше.
           </div>
         )}
       </div>

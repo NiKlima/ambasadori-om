@@ -4,28 +4,60 @@ import { createChallenge, toggleChallenge } from "../actions";
 
 export default async function AdminChallengesPage() {
   const supabase = await createClient();
-  const { data } = await supabase.from("challenges").select("*").order("created_at", { ascending: false });
+  const { data } = await supabase
+    .from("challenges")
+    .select("*")
+    .order("created_at", { ascending: false });
   const list = (data ?? []) as Challenge[];
 
   return (
-    <div className="space-y-8">
+    <div className="grid gap-8">
       <div>
-        <h1 className="text-3xl md:text-4xl font-semibold">Челленджи</h1>
-        <p className="text-om-muted mt-2">Создавай и архивируй активности.</p>
+        <div className="eyebrow">челленджи</div>
+        <h1
+          className="font-display"
+          style={{
+            fontWeight: 900,
+            fontSize: "clamp(40px, 5vw, 56px)",
+            letterSpacing: "-0.04em",
+            lineHeight: 0.95,
+            margin: "8px 0 0",
+          }}
+        >
+          создавай и архивируй активности.
+        </h1>
       </div>
 
-      <form action={createChallenge} className="rounded-3xl bg-white p-6 grid md:grid-cols-2 gap-4">
+      <form
+        action={createChallenge}
+        className="bg-white border border-[var(--om-ink-100)] grid md:grid-cols-2 gap-4"
+        style={{ padding: "28px 32px" }}
+      >
         <div className="md:col-span-2">
-          <label className="text-xs uppercase text-om-muted block mb-1">Название</label>
-          <input name="title" required className="w-full rounded-lg border border-black/10 px-3 py-2" />
+          <div className="eyebrow eyebrow-ink">название</div>
+          <input
+            className="input mt-2"
+            name="title"
+            required
+            placeholder="фото с OM на тренировке"
+          />
         </div>
         <div className="md:col-span-2">
-          <label className="text-xs uppercase text-om-muted block mb-1">Описание</label>
-          <textarea name="description" rows={2} className="w-full rounded-lg border border-black/10 px-3 py-2" />
+          <div className="eyebrow eyebrow-ink">описание</div>
+          <textarea
+            className="input mt-2"
+            name="description"
+            rows={3}
+            style={{
+              resize: "none",
+              fontFamily: "var(--font-body)",
+              fontSize: 14,
+            }}
+          />
         </div>
         <div>
-          <label className="text-xs uppercase text-om-muted block mb-1">Тип</label>
-          <select name="kind" defaultValue="manual" className="w-full rounded-lg border border-black/10 px-3 py-2">
+          <div className="eyebrow eyebrow-ink">тип</div>
+          <select className="input mt-2" name="kind" defaultValue="manual">
             <option value="manual">manual — ручная модерация</option>
             <option value="photo_ai">photo_ai — фото + AI</option>
             <option value="video_ai">video_ai — видео + AI</option>
@@ -33,68 +65,124 @@ export default async function AdminChallengesPage() {
           </select>
         </div>
         <div>
-          <label className="text-xs uppercase text-om-muted block mb-1">Баллы</label>
-          <input name="points" type="number" min={0} defaultValue={5} className="w-full rounded-lg border border-black/10 px-3 py-2" />
+          <div className="eyebrow eyebrow-ink">баллы</div>
+          <input
+            className="input mt-2"
+            name="points"
+            type="number"
+            min={0}
+            defaultValue={5}
+          />
         </div>
         <div className="md:col-span-2">
-          <label className="text-xs uppercase text-om-muted block mb-1">AI-промпт (для photo_ai / video_ai)</label>
+          <div className="eyebrow eyebrow-ink">AI-промпт</div>
           <textarea
+            className="input mt-2"
             name="ai_prompt"
-            rows={2}
-            placeholder="Например: «на фото должна быть бутылка OM на переднем плане, локация — спортзал»"
-            className="w-full rounded-lg border border-black/10 px-3 py-2"
+            rows={3}
+            placeholder="например: «на фото должна быть бутылка OM на переднем плане, локация — спортзал»"
+            style={{ resize: "none", fontFamily: "var(--font-body)", fontSize: 14 }}
           />
         </div>
         <div>
-          <label className="text-xs uppercase text-om-muted block mb-1">Обложка</label>
-          <input name="cover" type="file" accept="image/*" className="block text-sm w-full" />
-        </div>
-        <div className="md:col-span-2">
-          <label className="text-xs uppercase text-om-muted block mb-1">Видео-инструкция (URL, опц.)</label>
+          <div className="eyebrow eyebrow-ink">обложка</div>
           <input
-            name="intro_video_url"
-            placeholder="https://youtu.be/... — пример «как снимать»"
-            className="w-full rounded-lg border border-black/10 px-3 py-2"
+            className="input mt-2"
+            name="cover"
+            type="file"
+            accept="image/*"
           />
         </div>
-        <label className="flex items-center gap-2 mt-7">
+        <div>
+          <div className="eyebrow eyebrow-ink">видео-инструкция · url</div>
+          <input
+            className="input mt-2"
+            name="intro_video_url"
+            placeholder="https://youtu.be/…"
+          />
+        </div>
+        <label
+          className="flex items-center gap-2 font-mono"
+          style={{
+            fontSize: 12,
+            color: "var(--om-ink-500)",
+            textTransform: "uppercase",
+            letterSpacing: "0.06em",
+            marginTop: 4,
+          }}
+        >
           <input name="requires_moderation" type="checkbox" defaultChecked />
-          <span className="text-sm">Требует модерации (если AI не уверен)</span>
+          <span>требует модерации (если AI не уверен)</span>
         </label>
         <div className="md:col-span-2">
-          <button className="rounded-full bg-om-ink text-om-cream px-5 py-2 text-sm">Создать</button>
+          <button type="submit" className="btn btn-blue">
+            создать
+          </button>
         </div>
       </form>
 
-      <div className="space-y-3">
+      <div className="grid gap-3">
         {list.map((c) => (
-          <div key={c.id} className={`rounded-3xl bg-white border border-black/5 p-6 flex items-start justify-between gap-4 ${c.active ? "" : "opacity-60"}`}>
+          <div
+            key={c.id}
+            className="bg-white border border-[var(--om-ink-100)] flex items-start justify-between gap-4"
+            style={{
+              padding: "20px 24px",
+              opacity: c.active ? 1 : 0.55,
+            }}
+          >
             <div>
               <div className="flex items-center gap-2 flex-wrap">
-                <div className="text-lg font-semibold">{c.title}</div>
-                <span className="rounded-full bg-om-blue-soft text-om-blue-dark text-xs font-semibold px-2 py-0.5">+{c.points}</span>
-                <span className="rounded-full bg-om-ink/10 text-om-ink text-xs px-2 py-0.5">{c.kind}</span>
-                {c.ai_check && (
-                  <span className="rounded-full bg-om-green/15 text-om-green text-xs px-2 py-0.5">AI</span>
-                )}
+                <div
+                  className="font-display"
+                  style={{
+                    fontWeight: 800,
+                    fontSize: 17,
+                    letterSpacing: "-0.01em",
+                  }}
+                >
+                  {c.title}
+                </div>
+                <span className="chip chip-blue">+{c.points}</span>
+                <span className="chip">{c.kind}</span>
+                {c.ai_check && <span className="chip">AI</span>}
                 {c.requires_moderation && (
-                  <span className="rounded-full bg-om-sand text-om-ink text-xs px-2 py-0.5">модерация</span>
+                  <span className="chip">модерация</span>
                 )}
               </div>
-              <div className="text-om-muted text-sm mt-1">{c.description}</div>
+              {c.description && (
+                <div
+                  className="font-body mt-2"
+                  style={{
+                    fontSize: 13,
+                    color: "var(--om-ink-500)",
+                    lineHeight: 1.55,
+                  }}
+                >
+                  {c.description}
+                </div>
+              )}
             </div>
             <form action={toggleChallenge}>
               <input type="hidden" name="id" value={c.id} />
               <input type="hidden" name="active" value={String(c.active)} />
-              <button className="rounded-full border border-om-ink/20 px-4 py-2 text-sm hover:border-om-ink">
-                {c.active ? "Архивировать" : "Вернуть"}
+              <button type="submit" className="btn btn-outline">
+                {c.active ? "архивировать" : "вернуть"}
               </button>
             </form>
           </div>
         ))}
         {list.length === 0 && (
-          <div className="rounded-3xl bg-white p-8 text-center text-om-muted">
-            Челленджей пока нет. Создай первый через форму выше.
+          <div
+            className="bg-white border border-[var(--om-ink-100)]"
+            style={{
+              padding: "40px 28px",
+              textAlign: "center",
+              color: "var(--om-ink-500)",
+              fontSize: 14,
+            }}
+          >
+            челленджей пока нет. создай первый через форму выше.
           </div>
         )}
       </div>

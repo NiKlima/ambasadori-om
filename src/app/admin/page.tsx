@@ -14,61 +14,160 @@ export default async function AdminTrainersPage() {
   const list = (trainers ?? []) as Profile[];
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between flex-wrap gap-4">
+    <div className="grid gap-6">
+      <div className="flex items-end justify-between flex-wrap gap-4">
         <div>
-          <h1 className="text-3xl md:text-4xl font-semibold">Тренеры</h1>
-          <p className="text-om-muted mt-2">Всего в программе: {list.length}</p>
+          <div className="eyebrow">тренеры</div>
+          <h1
+            className="font-display"
+            style={{
+              fontWeight: 900,
+              fontSize: "clamp(40px, 5vw, 56px)",
+              letterSpacing: "-0.04em",
+              lineHeight: 0.95,
+              margin: "8px 0 0",
+            }}
+          >
+            всего: {list.length}
+          </h1>
         </div>
-        <div className="rounded-2xl bg-om-blue-soft text-om-blue-dark px-4 py-3 text-sm">
-          Создание тренера: Supabase → Auth → Add user → затем заполни профиль здесь.
+        <div
+          className="bg-[var(--om-blue-50)] font-mono"
+          style={{
+            padding: "16px 20px",
+            color: "var(--om-blue)",
+            fontSize: 12,
+            textTransform: "uppercase",
+            letterSpacing: "0.06em",
+            lineHeight: 1.55,
+            maxWidth: 480,
+          }}
+        >
+          создание тренера: supabase → auth → add user → потом заполни профиль здесь.
         </div>
       </div>
 
-      <div className="space-y-3">
+      <div className="grid gap-3">
         {list.map((t) => (
-          <details key={t.id} className="rounded-3xl bg-white border border-black/5">
-            <summary className="flex items-center gap-4 p-4 cursor-pointer list-none">
-              <Avatar name={t.full_name} photoUrl={t.photo_url} size="md" />
+          <details
+            key={t.id}
+            className="bg-white border border-[var(--om-ink-100)]"
+          >
+            <summary
+              className="flex items-center gap-4 cursor-pointer list-none"
+              style={{ padding: "16px 20px" }}
+            >
+              <Avatar
+                name={t.full_name}
+                photoUrl={t.photo_url}
+                size="md"
+                variant="blue"
+              />
               <div className="flex-1 min-w-0">
-                <div className="font-semibold truncate">{t.full_name}</div>
-                <div className="text-om-muted text-sm truncate">
-                  {t.club ?? "—"}{t.sport ? ` · ${t.sport}` : ""} · {t.promo_code ?? "без промокода"}
+                <div
+                  className="font-display truncate"
+                  style={{
+                    fontWeight: 800,
+                    fontSize: 16,
+                    letterSpacing: "-0.01em",
+                  }}
+                >
+                  {t.full_name}
+                </div>
+                <div
+                  className="font-mono truncate mt-1"
+                  style={{
+                    fontSize: 11,
+                    color: "var(--om-ink-500)",
+                    textTransform: "uppercase",
+                    letterSpacing: "0.06em",
+                  }}
+                >
+                  {t.club ?? "—"}
+                  {t.sport ? ` · ${t.sport}` : ""} · {t.promo_code ?? "без промокода"}
                 </div>
               </div>
-              <span className={`text-xs rounded-full px-3 py-1 ${t.is_active ? "bg-om-green/15 text-om-green" : "bg-om-coral/15 text-om-coral"}`}>
-                {t.is_active ? "активен" : "заблокирован"}
+              <span
+                className="font-mono"
+                style={{
+                  fontSize: 11,
+                  fontWeight: 700,
+                  color: t.is_active ? "var(--om-blue)" : "var(--om-magenta)",
+                  textTransform: "uppercase",
+                  letterSpacing: "0.08em",
+                }}
+              >
+                ● {t.is_active ? "активен" : "заблокирован"}
               </span>
             </summary>
-            <div className="border-t border-black/5 p-6 grid md:grid-cols-2 gap-6">
-              <form action={updateTrainer} className="space-y-3">
+            <div
+              className="grid md:grid-cols-2 gap-6"
+              style={{
+                borderTop: "1px solid var(--om-ink-100)",
+                padding: "24px 28px",
+              }}
+            >
+              <form action={updateTrainer} className="grid gap-3">
                 <input type="hidden" name="id" value={t.id} />
                 <div>
-                  <label className="text-xs uppercase text-om-muted block mb-1">Имя</label>
-                  <input name="full_name" defaultValue={t.full_name} className="w-full rounded-lg border border-black/10 px-3 py-2 text-sm" />
+                  <div className="eyebrow eyebrow-ink">имя</div>
+                  <input
+                    className="input mt-2"
+                    name="full_name"
+                    defaultValue={t.full_name}
+                  />
                 </div>
-                <div className="grid grid-cols-2 gap-2">
+                <div className="grid grid-cols-2 gap-3">
                   <div>
-                    <label className="text-xs uppercase text-om-muted block mb-1">Клуб</label>
-                    <input name="club" defaultValue={t.club ?? ""} className="w-full rounded-lg border border-black/10 px-3 py-2 text-sm" />
+                    <div className="eyebrow eyebrow-ink">клуб</div>
+                    <input
+                      className="input mt-2"
+                      name="club"
+                      defaultValue={t.club ?? ""}
+                    />
                   </div>
                   <div>
-                    <label className="text-xs uppercase text-om-muted block mb-1">Спорт</label>
-                    <input name="sport" defaultValue={t.sport ?? ""} className="w-full rounded-lg border border-black/10 px-3 py-2 text-sm" />
+                    <div className="eyebrow eyebrow-ink">спорт</div>
+                    <input
+                      className="input mt-2"
+                      name="sport"
+                      defaultValue={t.sport ?? ""}
+                    />
                   </div>
                 </div>
                 <div>
-                  <label className="text-xs uppercase text-om-muted block mb-1">Промокод</label>
-                  <input name="promo_code" defaultValue={t.promo_code ?? ""} className="w-full rounded-lg border border-black/10 px-3 py-2 text-sm font-mono uppercase" />
+                  <div className="eyebrow eyebrow-ink">промокод</div>
+                  <input
+                    className="input mt-2"
+                    name="promo_code"
+                    defaultValue={t.promo_code ?? ""}
+                    style={{
+                      fontFamily: "var(--font-mono)",
+                      textTransform: "uppercase",
+                    }}
+                  />
                 </div>
-                <button className="rounded-full bg-om-ink text-om-cream px-4 py-2 text-sm">Сохранить</button>
+                <button
+                  type="submit"
+                  className="btn btn-blue"
+                  style={{ alignSelf: "flex-start" }}
+                >
+                  сохранить
+                </button>
               </form>
 
-              <form action={toggleTrainer} className="flex items-start md:justify-end">
+              <form
+                action={toggleTrainer}
+                className="flex items-start md:justify-end"
+              >
                 <input type="hidden" name="id" value={t.id} />
-                <input type="hidden" name="active" value={String(t.is_active)} />
-                <button className={`rounded-full px-4 py-2 text-sm ${t.is_active ? "bg-om-coral/15 text-om-coral hover:bg-om-coral/25" : "bg-om-green/15 text-om-green hover:bg-om-green/25"}`}>
-                  {t.is_active ? "Заблокировать" : "Разблокировать"}
+                <input
+                  type="hidden"
+                  name="active"
+                  value={String(t.is_active)}
+                />
+                <button type="submit" className="btn btn-outline">
+                  {t.is_active ? "заблокировать" : "разблокировать"}
                 </button>
               </form>
             </div>
@@ -76,8 +175,16 @@ export default async function AdminTrainersPage() {
         ))}
 
         {list.length === 0 && (
-          <div className="rounded-3xl bg-white p-8 text-om-muted text-center">
-            Тренеров пока нет. Создай первого через Supabase → Authentication → Add user, затем добавь запись в таблицу profiles.
+          <div
+            className="bg-white border border-[var(--om-ink-100)]"
+            style={{
+              padding: "40px 28px",
+              textAlign: "center",
+              color: "var(--om-ink-500)",
+              fontSize: 14,
+            }}
+          >
+            тренеров пока нет. создай первого через supabase → authentication → add user, потом добавь запись в таблицу profiles.
           </div>
         )}
       </div>

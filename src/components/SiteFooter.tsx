@@ -1,38 +1,104 @@
+import Link from "next/link";
+import { Logo } from "@/components/ui/Logo";
+
+const COLUMNS: { title: string; items: { label: string; href?: string }[] }[] = [
+  {
+    title: "программа",
+    items: [
+      { label: "как работает", href: "/#how" },
+      { label: "челленджи", href: "/#challenges" },
+      { label: "лидерборд", href: "/leaderboard" },
+      { label: "события", href: "/events" },
+      { label: "FAQ", href: "/#faq" },
+    ],
+  },
+  {
+    title: "тренерам",
+    items: [
+      { label: "войти", href: "/login" },
+      { label: "стать амбассадором", href: "/login" },
+      { label: "партнёры", href: "/#clubs" },
+    ],
+  },
+  {
+    title: "контакты",
+    items: [
+      { label: "ambasadori@om.md", href: "mailto:ambasadori@om.md" },
+      { label: "Кишинёв, Молдова" },
+      { label: "политика конфиденциальности", href: "/privacy" },
+    ],
+  },
+];
+
 export function SiteFooter() {
   return (
-    <footer className="mt-24 border-t border-black/5 bg-om-sand/60">
-      <div className="container-xl py-10 grid md:grid-cols-3 gap-8 text-sm text-om-muted">
-        <div>
-          <div className="flex items-center gap-2 font-semibold text-om-ink mb-3">
-            <span className="inline-block w-6 h-6 rounded-full bg-om-blue" />
-            OM · Амбассадоры
+    <footer className="bg-[var(--om-ink-900)] text-white pt-20">
+      <div className="container-om">
+        <div className="grid md:grid-cols-[2fr_1fr_1fr_1fr] gap-12 pb-14 border-b border-white/10">
+          <div>
+            <Logo variant="white" size={32} />
+            <div
+              className="font-display font-extrabold text-[14px] tracking-[-0.01em] mt-4"
+              style={{ opacity: 0.8 }}
+            >
+              ambasadori — программа лояльности для тренеров
+            </div>
+            <div
+              className="font-display mt-8"
+              style={{
+                fontWeight: 900,
+                fontSize: 48,
+                letterSpacing: "-0.04em",
+                lineHeight: 0.95,
+              }}
+            >
+              este
+              <br />
+              decizia
+              <br />
+              mea.
+            </div>
           </div>
-          <p>
-            Программа поддержки тренеров от OM. Движение приносит радость, когда ты слышишь своё тело.
-          </p>
+
+          {COLUMNS.map((col) => (
+            <div key={col.title}>
+              <div
+                className="font-display"
+                style={{
+                  fontSize: 11,
+                  fontWeight: 800,
+                  letterSpacing: "0.08em",
+                  textTransform: "uppercase",
+                  opacity: 0.5,
+                  marginBottom: 14,
+                }}
+              >
+                {col.title}
+              </div>
+              <ul className="flex flex-col gap-[10px] list-none p-0 m-0">
+                {col.items.map((item) => (
+                  <li key={item.label} className="text-sm" style={{ opacity: 0.85 }}>
+                    {item.href ? (
+                      <Link href={item.href} className="hover:opacity-100" style={{ opacity: 0.85 }}>
+                        {item.label}
+                      </Link>
+                    ) : (
+                      item.label
+                    )}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
         </div>
-        <div>
-          <div className="font-medium text-om-ink mb-3">Программа</div>
-          <ul className="space-y-2">
-            <li><a href="/#how" className="hover:text-om-ink">Как работает</a></li>
-            <li><a href="/#challenges" className="hover:text-om-ink">Челленджи</a></li>
-            <li><a href="/leaderboard" className="hover:text-om-ink">Лидерборд</a></li>
-            <li><a href="/events" className="hover:text-om-ink">События</a></li>
-            <li><a href="/#faq" className="hover:text-om-ink">FAQ</a></li>
-          </ul>
-        </div>
-        <div>
-          <div className="font-medium text-om-ink mb-3">Контакты</div>
-          <ul className="space-y-2 mb-4">
-            <li><a href="/contacts" className="hover:text-om-ink">Написать нам</a></li>
-            <li><a href="/privacy" className="hover:text-om-ink">Политика конфиденциальности</a></li>
-            <li>
-              <a href="mailto:ambasadori@om.md" className="hover:text-om-ink">
-                ambasadori@om.md
-              </a>
-            </li>
-          </ul>
-          <p className="text-xs">© {new Date().getFullYear()} OM. Все права защищены.</p>
+
+        <div className="flex flex-col sm:flex-row justify-between gap-2 py-6 pb-8">
+          <span className="font-mono text-[11px]" style={{ opacity: 0.5 }}>
+            © {new Date().getFullYear()} OM water · Кишинёв
+          </span>
+          <span className="font-mono text-[11px]" style={{ opacity: 0.5 }}>
+            designed for trainers · brand by NORM.
+          </span>
         </div>
       </div>
     </footer>

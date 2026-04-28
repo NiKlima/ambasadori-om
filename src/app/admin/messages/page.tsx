@@ -12,38 +12,99 @@ export default async function AdminMessagesPage() {
   const list = (data ?? []) as ContactMessage[];
 
   return (
-    <div className="space-y-6">
+    <div className="grid gap-6">
       <div>
-        <h1 className="text-3xl md:text-4xl font-semibold">Сообщения</h1>
-        <p className="text-om-muted mt-2">Входящие из формы /contacts.</p>
+        <div className="eyebrow">сообщения</div>
+        <h1
+          className="font-display"
+          style={{
+            fontWeight: 900,
+            fontSize: "clamp(40px, 5vw, 56px)",
+            letterSpacing: "-0.04em",
+            lineHeight: 0.95,
+            margin: "8px 0 0",
+          }}
+        >
+          входящие из /contacts.
+        </h1>
       </div>
 
-      <div className="space-y-3">
+      <div className="grid gap-3">
         {list.map((m) => (
           <div
             key={m.id}
-            className={`rounded-3xl bg-white border border-black/5 p-6 ${m.is_read ? "opacity-70" : ""}`}
+            className="bg-white border border-[var(--om-ink-100)]"
+            style={{
+              padding: "24px 28px",
+              opacity: m.is_read ? 0.7 : 1,
+            }}
           >
-            <div className="flex items-start justify-between gap-4 mb-3">
+            <div className="flex items-start justify-between gap-4">
               <div>
-                <div className="font-semibold">{m.name}</div>
-                <a href={`mailto:${m.email}`} className="text-sm text-om-blue-dark underline">
-                  {m.email}
+                <div
+                  className="font-display"
+                  style={{
+                    fontWeight: 800,
+                    fontSize: 17,
+                    letterSpacing: "-0.01em",
+                  }}
+                >
+                  {m.name}
+                </div>
+                <a
+                  href={`mailto:${m.email}`}
+                  className="lk mt-1 inline-block"
+                  style={{ fontSize: 13 }}
+                >
+                  {m.email} →
                 </a>
-                <div className="text-xs text-om-muted mt-1">{formatDate(m.created_at)}</div>
+                <div
+                  className="font-mono mt-2"
+                  style={{
+                    fontSize: 11,
+                    color: "var(--om-ink-500)",
+                    textTransform: "uppercase",
+                    letterSpacing: "0.06em",
+                  }}
+                >
+                  {formatDate(m.created_at)}
+                </div>
               </div>
               <form action={toggleMessageRead}>
                 <input type="hidden" name="id" value={m.id} />
                 <input type="hidden" name="is_read" value={String(m.is_read)} />
-                <button className="text-xs rounded-full border border-black/10 px-3 py-1 hover:border-om-ink">
-                  {m.is_read ? "Вернуть в новые" : "Отметить прочитанным"}
+                <button type="submit" className="btn btn-outline btn-sm">
+                  {m.is_read ? "вернуть в новые" : "прочитано"}
                 </button>
               </form>
             </div>
-            <p className="whitespace-pre-line text-sm leading-relaxed">{m.message}</p>
+            <p
+              className="font-body whitespace-pre-line mt-4"
+              style={{
+                fontSize: 14,
+                lineHeight: 1.55,
+                color: "var(--om-ink-900)",
+              }}
+            >
+              {m.message}
+            </p>
           </div>
         ))}
-        {list.length === 0 && <p className="text-om-muted text-sm">Сообщений пока нет.</p>}
+        {list.length === 0 && (
+          <p
+            className="font-mono"
+            style={{
+              padding: "24px 0",
+              textAlign: "center",
+              color: "var(--om-ink-500)",
+              fontSize: 12,
+              textTransform: "uppercase",
+              letterSpacing: "0.06em",
+            }}
+          >
+            сообщений пока нет.
+          </p>
+        )}
       </div>
     </div>
   );

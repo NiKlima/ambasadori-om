@@ -39,67 +39,255 @@ export default async function MySurveysPage() {
   }
 
   return (
-    <div className="space-y-6">
-      <div>
-        <h1 className="text-3xl md:text-4xl font-semibold">Опросы для подопечных</h1>
-        <p className="text-om-muted mt-2">
-          Скопируй ссылку и отправь подопечному. После прохождения баллы придут автоматически.
-        </p>
-      </div>
-
-      {!promo && (
-        <div className="rounded-3xl bg-om-coral/10 text-om-coral p-6">
-          У тебя не задан промокод — без него ссылка не работает. Установи его в{" "}
-          <a className="underline" href="/dashboard/profile">профиле</a>{" "}
-          или попроси админа.
+    <>
+      {/* HERO */}
+      <section
+        className="relative overflow-hidden bg-[var(--om-ink-900)] text-white"
+        style={{ height: 360 }}
+      >
+        <div
+          className="bg-img"
+          style={{
+            position: "absolute",
+            inset: 0,
+            backgroundImage: "url(/brand/imagery/yoga-rooftop.jpg)",
+            opacity: 0.32,
+          }}
+        />
+        <div
+          style={{
+            position: "absolute",
+            inset: 0,
+            background:
+              "linear-gradient(135deg, rgba(35,31,32,0.7), rgba(0,71,185,0.4))",
+          }}
+        />
+        <div
+          className="container-om relative h-full flex flex-col justify-end"
+          style={{ paddingBottom: 36 }}
+        >
+          <div className="eyebrow eyebrow-w">опросы для подопечных</div>
+          <h1
+            className="font-display"
+            style={{
+              fontWeight: 900,
+              fontSize: "clamp(56px, 8vw, 120px)",
+              letterSpacing: "-0.04em",
+              lineHeight: 0.9,
+              margin: "12px 0 0",
+            }}
+          >
+            твоя ссылка.
+            <br />
+            их фидбек.
+          </h1>
         </div>
-      )}
+      </section>
 
-      <div className="space-y-4">
+      <div
+        className="container-om grid gap-4"
+        style={{ padding: "32px 0 80px" }}
+      >
+        {!promo && (
+          <div
+            className="bg-white border border-[var(--om-ink-100)]"
+            style={{ padding: "20px 24px" }}
+          >
+            <div className="eyebrow" style={{ color: "var(--om-magenta)" }}>
+              нужен промокод
+            </div>
+            <p
+              className="font-body mt-2"
+              style={{
+                fontSize: 14,
+                color: "var(--om-ink-900)",
+                lineHeight: 1.55,
+              }}
+            >
+              без промокода ссылка не работает. зайди в{" "}
+              <a className="lk" href="/dashboard/profile" style={{ display: "inline" }}>
+                профиль
+              </a>{" "}
+              или попроси админа OM.
+            </p>
+          </div>
+        )}
+
         {list.map((ch) => {
-          const url = promo ? `${origin}/survey/${ch.id}?ref=${encodeURIComponent(promo)}` : "";
+          const url = promo
+            ? `${origin}/survey/${ch.id}?ref=${encodeURIComponent(promo)}`
+            : "";
           const got = byChallenge.get(ch.id) ?? [];
           return (
-            <div key={ch.id} className="rounded-3xl bg-white p-6 space-y-4">
-              <div className="flex items-start justify-between gap-4">
+            <div
+              key={ch.id}
+              className="bg-white border border-[var(--om-ink-100)] grid"
+              style={{
+                gridTemplateColumns: "minmax(0, 1.5fr) minmax(0, 1fr)",
+                minHeight: 240,
+              }}
+            >
+              {/* Left — content */}
+              <div
+                className="flex flex-col justify-between"
+                style={{ padding: "32px 36px" }}
+              >
                 <div>
-                  <div className="text-lg font-semibold">{ch.title}</div>
-                  <div className="text-om-muted text-sm mt-1">{ch.description}</div>
+                  <div className="flex gap-2 flex-wrap" style={{ marginBottom: 12 }}>
+                    <span className="chip">опрос</span>
+                    <span className="chip chip-blue">+{ch.points} баллов за ответ</span>
+                  </div>
+                  <div
+                    className="font-display"
+                    style={{
+                      fontWeight: 900,
+                      fontSize: 32,
+                      letterSpacing: "-0.03em",
+                      lineHeight: 1.05,
+                    }}
+                  >
+                    {ch.title}
+                  </div>
+                  {ch.description && (
+                    <div
+                      className="font-body mt-2"
+                      style={{
+                        fontSize: 14,
+                        color: "var(--om-ink-500)",
+                        lineHeight: 1.55,
+                        maxWidth: 540,
+                      }}
+                    >
+                      {ch.description}
+                    </div>
+                  )}
                 </div>
-                <div className="rounded-full bg-om-blue-soft text-om-blue-dark text-xs font-semibold px-3 py-1">
-                  +{ch.points}
-                </div>
+
+                {url && (
+                  <div
+                    className="mt-6 pt-4"
+                    style={{ borderTop: "1px solid var(--om-ink-100)" }}
+                  >
+                    <ShareLink url={url} />
+                  </div>
+                )}
+
+                {got.length > 0 && (
+                  <div
+                    className="mt-5 pt-4"
+                    style={{ borderTop: "1px solid var(--om-ink-100)" }}
+                  >
+                    <div className="eyebrow">
+                      прошли ({got.length})
+                    </div>
+                    <div className="mt-3">
+                      {got.slice(0, 5).map((r, i) => (
+                        <div
+                          key={r.id}
+                          className="flex justify-between items-center"
+                          style={{
+                            padding: "8px 0",
+                            borderBottom:
+                              i < Math.min(got.length, 5) - 1
+                                ? "1px solid var(--om-ink-100)"
+                                : "none",
+                          }}
+                        >
+                          <div>
+                            <div
+                              className="font-display"
+                              style={{
+                                fontWeight: 800,
+                                fontSize: 14,
+                                letterSpacing: "-0.01em",
+                              }}
+                            >
+                              {r.trainee_name ?? r.trainee_email}
+                            </div>
+                            <div
+                              className="font-mono mt-0.5"
+                              style={{
+                                fontSize: 11,
+                                color: "var(--om-ink-500)",
+                                textTransform: "uppercase",
+                                letterSpacing: "0.06em",
+                              }}
+                            >
+                              {r.trainee_email}
+                            </div>
+                          </div>
+                          <div
+                            className="font-mono"
+                            style={{
+                              fontSize: 11,
+                              color: "var(--om-ink-500)",
+                              textTransform: "uppercase",
+                              letterSpacing: "0.06em",
+                            }}
+                          >
+                            {formatDate(r.submitted_at)}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
               </div>
 
-              {url && <ShareLink url={url} />}
-
-              {got.length > 0 && (
-                <div className="border-t border-black/5 pt-4">
-                  <div className="text-xs uppercase tracking-wider text-om-muted mb-2">
-                    Прошли ({got.length})
+              {/* Right — responses panel (blue) */}
+              <div
+                className="bg-[var(--om-blue)] text-white relative overflow-hidden"
+                style={{ padding: "32px 36px" }}
+              >
+                <div
+                  className="om-stripes-band"
+                  style={{ position: "absolute", inset: 0, opacity: 0.32 }}
+                />
+                <div className="relative">
+                  <div className="eyebrow eyebrow-w">ответов</div>
+                  <div
+                    className="font-display"
+                    style={{
+                      fontWeight: 900,
+                      fontSize: 96,
+                      letterSpacing: "-0.04em",
+                      lineHeight: 1,
+                      marginTop: 8,
+                    }}
+                  >
+                    {got.length}
                   </div>
-                  <div className="divide-y divide-black/5">
-                    {got.slice(0, 5).map((r) => (
-                      <div key={r.id} className="flex items-center justify-between py-2 text-sm">
-                        <div>
-                          <div className="font-medium">{r.trainee_name ?? r.trainee_email}</div>
-                          <div className="text-om-muted text-xs">{r.trainee_email}</div>
-                        </div>
-                        <div className="text-om-muted text-xs">{formatDate(r.submitted_at)}</div>
-                      </div>
-                    ))}
+                  <div
+                    className="font-mono mt-4"
+                    style={{
+                      fontSize: 11,
+                      opacity: 0.85,
+                      textTransform: "uppercase",
+                      letterSpacing: "0.08em",
+                    }}
+                  >
+                    +{got.length * ch.points} баллов заработано
                   </div>
                 </div>
-              )}
+              </div>
             </div>
           );
         })}
         {list.length === 0 && (
-          <div className="rounded-3xl bg-white p-8 text-om-muted">
-            Опросов пока нет. Админ может добавить их в админке.
+          <div
+            className="bg-white border border-[var(--om-ink-100)]"
+            style={{ padding: "40px 28px", textAlign: "center" }}
+          >
+            <div className="eyebrow">опросов нет</div>
+            <p
+              className="font-body mt-3"
+              style={{ fontSize: 14, color: "var(--om-ink-500)" }}
+            >
+              админ может добавить опросы — следи за обновлениями.
+            </p>
           </div>
         )}
       </div>
-    </div>
+    </>
   );
 }
