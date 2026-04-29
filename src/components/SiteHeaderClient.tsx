@@ -5,12 +5,12 @@ import { usePathname } from "next/navigation";
 import { Logo } from "@/components/ui/Logo";
 
 const NAV: { href: string; label: string }[] = [
-  { href: "/#how", label: "как работает" },
-  { href: "/#challenges", label: "челленджи" },
-  { href: "/#clubs", label: "клубы" },
-  { href: "/#trainers", label: "тренеры" },
-  { href: "/leaderboard", label: "лидерборд" },
-  { href: "/events", label: "события" },
+  { href: "/#how", label: "how it works" },
+  { href: "/#challenges", label: "challenges" },
+  { href: "/#clubs", label: "clubs" },
+  { href: "/#trainers", label: "trainers" },
+  { href: "/leaderboard", label: "leaderboard" },
+  { href: "/events", label: "events" },
 ];
 
 type Props = {
@@ -87,7 +87,7 @@ export function SiteHeaderClient({ user, role, onBlue = false }: Props) {
             className="font-mono text-[11px] hidden sm:inline-block"
             style={{ color: onBlue ? "rgba(255,255,255,.7)" : "var(--om-ink-500)" }}
           >
-            <b style={{ color: onBlue ? "#fff" : "var(--om-ink-900)" }}>RU</b> / RO
+            <b style={{ color: onBlue ? "#fff" : "var(--om-ink-900)" }}>EN</b> / RO
           </span>
           {user ? (
             <>
@@ -95,7 +95,7 @@ export function SiteHeaderClient({ user, role, onBlue = false }: Props) {
                 href={role === "admin" ? "/admin" : "/dashboard"}
                 className={`btn btn-sm ${onBlue ? "btn-white" : "btn-blue"}`}
               >
-                {role === "admin" ? "админка" : "кабинет"}
+                {role === "admin" ? "admin" : "dashboard"}
               </Link>
               <form action="/auth/signout" method="post">
                 <button
@@ -103,7 +103,7 @@ export function SiteHeaderClient({ user, role, onBlue = false }: Props) {
                   style={{ color: onBlue ? "rgba(255,255,255,.75)" : "var(--om-ink-500)" }}
                   type="submit"
                 >
-                  выйти
+                  log out
                 </button>
               </form>
             </>
@@ -112,7 +112,7 @@ export function SiteHeaderClient({ user, role, onBlue = false }: Props) {
               href="/login"
               className={`btn btn-sm ${onBlue ? "btn-white" : "btn-blue"}`}
             >
-              войти
+              log in
             </Link>
           )}
         </div>

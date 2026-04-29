@@ -25,7 +25,7 @@ function youtubeEmbed(url: string): string | null {
 
 export function VideoAccordion({
   url,
-  label = "как снимать",
+  label = "how to film",
 }: {
   url: string;
   label?: string;
@@ -62,7 +62,7 @@ export function VideoAccordion({
             letterSpacing: "0.06em",
           }}
         >
-          {open ? "скрыть" : "показать"}
+{open ? "hide" : "show"}
         </span>
       </button>
       {open && (
@@ -93,7 +93,7 @@ export function VideoAccordion({
               rel="noopener noreferrer"
               className="lk"
             >
-              открыть видео →
+open video →
             </a>
           )}
         </div>

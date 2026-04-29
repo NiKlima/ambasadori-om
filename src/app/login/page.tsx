@@ -38,7 +38,7 @@ export default async function LoginPage({ searchParams }: { searchParams: Search
           className="absolute left-14 right-14 bottom-14 text-white"
           style={{ zIndex: 1 }}
         >
-          <div className="eyebrow eyebrow-w">закрытая программа · по приглашению</div>
+          <div className="eyebrow eyebrow-w">closed programme · invite only</div>
           <div
             className="font-display"
             style={{
@@ -49,9 +49,9 @@ export default async function LoginPage({ searchParams }: { searchParams: Search
               margin: "16px 0 0",
             }}
           >
-            с возвращением,
+            welcome back,
             <br />
-            амбассадор.
+            ambassador.
           </div>
         </div>
       </div>
@@ -62,7 +62,7 @@ export default async function LoginPage({ searchParams }: { searchParams: Search
           <Link href="/" className="md:hidden mb-8 inline-block">
             <Logo variant="blue" size={22} />
           </Link>
-          <div className="eyebrow">войти</div>
+          <div className="eyebrow">log in</div>
           <h1
             className="font-display"
             style={{
@@ -73,7 +73,7 @@ export default async function LoginPage({ searchParams }: { searchParams: Search
               margin: "12px 0 12px",
             }}
           >
-            твой кабинет.
+            your dashboard.
           </h1>
           <p
             className="font-body"
@@ -84,7 +84,7 @@ export default async function LoginPage({ searchParams }: { searchParams: Search
               marginBottom: 28,
             }}
           >
-            введи email и пароль, которые прислала команда OM. программа закрытая.
+            use the email and password sent by the OM team. the programme is closed.
           </p>
 
           {error && (
@@ -115,11 +115,11 @@ export default async function LoginPage({ searchParams }: { searchParams: Search
               type="password"
               required
               autoComplete="current-password"
-              placeholder="пароль"
+              placeholder="password"
               className="input"
             />
             <button type="submit" className="btn btn-ink mt-1">
-              войти →
+              log in →
             </button>
           </form>
 
@@ -132,7 +132,7 @@ export default async function LoginPage({ searchParams }: { searchParams: Search
               letterSpacing: "0.06em",
             }}
           >
-            нет доступа?{" "}
+            no access?{" "}
             <a href="mailto:ambasadori@om.md" style={{ color: "var(--om-blue)" }}>
               ambasadori@om.md
             </a>

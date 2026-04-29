@@ -6,30 +6,30 @@ import type { Challenge, Submission } from "@/lib/types";
 import { SubmissionForm } from "./SubmissionForm";
 
 const KIND_LABEL: Record<Challenge["kind"], string> = {
-  photo_ai: "фото · AI",
-  video_ai: "видео · AI",
-  survey_trainee: "опрос",
-  manual: "ручная модерация",
+  photo_ai: "photo · AI",
+  video_ai: "video · AI",
+  survey_trainee: "survey",
+  manual: "manual review",
 };
 
 const KIND_FILTER: Record<Challenge["kind"], string> = {
-  photo_ai: "фото",
-  video_ai: "видео",
-  survey_trainee: "опрос",
-  manual: "ручное",
+  photo_ai: "photo",
+  video_ai: "video",
+  survey_trainee: "survey",
+  manual: "manual",
 };
 
 type StatusCode = "magenta" | "blue" | "muted";
 
 function challengeStatus(subs: Submission[]): { label: string; code: StatusCode } {
-  if (!subs || subs.length === 0) return { label: "доступно", code: "muted" };
+  if (!subs || subs.length === 0) return { label: "available", code: "muted" };
   const pending = subs.find((s) => s.status === "pending");
-  if (pending) return { label: "на модерации", code: "magenta" };
+  if (pending) return { label: "in review", code: "magenta" };
   const approved = subs.find((s) => s.status === "approved");
-  if (approved) return { label: "одобрено", code: "blue" };
+  if (approved) return { label: "approved", code: "blue" };
   const rejected = subs.find((s) => s.status === "rejected");
-  if (rejected) return { label: "отклонено · попробуй ещё", code: "magenta" };
-  return { label: "доступно", code: "muted" };
+  if (rejected) return { label: "rejected · try again", code: "magenta" };
+  return { label: "available", code: "muted" };
 }
 
 function statusColor(code: StatusCode): string {
@@ -38,7 +38,7 @@ function statusColor(code: StatusCode): string {
   return "var(--om-ink-500)";
 }
 
-const FILTERS = ["all", "фото", "видео", "опрос", "ручное"] as const;
+const FILTERS = ["all", "photo", "video", "survey", "manual"] as const;
 type Filter = (typeof FILTERS)[number];
 
 export function ChallengesGrid({
@@ -100,7 +100,7 @@ export function ChallengesGrid({
           className="container-om relative h-full flex flex-col justify-end"
           style={{ paddingBottom: 48 }}
         >
-          <div className="eyebrow eyebrow-w">апрель 2026 · сезон открыт</div>
+          <div className="eyebrow eyebrow-w">april 2026 · season is open</div>
           <h1
             className="font-display"
             style={{
@@ -112,9 +112,9 @@ export function ChallengesGrid({
               maxWidth: 1100,
             }}
           >
-            {challenges.length} {challenges.length === 1 ? "челлендж" : "челленджей"}.
+            {challenges.length} {challenges.length === 1 ? "challenge" : "challenges"}.
             <br />
-            до {totalPoints} баллов.
+            up to {totalPoints} pts.
           </h1>
           <div
             className="font-mono mt-6 flex flex-wrap gap-x-8 gap-y-2"
@@ -125,18 +125,18 @@ export function ChallengesGrid({
               letterSpacing: "0.08em",
             }}
           >
-            <span>{ready} активных</span>
-            <span>· {inReview} на модерации</span>
-            <span>· авто-зачёт за 2 дня</span>
+            <span>{ready} active</span>
+            <span>· {inReview} in review</span>
+            <span>· auto-credit in 2 days</span>
           </div>
         </div>
       </section>
 
-      <div className="container-om" style={{ padding: "32px 0 80px" }}>
+      <div className="container-om" style={{ paddingTop: 40, paddingBottom: 96 }}>
         {/* Filter bar */}
         <div
           className="bg-white border border-[var(--om-ink-100)] flex justify-between items-center flex-wrap gap-3"
-          style={{ padding: "16px 20px", marginBottom: 16 }}
+          style={{ padding: "18px 22px", marginBottom: 20 }}
         >
           <div className="flex gap-2 flex-wrap">
             {FILTERS.map((f) => (
@@ -146,7 +146,7 @@ export function ChallengesGrid({
                 onClick={() => setFilter(f)}
                 className={`chip ${filter === f ? "chip-ink" : ""}`}
               >
-                {f === "all" ? "все" : f}
+                {f}
               </button>
             ))}
           </div>
@@ -159,12 +159,12 @@ export function ChallengesGrid({
               letterSpacing: "0.08em",
             }}
           >
-            сорт: по баллам ↓
+sort: by points ↓
           </div>
         </div>
 
         {/* Cards */}
-        <div className="grid md:grid-cols-2 gap-4">
+        <div className="grid md:grid-cols-2" style={{ gap: 20 }}>
           {filtered.map((ch) => {
             const subs = byChallenge[ch.id] ?? [];
             const st = challengeStatus(subs);
@@ -200,12 +200,12 @@ export function ChallengesGrid({
                     </span>
                   </div>
                   <div className="absolute" style={{ bottom: 14, left: 14 }}>
-                    <span className="chip chip-blue">+{ch.points} баллов</span>
+                    <span className="chip chip-blue">+{ch.points} pts</span>
                   </div>
                 </div>
                 <div
                   className="flex flex-col justify-between"
-                  style={{ padding: "22px 24px" }}
+                  style={{ padding: "26px 28px" }}
                 >
                   <div>
                     <div
@@ -259,7 +259,7 @@ export function ChallengesGrid({
                       onClick={() => setOpenId(isOpen ? null : ch.id)}
                       className="btn btn-blue btn-sm"
                     >
-                      {isOpen ? "закрыть" : "открыть →"}
+                      {isOpen ? "close" : "open →"}
                     </button>
                   </div>
                 </div>
@@ -268,7 +268,7 @@ export function ChallengesGrid({
                   <div
                     style={{
                       borderTop: "1px solid var(--om-ink-100)",
-                      padding: "20px 24px",
+                      padding: "24px 28px",
                       gridColumn: "1 / -1",
                     }}
                   >
@@ -282,7 +282,7 @@ export function ChallengesGrid({
                             lineHeight: 1.55,
                           }}
                         >
-                          поделись ссылкой с подопечным — баллы придут автоматически после прохождения опроса.
+                          share the link with a client — points come automatically after the survey is submitted.
                         </p>
                         {surveyHref ? (
                           <Link
@@ -290,7 +290,7 @@ export function ChallengesGrid({
                             className="btn btn-ink"
                             style={{ alignSelf: "flex-start" }}
                           >
-                            получить ссылку
+get link
                           </Link>
                         ) : (
                           <p
@@ -302,7 +302,7 @@ export function ChallengesGrid({
                               letterSpacing: "0.06em",
                             }}
                           >
-                            сначала задай свой промокод в профиле — он работает как реф-код.
+                            set your promo code in profile first — it works as the ref-code in the link.
                           </p>
                         )}
                       </div>
@@ -327,8 +327,8 @@ export function ChallengesGrid({
               }}
             >
               {challenges.length === 0
-                ? "челленджи появятся скоро. следи за обновлениями."
-                : "ничего не нашли по фильтру"}
+                ? "challenges will appear soon. stay tuned."
+                : "nothing matches this filter"}
             </div>
           )}
         </div>
@@ -338,10 +338,10 @@ export function ChallengesGrid({
           <div
             className="bg-[var(--om-ink-900)] text-white relative overflow-hidden grid items-center"
             style={{
-              marginTop: 16,
-              padding: "32px 36px",
+              marginTop: 24,
+              padding: "40px 44px",
               gridTemplateColumns: "1fr 240px",
-              gap: 24,
+              gap: 28,
             }}
           >
             <div
@@ -349,7 +349,7 @@ export function ChallengesGrid({
               style={{ position: "absolute", inset: 0 }}
             />
             <div className="relative">
-              <div className="eyebrow eyebrow-w">бонус-серия</div>
+              <div className="eyebrow eyebrow-w">streak bonus</div>
               <div
                 className="font-display mt-2"
                 style={{
@@ -358,7 +358,7 @@ export function ChallengesGrid({
                   letterSpacing: "-0.03em",
                 }}
               >
-                выполни 5 челленджей в этом месяце → +20 баллов
+                complete 5 challenges this month → +20 pts
               </div>
               <div
                 className="font-mono mt-2"
@@ -369,7 +369,7 @@ export function ChallengesGrid({
                   letterSpacing: "0.06em",
                 }}
               >
-                твой прогресс: 0 / 5
+                your progress: 0 / 5
               </div>
             </div>
             <div

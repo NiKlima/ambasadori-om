@@ -27,7 +27,7 @@ export default async function AdminSurveysPage() {
   return (
     <div className="grid gap-8">
       <div>
-        <div className="eyebrow">опросы</div>
+        <div className="eyebrow">surveys</div>
         <h1
           className="font-display"
           style={{
@@ -38,7 +38,7 @@ export default async function AdminSurveysPage() {
             margin: "8px 0 0",
           }}
         >
-          ссылки и вопросы.
+          links & questions.
         </h1>
         <p
           className="font-body mt-3"
@@ -49,7 +49,7 @@ export default async function AdminSurveysPage() {
             maxWidth: 600,
           }}
         >
-          опрос — челлендж типа <code>survey_trainee</code>. подопечный заполняет публичную форму, тренер получает баллы.
+          a survey is a challenge of type <code>survey_trainee</code>. the client fills a public form, the trainer earns points.
         </p>
       </div>
 
@@ -59,11 +59,11 @@ export default async function AdminSurveysPage() {
         style={{ padding: "28px 32px" }}
       >
         <div className="md:col-span-2">
-          <div className="eyebrow eyebrow-ink">название опроса</div>
+          <div className="eyebrow eyebrow-ink">survey title</div>
           <input className="input mt-2" name="title" required />
         </div>
         <div className="md:col-span-2">
-          <div className="eyebrow eyebrow-ink">описание</div>
+          <div className="eyebrow eyebrow-ink">description</div>
           <textarea
             className="input mt-2"
             name="description"
@@ -76,7 +76,7 @@ export default async function AdminSurveysPage() {
           />
         </div>
         <div>
-          <div className="eyebrow eyebrow-ink">баллы тренеру</div>
+          <div className="eyebrow eyebrow-ink">points to trainer</div>
           <input
             className="input mt-2"
             name="points"
@@ -87,7 +87,7 @@ export default async function AdminSurveysPage() {
         </div>
         <div className="md:col-span-2">
           <button type="submit" className="btn btn-blue">
-            создать опрос
+            create survey
           </button>
         </div>
       </form>
@@ -178,7 +178,7 @@ export default async function AdminSurveysPage() {
                           cursor: "pointer",
                         }}
                       >
-                        удалить
+                        delete
                       </button>
                     </form>
                   </div>
@@ -193,7 +193,7 @@ export default async function AdminSurveysPage() {
                       letterSpacing: "0.06em",
                     }}
                   >
-                    вопросов нет — добавь первый.
+                    no questions — add the first one.
                   </div>
                 )}
               </div>
@@ -205,11 +205,11 @@ export default async function AdminSurveysPage() {
                 <input type="hidden" name="challenge_id" value={ch.id} />
                 <input type="hidden" name="position" value={nextPosition} />
                 <div>
-                  <div className="eyebrow eyebrow-ink">текст вопроса</div>
+                  <div className="eyebrow eyebrow-ink">question text</div>
                   <input className="input mt-2" name="text" required />
                 </div>
                 <div>
-                  <div className="eyebrow eyebrow-ink">варианты · по строке</div>
+                  <div className="eyebrow eyebrow-ink">options · one per line</div>
                   <textarea
                     className="input mt-2"
                     name="options"
@@ -222,7 +222,7 @@ export default async function AdminSurveysPage() {
                   />
                 </div>
                 <button type="submit" className="btn btn-blue">
-                  добавить
+                  add
                 </button>
               </form>
             </div>
@@ -238,7 +238,7 @@ export default async function AdminSurveysPage() {
               fontSize: 14,
             }}
           >
-            опросов нет. создай первый через форму выше.
+            no surveys. create the first one via the form above.
           </div>
         )}
       </div>

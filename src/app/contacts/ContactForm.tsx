@@ -31,24 +31,24 @@ export function ContactForm() {
       className="bg-[var(--om-ink-50)] border border-[var(--om-ink-100)]"
       style={{ padding: "32px 36px" }}
     >
-      <div className="eyebrow">форма обратной связи</div>
+      <div className="eyebrow">contact form</div>
       <div className="grid mt-4" style={{ gap: 12 }}>
         <div>
-          <div style={FIELD_LABEL_STYLE}>имя</div>
-          <input className="input" name="name" required placeholder="как тебя зовут" />
+          <div style={FIELD_LABEL_STYLE}>full name</div>
+          <input className="input" name="name" required placeholder="your name" />
         </div>
         <div>
           <div style={FIELD_LABEL_STYLE}>email</div>
           <input className="input" name="email" type="email" required placeholder="you@email.md" />
         </div>
         <div>
-          <div style={FIELD_LABEL_STYLE}>сообщение</div>
+          <div style={FIELD_LABEL_STYLE}>message</div>
           <textarea
             className="input"
             name="message"
             rows={6}
             required
-            placeholder="о чём хочешь поговорить"
+            placeholder="your message"
             style={{ resize: "none", fontFamily: "var(--font-body)" }}
           />
         </div>
@@ -69,7 +69,7 @@ export function ContactForm() {
             style={{ marginTop: 3 }}
           />
           <span>
-            согласен на обработку персональных данных по{" "}
+            i agree to processing of personal data under the{" "}
             <a
               href="/privacy"
               target="_blank"
@@ -77,7 +77,7 @@ export function ContactForm() {
               className="lk"
               style={{ display: "inline" }}
             >
-              политике конфиденциальности
+              privacy policy
             </a>
             .
           </span>
@@ -104,7 +104,7 @@ export function ContactForm() {
           className="btn btn-blue"
           style={{ marginTop: 6, alignSelf: "flex-start" }}
         >
-          {pending ? "отправляем…" : "отправить →"}
+          {pending ? "sending…" : "send →"}
         </button>
       </div>
     </form>

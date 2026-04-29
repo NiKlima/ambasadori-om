@@ -14,7 +14,7 @@ export default async function AdminMessagesPage() {
   return (
     <div className="grid gap-6">
       <div>
-        <div className="eyebrow">сообщения</div>
+        <div className="eyebrow">messages</div>
         <h1
           className="font-display"
           style={{
@@ -25,7 +25,7 @@ export default async function AdminMessagesPage() {
             margin: "8px 0 0",
           }}
         >
-          входящие из /contacts.
+          incoming from /contacts.
         </h1>
       </div>
 
@@ -74,7 +74,7 @@ export default async function AdminMessagesPage() {
                 <input type="hidden" name="id" value={m.id} />
                 <input type="hidden" name="is_read" value={String(m.is_read)} />
                 <button type="submit" className="btn btn-outline btn-sm">
-                  {m.is_read ? "вернуть в новые" : "прочитано"}
+                  {m.is_read ? "mark unread" : "mark read"}
                 </button>
               </form>
             </div>
@@ -102,7 +102,7 @@ export default async function AdminMessagesPage() {
               letterSpacing: "0.06em",
             }}
           >
-            сообщений пока нет.
+            no messages yet.
           </p>
         )}
       </div>

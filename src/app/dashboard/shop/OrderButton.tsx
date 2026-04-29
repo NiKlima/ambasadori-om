@@ -24,7 +24,7 @@ export function OrderButton({ productId, price, affordable }: Props) {
         setMsg(res.error);
       } else {
         setTone("ok");
-        setMsg("заказ создан. админ свяжется по доставке.");
+        setMsg("order placed. admin will reach out about delivery.");
         setOpen(false);
       }
     });
@@ -43,7 +43,7 @@ export function OrderButton({ productId, price, affordable }: Props) {
           className={`btn ${affordable ? "btn-blue" : "btn-outline"}`}
           style={{ width: "100%" }}
         >
-          {affordable ? `заказать за ${price}` : "не хватает баллов"}
+          {affordable ? `claim for ${price}` : "not enough points"}
         </button>
         {msg && (
           <p
@@ -67,7 +67,7 @@ export function OrderButton({ productId, price, affordable }: Props) {
       <textarea
         name="note"
         rows={2}
-        placeholder="комментарий (адрес, размер, контакт)…"
+        placeholder="note (address, size, contact)…"
         className="input"
         style={{ resize: "none", fontFamily: "var(--font-body)", fontSize: 13 }}
       />
@@ -78,14 +78,14 @@ export function OrderButton({ productId, price, affordable }: Props) {
           className="btn btn-ink"
           style={{ flex: 1 }}
         >
-          {pending ? "создаём…" : `подтвердить — ${price}`}
+          {pending ? "placing…" : `confirm — ${price}`}
         </button>
         <button
           type="button"
           onClick={() => setOpen(false)}
           className="btn btn-outline"
         >
-          отмена
+          cancel
         </button>
       </div>
       {msg && (

@@ -37,11 +37,11 @@ async function fetchRank(id: string): Promise<number | undefined> {
 export async function generateMetadata({ params }: { params: Params }): Promise<Metadata> {
   const { id } = await params;
   const trainer = await fetchTrainer(id);
-  if (!trainer) return { title: "Тренер не найден · OM Амбассадоры" };
-  const title = `${trainer.full_name} — амбассадор ОМ`;
+  if (!trainer) return { title: "Trainer not found · OM Ambasadori" };
+  const title = `${trainer.full_name} — OM ambassador`;
   const description = trainer.quote
     ? `«${trainer.quote}»`
-    : trainer.bio ?? `${trainer.sport ?? "Тренер"}, ${trainer.club ?? "OM"}`;
+    : trainer.bio ?? `${trainer.sport ?? "Coach"}, ${trainer.club ?? "OM"}`;
   return {
     title,
     description,
@@ -70,7 +70,7 @@ export default async function TrainerPage({ params }: { params: Params }) {
               letterSpacing: "0.08em",
             }}
           >
-            ← к лидерборду
+← back to leaderboard
           </Link>
           <TrainerProfileBody trainer={trainer} rank={rank} />
         </div>

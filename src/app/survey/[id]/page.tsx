@@ -52,7 +52,7 @@ export default async function SurveyPage({ params, searchParams }: Props) {
           style={{ padding: "40px 32px", textAlign: "center" }}
         >
           <div className="eyebrow" style={{ color: "var(--om-magenta)" }}>
-            ссылка некорректна
+            invalid link
           </div>
           <h1
             className="font-display"
@@ -63,7 +63,7 @@ export default async function SurveyPage({ params, searchParams }: Props) {
               margin: "12px 0 12px",
             }}
           >
-            реф-код тренера не найден.
+            trainer ref-code not found.
           </h1>
           <p
             className="font-body"
@@ -73,7 +73,7 @@ export default async function SurveyPage({ params, searchParams }: Props) {
               lineHeight: 1.55,
             }}
           >
-            попроси у тренера актуальную ссылку на опрос.
+            ask your trainer for an up-to-date survey link.
           </p>
         </div>
       </div>
@@ -94,7 +94,7 @@ export default async function SurveyPage({ params, searchParams }: Props) {
           style={{ position: "absolute", inset: 0 }}
         />
         <div className="relative">
-          <div className="eyebrow eyebrow-w">опрос от {trainer.full_name?.toLowerCase()}</div>
+          <div className="eyebrow eyebrow-w">survey from {trainer.full_name?.toLowerCase()}</div>
           <h1
             className="font-display"
             style={{

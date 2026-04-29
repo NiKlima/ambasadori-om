@@ -14,16 +14,22 @@ function ageFrom(birthdate: string | null) {
   return Math.floor(diff / (1000 * 60 * 60 * 24 * 365.25));
 }
 
-export function LeaderboardClient({ rows }: { rows: LeaderboardRow[] }) {
+export function LeaderboardClient({
+  rows,
+  clubsFromDb,
+}: {
+  rows: LeaderboardRow[];
+  clubsFromDb?: string[];
+}) {
   const [query, setQuery] = useState("");
   const [club, setClub] = useState<string>("");
   const [sport, setSport] = useState<string>("");
   const [sort, setSort] = useState<Sort>("points");
 
-  const clubs = useMemo(
-    () => Array.from(new Set(rows.map((r) => r.club).filter(Boolean))) as string[],
-    [rows],
-  );
+  const clubs = useMemo(() => {
+    if (clubsFromDb && clubsFromDb.length > 0) return clubsFromDb;
+    return Array.from(new Set(rows.map((r) => r.club).filter(Boolean))) as string[];
+  }, [rows, clubsFromDb]);
   const sports = useMemo(
     () => Array.from(new Set(rows.map((r) => r.sport).filter(Boolean))) as string[],
     [rows],
@@ -60,7 +66,7 @@ export function LeaderboardClient({ rows }: { rows: LeaderboardRow[] }) {
         <div className="container-om py-5 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-[1fr_200px_200px_140px] gap-3 items-center">
           <input
             className="input"
-            placeholder="поиск по имени"
+            placeholder="search by name"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
           />
@@ -69,7 +75,7 @@ export function LeaderboardClient({ rows }: { rows: LeaderboardRow[] }) {
             value={club}
             onChange={(e) => setClub(e.target.value)}
           >
-            <option value="">все клубы ({clubs.length})</option>
+            <option value="">all clubs ({clubs.length})</option>
             {clubs.map((c) => (
               <option key={c} value={c}>
                 {c}
@@ -81,11 +87,11 @@ export function LeaderboardClient({ rows }: { rows: LeaderboardRow[] }) {
             value={sort}
             onChange={(e) => setSort(e.target.value as Sort)}
           >
-            <option value="points">баллы ↓</option>
-            <option value="name">по имени</option>
+            <option value="points">points ↓</option>
+            <option value="name">by name</option>
           </select>
           <button className="btn btn-outline" onClick={reset} type="button">
-            сброс
+            reset
           </button>
         </div>
         <div className="container-om pb-5 flex gap-2 flex-wrap">
@@ -94,7 +100,7 @@ export function LeaderboardClient({ rows }: { rows: LeaderboardRow[] }) {
             onClick={() => setSport("")}
             className={`chip ${sport === "" ? "chip-ink" : ""}`}
           >
-            все виды
+            all sports
           </button>
           {sports.map((s) => (
             <button
@@ -208,7 +214,7 @@ export function LeaderboardClient({ rows }: { rows: LeaderboardRow[] }) {
                             letterSpacing: "0.08em",
                           }}
                         >
-                          баллов
+                          pts
                         </span>
                       </div>
                     </div>
@@ -229,11 +235,11 @@ export function LeaderboardClient({ rows }: { rows: LeaderboardRow[] }) {
           >
             <div className="lb-row head">
               <div>#</div>
-              <div>тренер</div>
-              <div>клуб</div>
-              <div>вид</div>
-              <div style={{ textAlign: "right" }}>возраст</div>
-              <div style={{ textAlign: "right" }}>баллы</div>
+              <div>coach</div>
+              <div>club</div>
+              <div>sport</div>
+              <div style={{ textAlign: "right" }}>age</div>
+              <div style={{ textAlign: "right" }}>points</div>
             </div>
             {filtered.map((r, i) => {
               const age = ageFrom(r.birthdate);
@@ -265,7 +271,7 @@ export function LeaderboardClient({ rows }: { rows: LeaderboardRow[] }) {
                           className="font-mono mt-0.5"
                           style={{ fontSize: 11, color: "var(--om-ink-500)" }}
                         >
-                          {age} лет
+                          {age} y.o.
                         </div>
                       )}
                     </div>
@@ -314,7 +320,7 @@ export function LeaderboardClient({ rows }: { rows: LeaderboardRow[] }) {
                   letterSpacing: "0.06em",
                 }}
               >
-                ничего не нашли
+                no results
               </div>
             )}
           </div>

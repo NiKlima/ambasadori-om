@@ -10,6 +10,7 @@ export type Profile = {
   role: UserRole;
   full_name: string;
   club: string | null;
+  club_id: string | null;
   sport: string | null;
   promo_code: string | null;
   photo_url: string | null;
@@ -22,6 +23,21 @@ export type Profile = {
   intro_video_url: string | null;
   gallery: string[];
   is_active: boolean;
+  sort_order: number;
+  created_at: string;
+};
+
+export type Club = {
+  id: string;
+  name: string;
+  slug: string | null;
+  logo_url: string | null;
+  description: string | null;
+  sport_focus: string | null;
+  city: string | null;
+  website: string | null;
+  sort_order: number;
+  active: boolean;
   created_at: string;
 };
 
@@ -38,6 +54,7 @@ export type Challenge = {
   ai_prompt: string | null;
   ai_check: boolean;
   intro_video_url: string | null;
+  sort_order: number;
 };
 
 export type Event = {
@@ -51,6 +68,7 @@ export type Event = {
   location: string | null;
   link: string | null;
   active: boolean;
+  sort_order: number;
   created_at: string;
 };
 
@@ -96,6 +114,8 @@ export type Product = {
   price_points: number;
   stock: number | null;
   active: boolean;
+  featured: boolean;
+  sort_order: number;
   created_at: string;
 };
 

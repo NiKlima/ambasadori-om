@@ -7,7 +7,7 @@ const RATE_LIMIT_PER_DAY = 20;
 export async function POST(req: Request) {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
-  if (!user) return NextResponse.json({ error: "Не авторизован" }, { status: 401 });
+  if (!user) return NextResponse.json({ error: "Not authorised" }, { status: 401 });
 
   const body = await req.json().catch(() => ({}));
   const submissionId = String(body.submissionId ?? "");
@@ -19,12 +19,12 @@ export async function POST(req: Request) {
     .eq("id", submissionId)
     .single();
 
-  if (!submission) return NextResponse.json({ error: "Не найдено" }, { status: 404 });
+  if (!submission) return NextResponse.json({ error: "Not found" }, { status: 404 });
   if (submission.trainer_id !== user.id) {
     const { data: profile } = await supabase
       .from("profiles").select("role").eq("id", user.id).single();
     if (profile?.role !== "admin") {
-      return NextResponse.json({ error: "Нет прав" }, { status: 403 });
+      return NextResponse.json({ error: "No permission" }, { status: 403 });
     }
   }
 
@@ -34,11 +34,11 @@ export async function POST(req: Request) {
     ai_check: boolean;
   } | null;
   if (!challenge?.ai_check || !challenge.ai_prompt) {
-    return NextResponse.json({ error: "AI-проверка не сконфигурирована" }, { status: 400 });
+    return NextResponse.json({ error: "AI verification is not configured" }, { status: 400 });
   }
 
   const mediaUrl = submission.video_url || submission.photo_url;
-  if (!mediaUrl) return NextResponse.json({ error: "Нет медиа" }, { status: 400 });
+  if (!mediaUrl) return NextResponse.json({ error: "No media" }, { status: 400 });
 
   const since = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
   const { count } = await supabase
@@ -48,7 +48,7 @@ export async function POST(req: Request) {
     .not("ai_verdict", "is", null)
     .gte("created_at", since);
   if ((count ?? 0) >= RATE_LIMIT_PER_DAY) {
-    return NextResponse.json({ error: "Лимит AI-проверок на сегодня исчерпан" }, { status: 429 });
+    return NextResponse.json({ error: "Daily AI verification limit reached" }, { status: 429 });
   }
 
   let aiVerdict;

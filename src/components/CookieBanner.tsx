@@ -42,7 +42,7 @@ export function CookieBanner() {
         className="font-body relative"
         style={{ flex: 1, fontSize: 13, lineHeight: 1.55 }}
       >
-        используем cookies для аналитики и работы программы.{" "}
+we use cookies for analytics and the programme to work.{" "}
         <a
           href="/privacy"
           style={{
@@ -50,7 +50,7 @@ export function CookieBanner() {
             color: "#fff",
           }}
         >
-          подробнее
+          learn more
         </a>
         .
       </div>
@@ -60,7 +60,7 @@ export function CookieBanner() {
         className="btn btn-white relative shrink-0"
         style={{ alignSelf: "flex-start" }}
       >
-        принимаю →
+accept →
       </button>
     </div>
   );

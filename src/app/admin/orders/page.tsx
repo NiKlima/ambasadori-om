@@ -16,10 +16,10 @@ const NEXT_STATUSES: Record<OrderStatus, OrderStatus[]> = {
 };
 
 const STATUS_LABEL: Record<OrderStatus, string> = {
-  pending: "в обработке",
-  approved: "подтверждён",
-  fulfilled: "выдан",
-  cancelled: "отменён",
+  pending: "pending",
+  approved: "approved",
+  fulfilled: "fulfilled",
+  cancelled: "cancelled",
 };
 
 const STATUS_COLOR: Record<OrderStatus, string> = {
@@ -41,7 +41,7 @@ export default async function AdminOrdersPage() {
   return (
     <div className="grid gap-6">
       <div>
-        <div className="eyebrow">заказы</div>
+        <div className="eyebrow">orders</div>
         <h1
           className="font-display"
           style={{
@@ -52,7 +52,7 @@ export default async function AdminOrdersPage() {
             margin: "8px 0 0",
           }}
         >
-          очередь из шопа OM.
+          shop queue.
         </h1>
       </div>
 
@@ -112,7 +112,7 @@ export default async function AdminOrdersPage() {
                       lineHeight: 1.55,
                     }}
                   >
-                    тренер: {o.trainer_note}
+                    trainer: {o.trainer_note}
                   </div>
                 )}
                 {o.admin_note && (
@@ -145,11 +145,11 @@ export default async function AdminOrdersPage() {
                   <input
                     className="input"
                     name="admin_note"
-                    placeholder="комментарий (опц)"
+                    placeholder="note (opt)"
                     defaultValue={o.admin_note ?? ""}
                   />
                   <button type="submit" className="btn btn-blue">
-                    сохранить
+                    save
                   </button>
                 </form>
               ) : (
@@ -162,7 +162,7 @@ export default async function AdminOrdersPage() {
                     letterSpacing: "0.06em",
                   }}
                 >
-                  завершено
+                  completed
                   {o.fulfilled_at && <div>{formatDate(o.fulfilled_at)}</div>}
                 </div>
               )}
@@ -179,7 +179,7 @@ export default async function AdminOrdersPage() {
               fontSize: 14,
             }}
           >
-            заказов пока нет.
+            no orders yet.
           </div>
         )}
       </div>

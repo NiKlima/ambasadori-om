@@ -29,15 +29,15 @@ const firs = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "ambasadori om — программа для тренеров",
+  title: "ambasadori om — programme for coaches",
   description:
-    "программа лояльности OM для тренеров Молдовы. ведёшь команду — получаешь баллы и призы за вклад в активный образ жизни.",
+    "OM's loyalty programme for coaches in Moldova. lead your team, earn points and prizes for contributing to an active lifestyle.",
   openGraph: {
     title: "ambasadori om",
     description:
-      "программа поддержки тренеров от бренда OM. твой вклад в развитие активного сообщества — в реальных наградах.",
+      "OM's coach support programme. your contribution to building an active community — in real rewards.",
     type: "website",
-    locale: "ru_MD",
+    locale: "en_MD",
   },
 };
 

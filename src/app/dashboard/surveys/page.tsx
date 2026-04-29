@@ -66,7 +66,7 @@ export default async function MySurveysPage() {
           className="container-om relative h-full flex flex-col justify-end"
           style={{ paddingBottom: 36 }}
         >
-          <div className="eyebrow eyebrow-w">опросы для подопечных</div>
+          <div className="eyebrow eyebrow-w">client surveys</div>
           <h1
             className="font-display"
             style={{
@@ -77,16 +77,16 @@ export default async function MySurveysPage() {
               margin: "12px 0 0",
             }}
           >
-            твоя ссылка.
+your link.
             <br />
-            их фидбек.
+            their feedback.
           </h1>
         </div>
       </section>
 
       <div
-        className="container-om grid gap-4"
-        style={{ padding: "32px 0 80px" }}
+        className="container-om grid"
+        style={{ paddingTop: 40, paddingBottom: 96, gap: 20 }}
       >
         {!promo && (
           <div
@@ -94,7 +94,7 @@ export default async function MySurveysPage() {
             style={{ padding: "20px 24px" }}
           >
             <div className="eyebrow" style={{ color: "var(--om-magenta)" }}>
-              нужен промокод
+              promo code required
             </div>
             <p
               className="font-body mt-2"
@@ -104,11 +104,11 @@ export default async function MySurveysPage() {
                 lineHeight: 1.55,
               }}
             >
-              без промокода ссылка не работает. зайди в{" "}
+              without a promo code the link won&apos;t work. set one in{" "}
               <a className="lk" href="/dashboard/profile" style={{ display: "inline" }}>
-                профиль
+                profile
               </a>{" "}
-              или попроси админа OM.
+              or ask the OM admin.
             </p>
           </div>
         )}
@@ -134,8 +134,8 @@ export default async function MySurveysPage() {
               >
                 <div>
                   <div className="flex gap-2 flex-wrap" style={{ marginBottom: 12 }}>
-                    <span className="chip">опрос</span>
-                    <span className="chip chip-blue">+{ch.points} баллов за ответ</span>
+                    <span className="chip">survey</span>
+                    <span className="chip chip-blue">+{ch.points} pts per response</span>
                   </div>
                   <div
                     className="font-display"
@@ -178,7 +178,7 @@ export default async function MySurveysPage() {
                     style={{ borderTop: "1px solid var(--om-ink-100)" }}
                   >
                     <div className="eyebrow">
-                      прошли ({got.length})
+                      submitted ({got.length})
                     </div>
                     <div className="mt-3">
                       {got.slice(0, 5).map((r, i) => (
@@ -244,7 +244,7 @@ export default async function MySurveysPage() {
                   style={{ position: "absolute", inset: 0, opacity: 0.32 }}
                 />
                 <div className="relative">
-                  <div className="eyebrow eyebrow-w">ответов</div>
+                  <div className="eyebrow eyebrow-w">responses</div>
                   <div
                     className="font-display"
                     style={{
@@ -266,7 +266,7 @@ export default async function MySurveysPage() {
                       letterSpacing: "0.08em",
                     }}
                   >
-                    +{got.length * ch.points} баллов заработано
++{got.length * ch.points} pts earned
                   </div>
                 </div>
               </div>
@@ -278,12 +278,12 @@ export default async function MySurveysPage() {
             className="bg-white border border-[var(--om-ink-100)]"
             style={{ padding: "40px 28px", textAlign: "center" }}
           >
-            <div className="eyebrow">опросов нет</div>
+            <div className="eyebrow">no surveys</div>
             <p
               className="font-body mt-3"
               style={{ fontSize: 14, color: "var(--om-ink-500)" }}
             >
-              админ может добавить опросы — следи за обновлениями.
+              admin can add surveys — stay tuned.
             </p>
           </div>
         )}

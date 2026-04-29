@@ -35,7 +35,7 @@ export default async function AdminPointsPage() {
   return (
     <div className="grid gap-6">
       <div>
-        <div className="eyebrow">ручные начисления</div>
+        <div className="eyebrow">manual credits</div>
         <h1
           className="font-display"
           style={{
@@ -46,7 +46,7 @@ export default async function AdminPointsPage() {
             margin: "8px 0 0",
           }}
         >
-          бонусы и корректировки.
+          bonuses & adjustments.
         </h1>
       </div>
 
@@ -56,7 +56,7 @@ export default async function AdminPointsPage() {
         style={{ padding: "24px 28px" }}
       >
         <div>
-          <div className="eyebrow eyebrow-ink">тренер</div>
+          <div className="eyebrow eyebrow-ink">trainer</div>
           <select className="input mt-2" name="trainer_id" required>
             <option value="">—</option>
             {list.map((t) => (
@@ -67,7 +67,7 @@ export default async function AdminPointsPage() {
           </select>
         </div>
         <div>
-          <div className="eyebrow eyebrow-ink">баллы</div>
+          <div className="eyebrow eyebrow-ink">points</div>
           <input
             className="input mt-2"
             name="amount"
@@ -76,16 +76,16 @@ export default async function AdminPointsPage() {
           />
         </div>
         <div>
-          <div className="eyebrow eyebrow-ink">причина</div>
+          <div className="eyebrow eyebrow-ink">reason</div>
           <input
             className="input mt-2"
             name="reason"
             required
-            placeholder="например: бонус за участие в забеге"
+            placeholder="e.g. bonus for race participation"
           />
         </div>
         <button type="submit" className="btn btn-blue">
-          начислить
+          award
         </button>
       </form>
 
@@ -93,7 +93,7 @@ export default async function AdminPointsPage() {
         className="bg-white border border-[var(--om-ink-100)]"
         style={{ padding: "24px 28px" }}
       >
-        <div className="eyebrow">последние транзакции</div>
+        <div className="eyebrow">recent transactions</div>
         <div className="mt-3">
           {rows.map((t, i) => (
             <div
@@ -157,7 +157,7 @@ export default async function AdminPointsPage() {
                 letterSpacing: "0.06em",
               }}
             >
-              транзакций пока нет.
+              no transactions yet.
             </p>
           )}
         </div>

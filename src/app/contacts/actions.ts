@@ -12,10 +12,10 @@ export async function submitContact(formData: FormData) {
   const message = String(formData.get("message") ?? "").trim();
   const consent = formData.get("consent") === "on";
 
-  if (!name) return { error: "Укажи имя" };
-  if (!EMAIL_RE.test(email)) return { error: "Введи корректный email" };
-  if (!message || message.length < 10) return { error: "Сообщение слишком короткое" };
-  if (!consent) return { error: "Нужно согласие на обработку персональных данных" };
+  if (!name) return { error: "name is required" };
+  if (!EMAIL_RE.test(email)) return { error: "valid email required" };
+  if (!message || message.length < 10) return { error: "message is too short" };
+  if (!consent) return { error: "consent to data processing is required" };
 
   const admin = createAdminClient();
   const { error } = await admin.from("contact_messages").insert({ name, email, message });

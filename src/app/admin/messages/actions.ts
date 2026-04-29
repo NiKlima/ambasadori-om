@@ -6,9 +6,9 @@ import { createClient } from "@/lib/supabase/server";
 async function assertAdmin() {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
-  if (!user) throw new Error("Не авторизован");
+  if (!user) throw new Error("Not authorised");
   const { data: profile } = await supabase.from("profiles").select("role").eq("id", user.id).single();
-  if (profile?.role !== "admin") throw new Error("Нет прав");
+  if (profile?.role !== "admin") throw new Error("No permission");
   return { supabase, user };
 }
 

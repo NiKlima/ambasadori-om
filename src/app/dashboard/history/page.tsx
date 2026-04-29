@@ -37,7 +37,7 @@ export default async function HistoryPage() {
           style={{ gridTemplateColumns: "1.4fr 1fr" }}
         >
           <div>
-            <div className="eyebrow eyebrow-w">история</div>
+            <div className="eyebrow eyebrow-w">history</div>
             <h1
               className="font-display"
               style={{
@@ -48,16 +48,16 @@ export default async function HistoryPage() {
                 margin: "12px 0 0",
               }}
             >
-              каждый балл.
+              every point.
               <br />
-              каждое движение.
+              every move.
             </h1>
           </div>
           <div
             className="bg-[var(--om-blue)]"
             style={{ padding: "22px 26px", textAlign: "right" }}
           >
-            <div className="eyebrow eyebrow-w">всего</div>
+            <div className="eyebrow eyebrow-w">total balance</div>
             <div
               className="font-display"
               style={{
@@ -74,7 +74,7 @@ export default async function HistoryPage() {
         </div>
       </section>
 
-      <div className="container-om" style={{ padding: "32px 0 80px" }}>
+      <div className="container-om" style={{ paddingTop: 40, paddingBottom: 96 }}>
         {list.length > 0 ? (
           <div className="bg-white border border-[var(--om-ink-100)]">
             {list.map((t, i) => (
@@ -83,7 +83,7 @@ export default async function HistoryPage() {
                 className="grid items-center"
                 style={{
                   gridTemplateColumns: "1fr auto",
-                  padding: "18px 24px",
+                  padding: "22px 28px",
                   borderBottom:
                     i < list.length - 1
                       ? "1px solid var(--om-ink-100)"
@@ -134,12 +134,12 @@ export default async function HistoryPage() {
             className="bg-white border border-[var(--om-ink-100)]"
             style={{ padding: "48px 32px", textAlign: "center" }}
           >
-            <div className="eyebrow">тихо</div>
+            <div className="eyebrow">quiet</div>
             <p
               className="font-body mt-3"
               style={{ color: "var(--om-ink-500)", fontSize: 15 }}
             >
-              пока нет начислений. начни с челленджа — баллы появятся здесь.
+              no credits yet. start with a challenge — points will appear here.
             </p>
           </div>
         )}

@@ -1,27 +1,38 @@
 import { createClient } from "@/lib/supabase/server";
 import { formatDate } from "@/lib/utils";
 import type { Event } from "@/lib/types";
-import { createEvent, toggleEvent, deleteEvent } from "./actions";
+import { createEvent, updateEvent, toggleEvent, deleteEvent } from "./actions";
+import { reorderEntity } from "../actions";
 
 const KIND_LABEL: Record<string, string> = {
-  race: "забег",
+  race: "race",
   live: "live",
-  workshop: "воркшоп",
-  community: "комьюнити",
+  workshop: "workshop",
+  community: "community",
 };
+
+function toLocalInput(iso: string | null): string {
+  if (!iso) return "";
+  const d = new Date(iso);
+  if (isNaN(d.getTime())) return "";
+  // YYYY-MM-DDTHH:mm
+  const pad = (n: number) => n.toString().padStart(2, "0");
+  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
+}
 
 export default async function AdminEventsPage() {
   const supabase = await createClient();
   const { data } = await supabase
     .from("events")
     .select("*")
+    .order("sort_order", { ascending: false })
     .order("starts_at", { ascending: false });
   const list = (data ?? []) as Event[];
 
   return (
     <div className="grid gap-8">
       <div>
-        <div className="eyebrow">события</div>
+        <div className="eyebrow">events</div>
         <h1
           className="font-display"
           style={{
@@ -32,7 +43,7 @@ export default async function AdminEventsPage() {
             margin: "8px 0 0",
           }}
         >
-          забеги, лайвы, воркшопы.
+          races, livestreams, workshops.
         </h1>
       </div>
 
@@ -42,151 +53,216 @@ export default async function AdminEventsPage() {
         style={{ padding: "28px 32px" }}
       >
         <div className="md:col-span-2">
-          <div className="eyebrow eyebrow-ink">название</div>
+          <div className="eyebrow eyebrow-ink">title</div>
           <input className="input mt-2" name="title" required />
         </div>
         <div className="md:col-span-2">
-          <div className="eyebrow eyebrow-ink">описание</div>
+          <div className="eyebrow eyebrow-ink">description</div>
           <textarea
             className="input mt-2"
             name="description"
             rows={3}
-            style={{
-              resize: "none",
-              fontFamily: "var(--font-body)",
-              fontSize: 14,
-            }}
+            style={{ resize: "none", fontFamily: "var(--font-body)", fontSize: 14 }}
           />
         </div>
         <div>
-          <div className="eyebrow eyebrow-ink">тип</div>
+          <div className="eyebrow eyebrow-ink">type</div>
           <select className="input mt-2" name="kind" defaultValue="community">
             {Object.entries(KIND_LABEL).map(([k, v]) => (
-              <option key={k} value={k}>
-                {v}
-              </option>
+              <option key={k} value={k}>{v}</option>
             ))}
           </select>
         </div>
         <div>
-          <div className="eyebrow eyebrow-ink">локация</div>
+          <div className="eyebrow eyebrow-ink">location</div>
           <input className="input mt-2" name="location" />
         </div>
         <div>
-          <div className="eyebrow eyebrow-ink">старт</div>
-          <input
-            className="input mt-2"
-            name="starts_at"
-            type="datetime-local"
-            required
-          />
+          <div className="eyebrow eyebrow-ink">starts</div>
+          <input className="input mt-2" name="starts_at" type="datetime-local" required />
         </div>
         <div>
-          <div className="eyebrow eyebrow-ink">конец · опц</div>
-          <input
-            className="input mt-2"
-            name="ends_at"
-            type="datetime-local"
-          />
+          <div className="eyebrow eyebrow-ink">end · optional</div>
+          <input className="input mt-2" name="ends_at" type="datetime-local" />
         </div>
         <div>
-          <div className="eyebrow eyebrow-ink">ссылка</div>
-          <input
-            className="input mt-2"
-            name="link"
-            type="url"
-            placeholder="https://…"
-          />
+          <div className="eyebrow eyebrow-ink">link</div>
+          <input className="input mt-2" name="link" type="url" placeholder="https://…" />
         </div>
         <div>
-          <div className="eyebrow eyebrow-ink">cover url</div>
-          <input
-            className="input mt-2"
-            name="cover_url"
-            type="url"
-            placeholder="https://…"
-          />
+          <div className="eyebrow eyebrow-ink">sort order</div>
+          <input className="input mt-2" name="sort_order" type="number" defaultValue={0} />
+        </div>
+        <div>
+          <div className="eyebrow eyebrow-ink">cover (file)</div>
+          <input className="input mt-2" name="cover" type="file" accept="image/*" />
+        </div>
+        <div>
+          <div className="eyebrow eyebrow-ink">cover (url, fallback)</div>
+          <input className="input mt-2" name="cover_url" type="url" placeholder="https://…" />
         </div>
         <div className="md:col-span-2">
-          <button type="submit" className="btn btn-blue">
-            добавить
-          </button>
+          <button type="submit" className="btn btn-blue">add</button>
         </div>
       </form>
 
       <div className="grid gap-3">
         {list.map((ev) => (
-          <div
+          <details
             key={ev.id}
-            className="bg-white border border-[var(--om-ink-100)] flex items-start justify-between gap-4"
-            style={{
-              padding: "20px 24px",
-              opacity: ev.active ? 1 : 0.55,
-            }}
+            className="bg-white border border-[var(--om-ink-100)]"
+            style={{ opacity: ev.active ? 1 : 0.55 }}
           >
-            <div className="min-w-0">
-              <div className="flex items-center gap-2 flex-wrap">
-                <div
-                  className="font-display truncate"
-                  style={{
-                    fontWeight: 800,
-                    fontSize: 17,
-                    letterSpacing: "-0.01em",
-                  }}
-                >
-                  {ev.title}
+            <summary
+              className="flex items-center gap-4 cursor-pointer list-none"
+              style={{ padding: "16px 20px" }}
+            >
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center gap-2 flex-wrap">
+                  <div
+                    className="font-display truncate"
+                    style={{ fontWeight: 800, fontSize: 16, letterSpacing: "-0.01em" }}
+                  >
+                    {ev.title}
+                  </div>
+                  <span className="chip chip-blue">{KIND_LABEL[ev.kind] ?? ev.kind}</span>
+                  {!ev.active && <span className="chip">hidden</span>}
                 </div>
-                <span className="chip chip-blue">{KIND_LABEL[ev.kind] ?? ev.kind}</span>
-                {!ev.active && <span className="chip">скрыто</span>}
-              </div>
-              <div
-                className="font-mono mt-2"
-                style={{
-                  fontSize: 11,
-                  color: "var(--om-ink-500)",
-                  textTransform: "uppercase",
-                  letterSpacing: "0.06em",
-                }}
-              >
-                {formatDate(ev.starts_at)}
-                {ev.location ? ` · ${ev.location}` : ""}
-              </div>
-              {ev.description && (
-                <p
-                  className="font-body mt-2 line-clamp-2"
+                <div
+                  className="font-mono mt-1"
                   style={{
-                    fontSize: 13,
+                    fontSize: 11,
                     color: "var(--om-ink-500)",
-                    lineHeight: 1.55,
+                    textTransform: "uppercase",
+                    letterSpacing: "0.06em",
                   }}
                 >
-                  {ev.description}
-                </p>
-              )}
-            </div>
-            <div className="flex flex-col gap-2 shrink-0">
-              <form action={toggleEvent}>
+                  {formatDate(ev.starts_at)}
+                  {ev.location ? ` · ${ev.location}` : ""} · sort {ev.sort_order}
+                </div>
+              </div>
+              <div className="flex items-center gap-2">
+                <form action={reorderEntity}>
+                  <input type="hidden" name="table" value="events" />
+                  <input type="hidden" name="id" value={ev.id} />
+                  <input type="hidden" name="direction" value="up" />
+                  <button type="submit" className="btn btn-outline btn-sm" aria-label="up">↑</button>
+                </form>
+                <form action={reorderEntity}>
+                  <input type="hidden" name="table" value="events" />
+                  <input type="hidden" name="id" value={ev.id} />
+                  <input type="hidden" name="direction" value="down" />
+                  <button type="submit" className="btn btn-outline btn-sm" aria-label="down">↓</button>
+                </form>
+              </div>
+            </summary>
+
+            <div
+              className="grid gap-4"
+              style={{ borderTop: "1px solid var(--om-ink-100)", padding: "24px 28px" }}
+            >
+              <form action={updateEvent} className="grid md:grid-cols-2 gap-4">
                 <input type="hidden" name="id" value={ev.id} />
-                <input type="hidden" name="active" value={String(ev.active)} />
-                <button type="submit" className="btn btn-outline btn-sm">
-                  {ev.active ? "скрыть" : "показать"}
-                </button>
+                <div className="md:col-span-2">
+                  <div className="eyebrow eyebrow-ink">title</div>
+                  <input className="input mt-2" name="title" defaultValue={ev.title} required />
+                </div>
+                <div className="md:col-span-2">
+                  <div className="eyebrow eyebrow-ink">description</div>
+                  <textarea
+                    className="input mt-2"
+                    name="description"
+                    rows={3}
+                    defaultValue={ev.description ?? ""}
+                    style={{ resize: "none", fontFamily: "var(--font-body)", fontSize: 14 }}
+                  />
+                </div>
+                <div>
+                  <div className="eyebrow eyebrow-ink">type</div>
+                  <select className="input mt-2" name="kind" defaultValue={ev.kind}>
+                    {Object.entries(KIND_LABEL).map(([k, v]) => (
+                      <option key={k} value={k}>{v}</option>
+                    ))}
+                  </select>
+                </div>
+                <div>
+                  <div className="eyebrow eyebrow-ink">location</div>
+                  <input className="input mt-2" name="location" defaultValue={ev.location ?? ""} />
+                </div>
+                <div>
+                  <div className="eyebrow eyebrow-ink">starts</div>
+                  <input
+                    className="input mt-2"
+                    name="starts_at"
+                    type="datetime-local"
+                    defaultValue={toLocalInput(ev.starts_at)}
+                    required
+                  />
+                </div>
+                <div>
+                  <div className="eyebrow eyebrow-ink">end</div>
+                  <input
+                    className="input mt-2"
+                    name="ends_at"
+                    type="datetime-local"
+                    defaultValue={toLocalInput(ev.ends_at)}
+                  />
+                </div>
+                <div>
+                  <div className="eyebrow eyebrow-ink">link</div>
+                  <input className="input mt-2" name="link" type="url" defaultValue={ev.link ?? ""} />
+                </div>
+                <div>
+                  <div className="eyebrow eyebrow-ink">sort order</div>
+                  <input
+                    className="input mt-2"
+                    name="sort_order"
+                    type="number"
+                    defaultValue={ev.sort_order}
+                  />
+                </div>
+                <div>
+                  <div className="eyebrow eyebrow-ink">replace cover (file)</div>
+                  <input className="input mt-2" name="cover" type="file" accept="image/*" />
+                </div>
+                <div>
+                  <div className="eyebrow eyebrow-ink">cover url</div>
+                  <input
+                    className="input mt-2"
+                    name="cover_url"
+                    type="url"
+                    defaultValue={ev.cover_url ?? ""}
+                  />
+                </div>
+                <div className="md:col-span-2">
+                  <button type="submit" className="btn btn-blue">save</button>
+                </div>
               </form>
-              <form action={deleteEvent}>
-                <input type="hidden" name="id" value={ev.id} />
-                <button
-                  type="submit"
-                  className="btn btn-outline btn-sm"
-                  style={{
-                    borderColor: "var(--om-magenta)",
-                    color: "var(--om-magenta)",
-                  }}
-                >
-                  удалить
-                </button>
-              </form>
+
+              <div
+                className="flex gap-3 flex-wrap"
+                style={{ borderTop: "1px solid var(--om-ink-100)", paddingTop: 16 }}
+              >
+                <form action={toggleEvent}>
+                  <input type="hidden" name="id" value={ev.id} />
+                  <input type="hidden" name="active" value={String(ev.active)} />
+                  <button type="submit" className="btn btn-outline btn-sm">
+                    {ev.active ? "hide" : "show"}
+                  </button>
+                </form>
+                <form action={deleteEvent}>
+                  <input type="hidden" name="id" value={ev.id} />
+                  <button
+                    type="submit"
+                    className="btn btn-outline btn-sm"
+                    style={{ borderColor: "var(--om-magenta)", color: "var(--om-magenta)" }}
+                  >
+                    delete
+                  </button>
+                </form>
+              </div>
             </div>
-          </div>
+          </details>
         ))}
         {list.length === 0 && (
           <p
@@ -200,7 +276,7 @@ export default async function AdminEventsPage() {
               letterSpacing: "0.06em",
             }}
           >
-            событий пока нет.
+            no events yet.
           </p>
         )}
       </div>

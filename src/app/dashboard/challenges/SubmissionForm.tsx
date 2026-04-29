@@ -28,22 +28,22 @@ export function SubmissionForm({ challengeId, kind }: Props) {
       const res = await submitChallenge(fd);
       if (res?.error) {
         setTone("err");
-        setMsg(`ошибка: ${res.error}`);
+        setMsg(`error: ${res.error}`);
         return;
       }
       const ai = res?.aiStatus;
       if (ai === "approved") {
         setTone("ok");
-        setMsg("AI одобрил — баллы начислены.");
+        setMsg("AI approved — points credited.");
       } else if (ai === "rejected") {
         setTone("err");
-        setMsg("AI отклонил. загрузи новое подтверждение.");
+        setMsg("AI rejected. upload a new submission.");
       } else if (ai === "pending") {
         setTone("info");
-        setMsg("AI не уверен — отправлено на ручную модерацию.");
+        setMsg("AI uncertain — sent to manual review.");
       } else {
         setTone("ok");
-        setMsg("отправлено. жди модерации.");
+        setMsg("submitted. awaiting review.");
       }
       setOpen(false);
     });
@@ -67,7 +67,7 @@ export function SubmissionForm({ challengeId, kind }: Props) {
           }}
           className="btn btn-blue"
         >
-          отправить подтверждение
+submit proof
         </button>
         {msg && (
           <p
@@ -101,13 +101,13 @@ export function SubmissionForm({ challengeId, kind }: Props) {
     >
       {showPhoto && (
         <div>
-          <div style={FIELD_LABEL_STYLE}>фото</div>
+          <div style={FIELD_LABEL_STYLE}>photo</div>
           <input className="input" name="photo" type="file" accept="image/*" />
         </div>
       )}
       {showVideo && (
         <div>
-          <div style={FIELD_LABEL_STYLE}>видео</div>
+          <div style={FIELD_LABEL_STYLE}>video</div>
           <input className="input" name="video" type="file" accept="video/*" />
           <p
             className="font-mono mt-2"
@@ -118,12 +118,12 @@ export function SubmissionForm({ challengeId, kind }: Props) {
               letterSpacing: "0.06em",
             }}
           >
-            AI смотрит ключевой кадр — сними одним дублем
+            AI checks a key frame — film in one take
           </p>
         </div>
       )}
       <div>
-        <div style={FIELD_LABEL_STYLE}>ссылка (stories, пост)</div>
+        <div style={FIELD_LABEL_STYLE}>link (stories, post)</div>
         <input
           className="input"
           name="link"
@@ -132,7 +132,7 @@ export function SubmissionForm({ challengeId, kind }: Props) {
         />
       </div>
       <div>
-        <div style={FIELD_LABEL_STYLE}>комментарий</div>
+        <div style={FIELD_LABEL_STYLE}>note</div>
         <textarea
           className="input"
           name="note"
@@ -146,14 +146,14 @@ export function SubmissionForm({ challengeId, kind }: Props) {
           disabled={pending}
           className="btn btn-ink"
         >
-          {pending ? "отправляем…" : "отправить →"}
+          {pending ? "sending…" : "submit →"}
         </button>
         <button
           type="button"
           onClick={() => setOpen(false)}
           className="btn btn-outline"
         >
-          отмена
+          cancel
         </button>
       </div>
       {msg && (

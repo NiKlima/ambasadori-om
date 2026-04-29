@@ -1,14 +1,14 @@
 import { ImageResponse } from "next/og";
 import { createClient } from "@/lib/supabase/server";
 
-export const alt = "OM Амбассадоры";
+export const alt = "OM Ambasadori";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
 type Params = { id: string };
 
 export default async function OG({ params }: { params: Params }) {
-  let name = "Тренер";
+  let name = "Trainer";
   let sport: string | null = null;
   let club: string | null = null;
   let points = 0;
@@ -43,7 +43,7 @@ export default async function OG({ params }: { params: Params }) {
       >
         <div style={{ display: "flex", alignItems: "center", gap: 16, fontSize: 28, color: "#1B3A5B" }}>
           <div style={{ width: 40, height: 40, borderRadius: 20, background: "#7AB3FF" }} />
-          <div style={{ fontWeight: 600 }}>OM · Амбассадоры</div>
+          <div style={{ fontWeight: 600 }}>OM · Ambasadori</div>
         </div>
         <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
           <div style={{ fontSize: 86, fontWeight: 700, color: "#0F1B2A", lineHeight: 1.05 }}>{name}</div>
@@ -54,10 +54,10 @@ export default async function OG({ params }: { params: Params }) {
           </div>
         </div>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end" }}>
-          <div style={{ fontSize: 28, color: "#3B5067" }}>Лидерборд сезона 2026</div>
+          <div style={{ fontSize: 28, color: "#3B5067" }}>Leaderboard 2026</div>
           <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end" }}>
             <div style={{ fontSize: 120, fontWeight: 700, color: "#0F1B2A", lineHeight: 1 }}>{points}</div>
-            <div style={{ fontSize: 28, color: "#3B5067", textTransform: "uppercase", letterSpacing: 2 }}>баллов</div>
+            <div style={{ fontSize: 28, color: "#3B5067", textTransform: "uppercase", letterSpacing: 2 }}>points</div>
           </div>
         </div>
       </div>

@@ -37,7 +37,7 @@ export function ShareLink({ url }: Props) {
         className="btn btn-blue"
         style={{ whiteSpace: "nowrap" }}
       >
-        {copied ? "скопировано" : "копировать"}
+        {copied ? "copied" : "copy link"}
       </button>
     </div>
   );

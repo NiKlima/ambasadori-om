@@ -5,15 +5,16 @@ import { usePathname } from "next/navigation";
 import { Logo } from "@/components/ui/Logo";
 
 const ITEMS: { href: string; label: string }[] = [
-  { href: "/admin", label: "тренеры" },
-  { href: "/admin/moderation", label: "модерация" },
-  { href: "/admin/challenges", label: "челленджи" },
-  { href: "/admin/products", label: "шоп" },
-  { href: "/admin/orders", label: "заказы" },
-  { href: "/admin/surveys", label: "опросы" },
-  { href: "/admin/points", label: "начисления" },
-  { href: "/admin/events", label: "события" },
-  { href: "/admin/messages", label: "сообщения" },
+  { href: "/admin", label: "trainers" },
+  { href: "/admin/clubs", label: "clubs" },
+  { href: "/admin/moderation", label: "moderation" },
+  { href: "/admin/challenges", label: "challenges" },
+  { href: "/admin/products", label: "shop" },
+  { href: "/admin/orders", label: "orders" },
+  { href: "/admin/surveys", label: "surveys" },
+  { href: "/admin/points", label: "points" },
+  { href: "/admin/events", label: "events" },
+  { href: "/admin/messages", label: "messages" },
 ];
 
 export function AdminTopBar() {
@@ -64,7 +65,7 @@ export function AdminTopBar() {
             className="font-display font-extrabold text-[12px] tracking-[-0.005em]"
             style={{ color: "rgba(255,255,255,.6)" }}
           >
-            выйти
+            log out
           </button>
         </form>
       </div>

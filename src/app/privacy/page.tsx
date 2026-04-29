@@ -2,7 +2,7 @@ import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
 
 export const metadata = {
-  title: "политика конфиденциальности · OM Амбассадоры",
+  title: "privacy policy · OM Ambasadori",
 };
 
 export default function PrivacyPage() {
@@ -13,7 +13,7 @@ export default function PrivacyPage() {
         className="container-om om-prose"
         style={{ padding: "72px 0", maxWidth: 760 }}
       >
-        <div className="eyebrow">политика конфиденциальности</div>
+        <div className="eyebrow">privacy policy</div>
         <h1
           className="font-display"
           style={{
@@ -24,70 +24,65 @@ export default function PrivacyPage() {
             margin: "16px 0 32px",
           }}
         >
-          как мы обрабатываем
+          how we process
           <br />
-          персональные данные.
+          personal data.
         </h1>
 
         <p>
-          программа «амбассадоры ОМ» (далее — «программа») обрабатывает
-          персональные данные тренеров-участников и их подопечных в соответствии
-          с <strong>законом республики молдова №&nbsp;133/2011</strong> «о защите
-          персональных данных».
+          the &laquo;ambasadori OM&raquo; programme (the &laquo;programme&raquo;) processes
+          personal data of participating coaches and their clients in accordance with
+          <strong> Law of the Republic of Moldova No. 133/2011</strong> &laquo;on the protection of personal data&raquo;.
         </p>
 
-        <h2>какие данные мы собираем</h2>
+        <h2>data we collect</h2>
         <ul>
           <li>
-            <strong>тренеры:</strong> имя, email, клуб, вид спорта, дата
-            рождения, фото, ссылки на соцсети, регалии, история и галерея,
-            промокод.
+            <strong>coaches:</strong> name, email, club, sport, date of birth,
+            photo, social links, achievements, story and gallery, promo code.
           </li>
           <li>
-            <strong>подопечные (опросы):</strong> имя, email, ответы на
-            вопросы. email используется только для исключения повторного
-            прохождения.
+            <strong>clients (surveys):</strong> name, email, answers. email is
+            used only to prevent duplicate submissions.
           </li>
           <li>
-            <strong>контактная форма:</strong> имя, email, текст сообщения.
+            <strong>contact form:</strong> name, email, message text.
           </li>
         </ul>
 
-        <h2>цели обработки</h2>
+        <h2>purposes of processing</h2>
         <ul>
-          <li>учёт баллов в программе и подтверждение выполнения челленджей.</li>
-          <li>публикация публичной карточки тренера на сайте программы.</li>
-          <li>связь по существу обращения через форму контактов.</li>
+          <li>tracking points in the programme and confirming challenge completion.</li>
+          <li>publishing a public coach card on the programme website.</li>
+          <li>handling enquiries via the contact form.</li>
         </ul>
 
-        <h2>сроки хранения</h2>
+        <h2>retention</h2>
         <p>
-          данные хранятся в течение всего периода участия в программе и до 12
-          месяцев после её завершения, после чего удаляются. email подопечных,
-          прошедших опрос, хранится 24 месяца с целью контроля повторов.
+          data is retained throughout participation in the programme and up to 12
+          months after it ends, after which it is deleted. survey-respondent emails
+          are retained for 24 months for duplicate-control purposes.
         </p>
 
-        <h2>передача третьим лицам</h2>
+        <h2>third-party transfers</h2>
         <p>
-          данные не передаются третьим лицам, за исключением технических
-          провайдеров, обеспечивающих работу сервиса (supabase — хостинг и БД;
-          openai — обработка изображений-подтверждений челленджей по
-          обезличенным файлам).
+          data is not shared with third parties except for technical providers who
+          power the service (supabase — hosting and database; openai — anonymised
+          processing of challenge-confirmation imagery).
         </p>
 
-        <h2>твои права</h2>
+        <h2>your rights</h2>
         <p>
-          ты имеешь право запросить доступ к своим данным, их исправление или
-          удаление, написав нам на{" "}
-          <a href="/contacts">страницу контактов</a> или по почте, указанной на
-          сайте.
+          you can request access to your data, its correction or deletion by
+          contacting us via the <a href="/contacts">contacts page</a> or the email
+          listed on the site.
         </p>
 
-        <h2>согласие</h2>
+        <h2>consent</h2>
         <p>
-          использование форм программы (регистрация тренера, прохождение опроса
-          подопечным, отправка сообщения через /contacts) означает согласие на
-          обработку персональных данных в указанных выше целях.
+          using the programme&apos;s forms (coach registration, client survey,
+          message via /contacts) means consent to processing of personal data for
+          the purposes listed above.
         </p>
 
         <p
@@ -100,7 +95,7 @@ export default function PrivacyPage() {
             marginTop: 48,
           }}
         >
-          последнее обновление: 2026
+          last updated: 2026
         </p>
       </article>
       <SiteFooter />

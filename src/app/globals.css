@@ -187,17 +187,20 @@ html, body {
     #fff 0 var(--stripe-thickness),
     var(--om-blue) var(--stripe-thickness) calc(var(--stripe-thickness) + var(--stripe-gap-2x)));
 }
-.om-stripes-blue-soft {
-  background-image: repeating-linear-gradient(0deg, var(--om-blue) 0 18px, #fff 18px 54px);
-  opacity: .06;
-}
-.om-stripes-white-soft {
-  background-image: repeating-linear-gradient(0deg, #fff 0 6px, transparent 6px 24px);
-  opacity: 0.18;
-}
-.om-stripes-band {
-  background-image: repeating-linear-gradient(0deg, #fff 0 22px, transparent 22px 88px);
-}
+/* Stripe overlays disabled per design v5 — DOM stays for backward compat,
+   visually hidden. To restore: remove `display:none` block and uncomment
+   the original definitions below. */
+.om-stripes-blue-on-white,
+.om-stripes-white-on-blue,
+.om-stripes-blue-soft,
+.om-stripes-white-soft,
+.om-stripes-band { display: none !important; }
+
+/* original definitions (kept for reference):
+.om-stripes-blue-soft { background-image: repeating-linear-gradient(0deg, var(--om-blue) 0 18px, #fff 18px 54px); opacity: .06; }
+.om-stripes-white-soft { background-image: repeating-linear-gradient(0deg, #fff 0 6px, transparent 6px 24px); opacity: 0.18; }
+.om-stripes-band { background-image: repeating-linear-gradient(0deg, #fff 0 22px, transparent 22px 88px); }
+*/
 
 /* ============================================================================
    PRIMITIVE COMPONENTS — used as raw classes for handoff fidelity

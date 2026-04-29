@@ -6,7 +6,7 @@ import { createClient } from "@/lib/supabase/server";
 export async function placeOrder(formData: FormData) {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
-  if (!user) return { error: "Не авторизован" };
+  if (!user) return { error: "Not authorised" };
 
   const productId = String(formData.get("product_id"));
   const note = String(formData.get("note") ?? "").trim() || null;

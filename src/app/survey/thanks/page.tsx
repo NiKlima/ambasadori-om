@@ -10,7 +10,7 @@ export default function ThanksPage() {
         className="bg-white border border-[var(--om-ink-100)]"
         style={{ padding: "48px 32px", textAlign: "center" }}
       >
-        <div className="eyebrow">ответы получены</div>
+        <div className="eyebrow">answers received</div>
         <h1
           className="font-display"
           style={{
@@ -21,7 +21,7 @@ export default function ThanksPage() {
             margin: "16px 0 16px",
           }}
         >
-          спасибо.
+          thanks.
         </h1>
         <p
           className="font-body"
@@ -35,10 +35,10 @@ export default function ThanksPage() {
             marginRight: "auto",
           }}
         >
-          твой тренер автоматически получит баллы программы OM.
+          your trainer will automatically receive OM programme points.
         </p>
         <Link href="/" className="btn btn-blue" style={{ display: "inline-flex" }}>
-          узнать про OM →
+          learn about OM →
         </Link>
       </div>
     </div>

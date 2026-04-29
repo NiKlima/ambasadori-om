@@ -34,13 +34,13 @@ export function GalleryUpload({
     setError(null);
     const slots = MAX_PHOTOS - items.length;
     if (slots <= 0) {
-      setError(`максимум ${MAX_PHOTOS} фото`);
+      setError(`maximum ${MAX_PHOTOS} photos`);
       return;
     }
     const toUpload = Array.from(files).slice(0, slots);
     for (const f of toUpload) {
       if (f.size > MAX_BYTES) {
-        setError(`файл ${f.name} больше 2 мб`);
+        setError(`file ${f.name} larger than 2 MB`);
         return;
       }
     }
@@ -60,7 +60,7 @@ export function GalleryUpload({
       }
       await persist(next);
     } catch (e) {
-      setError(e instanceof Error ? e.message : "ошибка загрузки");
+      setError(e instanceof Error ? e.message : "upload error");
     } finally {
       setBusy(false);
     }
@@ -71,7 +71,7 @@ export function GalleryUpload({
     try {
       await persist(items.filter((u) => u !== url));
     } catch (e) {
-      setError(e instanceof Error ? e.message : "ошибка");
+      setError(e instanceof Error ? e.message : "error");
     } finally {
       setBusy(false);
     }
@@ -90,14 +90,14 @@ export function GalleryUpload({
             color: "var(--om-ink-500)",
           }}
         >
-          галерея · {items.length} из {MAX_PHOTOS}
+gallery · {items.length} of {MAX_PHOTOS}
         </div>
         {items.length < MAX_PHOTOS && (
           <label
             className="lk"
             style={{ fontSize: 12, cursor: busy ? "not-allowed" : "pointer" }}
           >
-            {busy ? "загрузка…" : "+ загрузить"}
+{busy ? "uploading…" : "+ upload"}
             <input
               type="file"
               accept="image/*"
@@ -140,7 +140,7 @@ export function GalleryUpload({
                 fontWeight: 800,
                 border: 0,
               }}
-              aria-label="удалить"
+              aria-label="remove"
             >
               ×
             </button>

@@ -28,7 +28,7 @@ export function PhotoUpload({
   async function handleFile(file: File) {
     setError(null);
     if (file.size > maxBytes) {
-      setError(`файл больше ${(maxBytes / 1024 / 1024).toFixed(1)} мб`);
+      setError(`file larger than ${(maxBytes / 1024 / 1024).toFixed(1)} MB`);
       return;
     }
     setBusy(true);
@@ -49,7 +49,7 @@ export function PhotoUpload({
       if (dbErr) throw dbErr;
       router.refresh();
     } catch (e) {
-      setError(e instanceof Error ? e.message : "ошибка загрузки");
+      setError(e instanceof Error ? e.message : "upload error");
     } finally {
       setBusy(false);
     }
@@ -86,7 +86,7 @@ export function PhotoUpload({
           className="lk mt-3 inline-block"
           style={{ fontSize: 12 }}
         >
-          текущий файл →
+current file →
         </a>
       )}
       <label
@@ -94,10 +94,10 @@ export function PhotoUpload({
         style={{ width: "100%", cursor: busy ? "not-allowed" : "pointer" }}
       >
         {busy
-          ? "загрузка…"
+          ? "uploading…"
           : currentUrl
-            ? "заменить фото"
-            : "загрузить фото"}
+            ? "replace photo"
+            : "upload photo"}
         <input
           type="file"
           accept={accept}

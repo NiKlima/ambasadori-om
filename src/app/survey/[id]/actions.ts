@@ -11,10 +11,10 @@ export async function submitSurvey(formData: FormData) {
   const trainee_email = String(formData.get("email") ?? "").trim().toLowerCase();
   const trainee_name = String(formData.get("name") ?? "").trim() || null;
 
-  if (!challengeId || !ref) return { error: "Некорректная ссылка" };
-  if (!EMAIL_RE.test(trainee_email)) return { error: "Введи корректный email" };
+  if (!challengeId || !ref) return { error: "Invalid link" };
+  if (!EMAIL_RE.test(trainee_email)) return { error: "valid email required" };
   if (formData.get("consent") !== "on") {
-    return { error: "Нужно согласие на обработку персональных данных" };
+    return { error: "consent to data processing is required" };
   }
 
   const admin = createAdminClient();
@@ -26,7 +26,7 @@ export async function submitSurvey(formData: FormData) {
     .eq("role", "trainer")
     .eq("is_active", true)
     .single();
-  if (!trainer) return { error: "Тренер по ссылке не найден" };
+  if (!trainer) return { error: "Trainer for this link not found" };
 
   const { data: questions } = await admin
     .from("survey_questions")
@@ -48,7 +48,7 @@ export async function submitSurvey(formData: FormData) {
 
   if (error) {
     if (error.code === "23505") {
-      return { error: "Этот опрос уже пройден с этим email" };
+      return { error: "This survey was already submitted with this email" };
     }
     return { error: error.message };
   }

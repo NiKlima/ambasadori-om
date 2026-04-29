@@ -40,18 +40,18 @@ export default async function DashboardPage() {
     return (
       <div className="container-om py-10">
         <div className="bg-white border border-[var(--om-ink-100)] p-8">
-          <div className="eyebrow">профиль не настроен</div>
+          <div className="eyebrow">profile not set up</div>
           <h2
             className="font-display mt-3"
             style={{ fontWeight: 900, fontSize: 32, letterSpacing: "-0.03em" }}
           >
-            обратись к админу OM.
+            contact OM admin.
           </h2>
           <p
             className="mt-3"
             style={{ color: "var(--om-ink-500)" }}
           >
-            нужно добавить тебя в программу. напиши на{" "}
+            we need to add you to the programme. write to{" "}
             <a href="mailto:ambasadori@om.md" style={{ color: "var(--om-blue)" }}>
               ambasadori@om.md
             </a>
@@ -63,9 +63,9 @@ export default async function DashboardPage() {
   }
 
   return (
-    <div className="container-om py-8 grid gap-4">
+    <div className="container-om grid" style={{ paddingTop: 40, paddingBottom: 80, gap: 20 }}>
       {/* Profile + promo code */}
-      <div className="grid md:grid-cols-[1.6fr_1fr] gap-4">
+      <div className="grid md:grid-cols-[1.6fr_1fr]" style={{ gap: 20 }}>
         <div className="bg-white border border-[var(--om-ink-100)] p-8 sm:p-10 flex items-center gap-6">
           <Avatar
             name={profile.full_name}
@@ -74,7 +74,7 @@ export default async function DashboardPage() {
             variant="blue"
           />
           <div>
-            <div className="eyebrow eyebrow-ink">привет,</div>
+            <div className="eyebrow eyebrow-ink">hello,</div>
             <h1
               className="font-display"
               style={{
@@ -98,7 +98,7 @@ export default async function DashboardPage() {
             >
               {profile.club ?? "—"}
               {profile.sport ? ` · ${profile.sport}` : ""}
-              {" · амбассадор"}
+              {" · ambassador"}
             </div>
           </div>
         </div>
@@ -106,7 +106,7 @@ export default async function DashboardPage() {
         <div className="bg-[var(--om-ink-900)] text-white p-8 relative overflow-hidden">
           <div className="om-stripes-white-soft" style={{ position: "absolute", inset: 0 }} />
           <div className="relative">
-            <div className="eyebrow eyebrow-w">твой промокод</div>
+            <div className="eyebrow eyebrow-w">your promo code</div>
             <div
               className="font-display mt-3"
               style={{ fontWeight: 900, fontSize: 44, letterSpacing: "-0.02em" }}
@@ -117,32 +117,32 @@ export default async function DashboardPage() {
               className="font-mono mt-3"
               style={{ fontSize: 12, opacity: 0.7, lineHeight: 1.55 }}
             >
-              клиенты вводят код при покупке OM. баллы начисляются автоматически.
+clients enter the code at OM checkout. points credit automatically.
             </div>
           </div>
         </div>
       </div>
 
       {/* KPI row */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <Kpi label="всего баллов" value={totalPoints} variant="blue" />
-        <Kpi label="место" value={position ? `№${position}` : "—"} />
+      <div className="grid grid-cols-2 md:grid-cols-4" style={{ gap: 20 }}>
+        <Kpi label="total points" value={totalPoints} variant="blue" />
+        <Kpi label="rank" value={position ? `#${position}` : "—"} />
         <Kpi
-          label="на модерации"
+          label="in review"
           value={
             <span style={{ color: "var(--om-magenta)" }}>
               {pendingSubs?.length ?? 0}
             </span>
           }
         />
-        <Kpi label="всего записей" value={recentTxs?.length ?? 0} />
+        <Kpi label="recent" value={recentTxs?.length ?? 0} />
       </div>
 
       {/* Recent activity */}
       <div className="bg-white border border-[var(--om-ink-100)] p-7 sm:p-8">
         <div className="flex justify-between items-baseline mb-5">
           <div>
-            <div className="eyebrow">последние начисления</div>
+            <div className="eyebrow">latest credits</div>
             <h2
               className="font-display mt-2"
               style={{
@@ -152,11 +152,11 @@ export default async function DashboardPage() {
                 margin: 0,
               }}
             >
-              недавняя активность.
+              recent activity.
             </h2>
           </div>
           <Link href="/dashboard/history" className="lk">
-            вся история →
+            full history →
           </Link>
         </div>
         {recentTxs && recentTxs.length > 0 ? (
@@ -213,14 +213,14 @@ export default async function DashboardPage() {
           </div>
         ) : (
           <p style={{ color: "var(--om-ink-500)" }}>
-            пока тихо. начни с челленджа — загрузи фото и получишь первые
-            баллы.{" "}
+            quiet so far. start with a challenge — upload a photo and earn
+            your first points.{" "}
             <Link
               href="/dashboard/challenges"
               className="lk"
               style={{ display: "inline" }}
             >
-              к челленджам →
+              to challenges →
             </Link>
           </p>
         )}

@@ -14,7 +14,7 @@ export default function ContactsThanksPage() {
           className="container-om"
           style={{ maxWidth: 640, textAlign: "center" }}
         >
-          <div className="eyebrow">сообщение отправлено</div>
+          <div className="eyebrow">message sent</div>
           <h1
             className="font-display"
             style={{
@@ -25,7 +25,7 @@ export default function ContactsThanksPage() {
               margin: "16px 0 16px",
             }}
           >
-            спасибо.
+            thanks.
           </h1>
           <p
             className="font-body"
@@ -39,10 +39,10 @@ export default function ContactsThanksPage() {
               marginRight: "auto",
             }}
           >
-            мы получили твоё сообщение и ответим в течение 1–2 рабочих дней.
+            we got your message and will reply within 1–2 business days.
           </p>
           <Link href="/" className="btn btn-ink" style={{ display: "inline-flex" }}>
-            на главную →
+            home →
           </Link>
         </div>
       </section>

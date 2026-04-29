@@ -4,13 +4,13 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 const ITEMS: { href: string; label: string }[] = [
-  { href: "/dashboard", label: "дашборд" },
-  { href: "/dashboard/challenges", label: "челленджи" },
-  { href: "/dashboard/shop", label: "шоп" },
-  { href: "/dashboard/orders", label: "заказы" },
-  { href: "/dashboard/surveys", label: "опросы" },
-  { href: "/dashboard/history", label: "история" },
-  { href: "/dashboard/profile", label: "профиль" },
+  { href: "/dashboard", label: "dashboard" },
+  { href: "/dashboard/challenges", label: "challenges" },
+  { href: "/dashboard/shop", label: "shop" },
+  { href: "/dashboard/orders", label: "orders" },
+  { href: "/dashboard/surveys", label: "surveys" },
+  { href: "/dashboard/history", label: "history" },
+  { href: "/dashboard/profile", label: "profile" },
 ];
 
 export function DashboardSubnav() {

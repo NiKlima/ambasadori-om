@@ -6,7 +6,7 @@ import { createClient } from "@/lib/supabase/server";
 export async function updateProfile(formData: FormData): Promise<void> {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
-  if (!user) throw new Error("Не авторизован");
+  if (!user) throw new Error("Not authorised");
 
   const full_name = String(formData.get("full_name") ?? "").trim();
   const club = String(formData.get("club") ?? "").trim() || null;

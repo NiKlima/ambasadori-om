@@ -5,19 +5,19 @@ import { formatDate } from "@/lib/utils";
 import type { Event } from "@/lib/types";
 
 const KIND_LABEL: Record<string, string> = {
-  race: "забег",
+  race: "race",
   live: "live",
-  workshop: "воркшоп",
-  community: "комьюнити",
+  workshop: "workshop",
+  community: "community",
 };
 
 const FALLBACK_IMG = "/brand/imagery/park-crowd.jpg";
 
 const FALLBACK: Event[] = [
-  { id: "f1", title: "Кишинёв 10К", description: "Главный городской забег весны.", cover_url: "/brand/imagery/runner-asphalt-line.jpg", kind: "race", starts_at: "2026-05-25T08:00:00Z", ends_at: null, location: "Парк «Валя Морилор»", link: null, active: true, created_at: new Date().toISOString() },
-  { id: "f2", title: "OM Live с амбассадорами", description: "Прямой эфир с тренерами сети.", cover_url: "/brand/imagery/yoga-rooftop.jpg", kind: "live", starts_at: "2026-05-12T19:00:00Z", ends_at: null, location: "Instagram @om", link: null, active: true, created_at: new Date().toISOString() },
-  { id: "f3", title: "Утренняя йога на крыше", description: "На рассвете в центре города.", cover_url: "/brand/imagery/yoga-rooftop.jpg", kind: "community", starts_at: "2026-06-02T06:30:00Z", ends_at: null, location: "Press House", link: null, active: true, created_at: new Date().toISOString() },
-  { id: "f4", title: "Трейл-полумарафон", description: "По лесным тропам Кодр.", cover_url: "/brand/imagery/runner-forest.jpg", kind: "race", starts_at: "2026-06-14T07:00:00Z", ends_at: null, location: "Лес Кодрь", link: null, active: true, created_at: new Date().toISOString() },
+  { id: "f1", title: "Chișinău 10K", description: "the main spring road race.", cover_url: "/brand/imagery/runner-asphalt-line.jpg", kind: "race", starts_at: "2026-05-25T08:00:00Z", ends_at: null, location: "Valea Morilor park", link: null, active: true, sort_order: 0, created_at: new Date().toISOString() },
+  { id: "f2", title: "OM Live with ambassadors", description: "live stream with the network coaches.", cover_url: "/brand/imagery/yoga-rooftop.jpg", kind: "live", starts_at: "2026-05-12T19:00:00Z", ends_at: null, location: "Instagram @om", link: null, active: true, sort_order: 0, created_at: new Date().toISOString() },
+  { id: "f3", title: "rooftop yoga · sunrise", description: "at sunrise in the city center.", cover_url: "/brand/imagery/yoga-rooftop.jpg", kind: "community", starts_at: "2026-06-02T06:30:00Z", ends_at: null, location: "Press House", link: null, active: true, sort_order: 0, created_at: new Date().toISOString() },
+  { id: "f4", title: "trail half marathon", description: "through the Codrii forest paths.", cover_url: "/brand/imagery/runner-forest.jpg", kind: "race", starts_at: "2026-06-14T07:00:00Z", ends_at: null, location: "Codrii forest", link: null, active: true, sort_order: 0, created_at: new Date().toISOString() },
 ];
 
 export default async function EventsPage() {
@@ -28,6 +28,7 @@ export default async function EventsPage() {
       .from("events")
       .select("*")
       .eq("active", true)
+      .order("sort_order", { ascending: false })
       .order("starts_at", { ascending: true });
     if (data && data.length > 0) events = data as Event[];
   } catch {}
@@ -38,7 +39,7 @@ export default async function EventsPage() {
 
   const spotlight = upcoming[0];
   const moreUpcoming = upcoming.slice(1);
-  const filters = ["все", ...Array.from(new Set(upcoming.map((e) => KIND_LABEL[e.kind] ?? e.kind)))];
+  const filters = ["all", ...Array.from(new Set(upcoming.map((e) => KIND_LABEL[e.kind] ?? e.kind)))];
 
   return (
     <>
@@ -69,7 +70,7 @@ export default async function EventsPage() {
           className="container-om relative h-full flex flex-col justify-end text-white"
           style={{ paddingBottom: 56 }}
         >
-          <div className="eyebrow eyebrow-w">события · сезон 2026</div>
+          <div className="eyebrow eyebrow-w">events · season 2026</div>
           <h1
             className="font-display"
             style={{
@@ -81,9 +82,9 @@ export default async function EventsPage() {
               maxWidth: 1100,
             }}
           >
-            там, где живёт
+            where the
             <br />
-            сообщество.
+            community lives.
           </h1>
           <div
             className="font-mono flex flex-wrap gap-x-8 gap-y-2"
@@ -94,8 +95,8 @@ export default async function EventsPage() {
               letterSpacing: "0.08em",
             }}
           >
-            <span>{upcoming.length} впереди</span>
-            <span>· 4 города</span>
+            <span>{upcoming.length} upcoming</span>
+            <span>· 4 cities</span>
             <span>· OM run · OM live · OM festival</span>
           </div>
         </div>
@@ -127,7 +128,7 @@ export default async function EventsPage() {
               marginRight: 8,
             }}
           >
-            фильтр
+            filter
           </span>
           {filters.map((f, i) => (
             <span key={f} className={i === 0 ? "chip chip-ink" : "chip"}>
@@ -141,7 +142,7 @@ export default async function EventsPage() {
       {spotlight && (
         <section className="bg-white">
           <div className="container-om" style={{ padding: "56px 0" }}>
-            <div className="eyebrow">ближайшее</div>
+            <div className="eyebrow">next event</div>
             <div
               className="grid mt-4 border border-[var(--om-ink-100)]"
               style={{ gridTemplateColumns: "minmax(0, 1.4fr) minmax(0, 1fr)" }}
@@ -219,11 +220,11 @@ export default async function EventsPage() {
                       rel="noopener noreferrer"
                       className="btn btn-white"
                     >
-                      зарегистрироваться →
+                      register →
                     </a>
                   ) : (
                     <span className="btn btn-white" style={{ opacity: 0.7 }}>
-                      детали скоро
+                      details soon
                     </span>
                   )}
                 </div>
@@ -241,7 +242,7 @@ export default async function EventsPage() {
               className="eyebrow"
               style={{ paddingBottom: 16 }}
             >
-              впереди · ещё {moreUpcoming.length}
+              upcoming · {moreUpcoming.length} more
             </div>
             <div
               className="grid border border-[var(--om-ink-100)]"
@@ -348,7 +349,7 @@ export default async function EventsPage() {
                             letterSpacing: "0.06em",
                           }}
                         >
-                          регистрация открыта
+                          registration open
                         </span>
                         {e.link ? (
                           <a
@@ -364,7 +365,7 @@ export default async function EventsPage() {
                               textTransform: "uppercase",
                             }}
                           >
-                            подробнее →
+                            register →
                           </a>
                         ) : (
                           <span
@@ -377,7 +378,7 @@ export default async function EventsPage() {
                               textTransform: "uppercase",
                             }}
                           >
-                            скоро →
+                            soon →
                           </span>
                         )}
                       </div>
@@ -397,12 +398,12 @@ export default async function EventsPage() {
               className="bg-white border border-[var(--om-ink-100)]"
               style={{ padding: "40px 28px", textAlign: "center" }}
             >
-              <div className="eyebrow">пусто</div>
+              <div className="eyebrow">empty</div>
               <p
                 className="font-body mt-3"
                 style={{ fontSize: 15, color: "var(--om-ink-500)" }}
               >
-                пока ничего не запланировано — следи за обновлениями.
+                nothing scheduled yet — stay tuned.
               </p>
             </div>
           </div>
@@ -416,7 +417,7 @@ export default async function EventsPage() {
           style={{ padding: "72px 0" }}
         >
           <div className="container-om">
-            <div className="eyebrow">прошедшие</div>
+            <div className="eyebrow">past events</div>
             <h2
               className="font-display"
               style={{
@@ -426,7 +427,7 @@ export default async function EventsPage() {
                 margin: "12px 0 32px",
               }}
             >
-              посмотри назад.
+              look back.
             </h2>
             <div
               className="grid"

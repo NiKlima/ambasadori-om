@@ -51,7 +51,7 @@ export default async function ModerationPage() {
           }}
         >
           <div>
-            <div className="eyebrow">очередь модерации</div>
+            <div className="eyebrow">moderation queue</div>
             <h1
               className="font-display"
               style={{
@@ -63,18 +63,18 @@ export default async function ModerationPage() {
               }}
             >
               {list.length === 0
-                ? "очередь пуста."
-                : `${list.length} на проверку.`}
+                ? "queue empty."
+                : `${list.length} to review.`}
             </h1>
           </div>
-          <Kpi label="на модерации" value={list.length} />
+          <Kpi label="in review" value={list.length} />
           <Kpi
-            label="баллов в очереди"
+            label="points in queue"
             value={
               <span style={{ color: "var(--om-blue)" }}>+{ptsAtStake}</span>
             }
           />
-          <Kpi label="среднее ожидание" value="—" />
+          <Kpi label="avg wait" value="—" />
         </div>
       </section>
 
@@ -94,7 +94,7 @@ export default async function ModerationPage() {
               {s.photo_url ? (
                 <Image
                   src={s.photo_url}
-                  alt="подтверждение"
+                  alt="submission"
                   fill
                   className="object-cover"
                   sizes="240px"
@@ -112,7 +112,7 @@ export default async function ModerationPage() {
                     textAlign: "center",
                   }}
                 >
-                  без фото
+                  no photo
                 </div>
               )}
               <span
@@ -124,7 +124,7 @@ export default async function ModerationPage() {
                   borderColor: "transparent",
                 }}
               >
-                подтверждение
+                submission
               </span>
             </div>
 
@@ -164,7 +164,7 @@ export default async function ModerationPage() {
                       letterSpacing: "-0.01em",
                     }}
                   >
-                    {s.trainer?.full_name ?? "неизвестный"}
+                    {s.trainer?.full_name ?? "unknown"}
                   </div>
                   <div
                     className="font-mono"
@@ -187,7 +187,7 @@ export default async function ModerationPage() {
               >
                 <span className="chip">{s.challenge?.title ?? "—"}</span>
                 <span className="chip chip-blue">
-                  +{s.challenge?.points ?? 0} баллов
+                  +{s.challenge?.points ?? 0} pts
                 </span>
               </div>
 
@@ -231,7 +231,7 @@ export default async function ModerationPage() {
                   className="btn btn-blue"
                   style={{ width: "100%" }}
                 >
-                  одобрить · +{s.challenge?.points ?? 0}
+                  approve · +{s.challenge?.points ?? 0}
                 </button>
               </form>
               <form action={moderateSubmission} className="flex flex-col gap-2">
@@ -239,7 +239,7 @@ export default async function ModerationPage() {
                 <input type="hidden" name="action" value="reject" />
                 <input
                   name="comment"
-                  placeholder="причина (необязательно)"
+                  placeholder="reason (optional)"
                   className="input"
                 />
                 <button
@@ -247,7 +247,7 @@ export default async function ModerationPage() {
                   className="btn btn-outline"
                   style={{ width: "100%" }}
                 >
-                  отклонить
+                  reject
                 </button>
               </form>
             </div>
@@ -259,12 +259,12 @@ export default async function ModerationPage() {
             className="bg-white border border-[var(--om-ink-100)]"
             style={{ padding: "60px 32px", textAlign: "center" }}
           >
-            <div className="eyebrow">всё разобрано</div>
+            <div className="eyebrow">all clear</div>
             <p
               className="font-body mt-3"
               style={{ fontSize: 15, color: "var(--om-ink-500)" }}
             >
-              очередь пуста. подтверждения подъедут — увидишь их здесь.
+              queue empty. submissions will appear here.
             </p>
           </div>
         )}

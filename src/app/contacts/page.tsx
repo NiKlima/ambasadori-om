@@ -2,7 +2,7 @@ import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
 import { ContactForm } from "./ContactForm";
 
-export const metadata = { title: "контакты · OM Амбассадоры" };
+export const metadata = { title: "contact · OM Ambasadori" };
 
 export default function ContactsPage() {
   return (
@@ -31,7 +31,7 @@ export default function ContactsPage() {
           className="container-om relative h-full flex flex-col justify-end"
           style={{ paddingBottom: 56 }}
         >
-          <div className="eyebrow eyebrow-w">контакты</div>
+          <div className="eyebrow eyebrow-w">contact</div>
           <h1
             className="font-display"
             style={{
@@ -42,7 +42,7 @@ export default function ContactsPage() {
               margin: "16px 0 0",
             }}
           >
-            напиши нам.
+write us.
           </h1>
         </div>
       </section>
@@ -52,12 +52,12 @@ export default function ContactsPage() {
         style={{ padding: "72px 0" }}
       >
         <div>
-          <div className="eyebrow">о программе</div>
+          <div className="eyebrow">about</div>
           <p
             className="font-body mt-3"
             style={{ fontSize: 18, lineHeight: 1.5, maxWidth: 460 }}
           >
-            партнёрство, вопросы программы, идеи. отвечаем в течение 1–2 рабочих дней.
+            partnerships, programme questions, ideas. we reply within 1–2 business days.
           </p>
           <div
             className="grid mt-8 border border-[var(--om-ink-100)]"
@@ -65,8 +65,8 @@ export default function ContactsPage() {
           >
             {[
               ["email", "ambasadori@om.md"],
-              ["офис", "Кишинёв, ул. Албишоара 4"],
-              ["часы", "пн — пт · 9:00 — 18:00"],
+              ["office", "Chișinău, str. Albișoara 4"],
+              ["hours", "mon — fri · 9:00 — 18:00"],
             ].map(([k, v], i, arr) => (
               <div
                 key={k}

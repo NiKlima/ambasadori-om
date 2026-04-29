@@ -3,29 +3,29 @@ import { Logo } from "@/components/ui/Logo";
 
 const COLUMNS: { title: string; items: { label: string; href?: string }[] }[] = [
   {
-    title: "программа",
+    title: "programme",
     items: [
-      { label: "как работает", href: "/#how" },
-      { label: "челленджи", href: "/#challenges" },
-      { label: "лидерборд", href: "/leaderboard" },
-      { label: "события", href: "/events" },
+      { label: "how it works", href: "/#how" },
+      { label: "challenges", href: "/#challenges" },
+      { label: "leaderboard", href: "/leaderboard" },
+      { label: "events", href: "/events" },
       { label: "FAQ", href: "/#faq" },
     ],
   },
   {
-    title: "тренерам",
+    title: "for coaches",
     items: [
-      { label: "войти", href: "/login" },
-      { label: "стать амбассадором", href: "/login" },
-      { label: "партнёры", href: "/#clubs" },
+      { label: "log in", href: "/login" },
+      { label: "become an ambassador", href: "/login" },
+      { label: "partners", href: "/#clubs" },
     ],
   },
   {
-    title: "контакты",
+    title: "contact",
     items: [
       { label: "ambasadori@om.md", href: "mailto:ambasadori@om.md" },
-      { label: "Кишинёв, Молдова" },
-      { label: "политика конфиденциальности", href: "/privacy" },
+      { label: "Chișinău, Moldova" },
+      { label: "privacy policy", href: "/privacy" },
     ],
   },
 ];
@@ -41,7 +41,7 @@ export function SiteFooter() {
               className="font-display font-extrabold text-[14px] tracking-[-0.01em] mt-4"
               style={{ opacity: 0.8 }}
             >
-              ambasadori — программа лояльности для тренеров
+              ambasadori — loyalty programme for coaches
             </div>
             <div
               className="font-display mt-8"
@@ -94,7 +94,7 @@ export function SiteFooter() {
 
         <div className="flex flex-col sm:flex-row justify-between gap-2 py-6 pb-8">
           <span className="font-mono text-[11px]" style={{ opacity: 0.5 }}>
-            © {new Date().getFullYear()} OM water · Кишинёв
+            © {new Date().getFullYear()} OM water · Chișinău
           </span>
           <span className="font-mono text-[11px]" style={{ opacity: 0.5 }}>
             designed for trainers · brand by NORM.

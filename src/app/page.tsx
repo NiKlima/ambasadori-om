@@ -2,13 +2,13 @@ import Link from "next/link";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
 import { createClient } from "@/lib/supabase/server";
-import type { Challenge, LeaderboardRow } from "@/lib/types";
+import type { Challenge, LeaderboardRow, Product } from "@/lib/types";
 
 const FALLBACK_CHALLENGES: Partial<Challenge>[] = [
-  { id: "1", title: "фото с OM на тренировке", description: "выложи stories с тегом @om во время тренировки.", points: 5 },
-  { id: "2", title: "ученик купил OM по промокоду", description: "каждая покупка по твоему промокоду — твои баллы.", points: 10 },
-  { id: "3", title: "опрос для клиента", description: "поделись ссылкой — баллы после прохождения.", points: 8 },
-  { id: "4", title: "регистрация на событие OM", description: "твой ученик записался на забег, фестиваль или йогу.", points: 10 },
+  { id: "1", title: "photo with OM at training", description: "post a story tagging @om while training. AI checks bottle/branding.", points: 5 },
+  { id: "2", title: "client buys OM with your code", description: "every purchase via your promo code = your points. credits in 2 days.", points: 10 },
+  { id: "3", title: "client survey · pulse", description: "share the link with a client — points come after submission.", points: 8 },
+  { id: "4", title: "registration to OM event", description: "a client signs up to an OM run, festival or yoga session.", points: 10 },
 ];
 
 const CHALLENGE_PHOTOS = [
@@ -20,58 +20,143 @@ const CHALLENGE_PHOTOS = [
 
 const CHALLENGE_KINDS = ["photo · AI", "auto", "survey", "auto"];
 
-const PRIZES: { title: string; desc: string; points: number; kind: string; img: string }[] = [
-  { title: "Garmin Forerunner 165", desc: "GPS-часы для бегунов и триатлетов.", points: 1200, kind: "device", img: "/brand/imagery/runner-asphalt-line.jpg" },
-  { title: "абонемент Bigsport на месяц", desc: "все клубы сети, 30 дней.", points: 600, kind: "service", img: "/brand/imagery/stadium-seats.jpg" },
-  { title: "капсула OM '26", desc: "лимитированная футболка + бутылка.", points: 250, kind: "merch", img: "/brand/imagery/socks-stripe.jpg" },
-  { title: "слот на марафон", desc: "место на главном забеге года.", points: 400, kind: "bonus", img: "/brand/imagery/park-crowd.jpg" },
-  { title: "сессия с топ-PT", desc: "час с ведущим тренером сети.", points: 350, kind: "service", img: "/brand/imagery/runner-overhead.jpg" },
-  { title: "куртка амбассадора OM", desc: "эксклюзивный мерч для амбассадоров.", points: 800, kind: "merch", img: "/brand/imagery/towel.jpg" },
+type PrizeView = { id: string; title: string; desc: string; points: number; kind: string; img: string };
+
+const FALLBACK_PRIZES: PrizeView[] = [
+  { id: "p1", title: "Garmin Forerunner 165", desc: "GPS watch for runners and triathletes.", points: 1200, kind: "gear", img: "/brand/imagery/runner-asphalt-line.jpg" },
+  { id: "p2", title: "Bigsport monthly pass", desc: "all clubs in the network, 30 days.", points: 600, kind: "perk", img: "/brand/imagery/stadium-seats.jpg" },
+  { id: "p3", title: "OM '26 capsule", desc: "limited tee + thermo bottle.", points: 250, kind: "merch", img: "/brand/imagery/socks-stripe.jpg" },
+  { id: "p4", title: "marathon start slot", desc: "spot at the main race of the year.", points: 400, kind: "perk", img: "/brand/imagery/park-crowd.jpg" },
+  { id: "p5", title: "session with top PT", desc: "an hour with a leading network coach.", points: 350, kind: "service", img: "/brand/imagery/runner-overhead.jpg" },
+  { id: "p6", title: "OM ambassador jacket", desc: "exclusive merch for ambassadors.", points: 800, kind: "merch", img: "/brand/imagery/towel.jpg" },
 ];
 
 const FALLBACK_LEADERBOARD: LeaderboardRow[] = [
-  { id: "1", full_name: "Алина Руссу", club: "Bigsport", sport: "бег", photo_url: "/brand/imagery/runner-asphalt-line.jpg", total_points: 145, birthdate: "1992-04-12", bio: null, socials: {}, achievements: [], quote: null, story: null, intro_video_url: null, gallery: [] },
-  { id: "2", full_name: "Михаил Чобану", club: "Martz Fitness", sport: "кроссфит", photo_url: "/brand/imagery/runner-overhead.jpg", total_points: 128, birthdate: "1988-09-03", bio: null, socials: {}, achievements: [], quote: null, story: null, intro_video_url: null, gallery: [] },
-  { id: "3", full_name: "Ирина Балан", club: "Jiva Yoga", sport: "йога", photo_url: "/brand/imagery/yoga-rooftop.jpg", total_points: 110, birthdate: "1990-07-20", bio: null, socials: {}, achievements: [], quote: null, story: null, intro_video_url: null, gallery: [] },
-  { id: "4", full_name: "Виктор Морару", club: "Premier Fitness", sport: "силовой", photo_url: "/brand/imagery/runner-forest.jpg", total_points: 92, birthdate: "1985-02-14", bio: null, socials: {}, achievements: [], quote: null, story: null, intro_video_url: null, gallery: [] },
-  { id: "5", full_name: "Оксана Лупу", club: "Alexia", sport: "пилатес", photo_url: "/brand/imagery/golf-sunset.jpg", total_points: 84, birthdate: "1993-11-05", bio: null, socials: {}, achievements: [], quote: null, story: null, intro_video_url: null, gallery: [] },
-  { id: "6", full_name: "Андрей Попеску", club: "Aquaterra", sport: "триатлон", photo_url: "/brand/imagery/runner-asphalt-line.jpg", total_points: 71, birthdate: "1986-06-18", bio: null, socials: {}, achievements: [], quote: null, story: null, intro_video_url: null, gallery: [] },
-  { id: "7", full_name: "Наталья Гынку", club: "Bigsport", sport: "функциональный", photo_url: "/brand/imagery/park-crowd.jpg", total_points: 60, birthdate: "1991-03-09", bio: null, socials: {}, achievements: [], quote: null, story: null, intro_video_url: null, gallery: [] },
-  { id: "8", full_name: "Дмитрий Унгуряну", club: "Martz Fitness", sport: "бокс", photo_url: "/brand/imagery/runner-overhead.jpg", total_points: 48, birthdate: "1989-08-25", bio: null, socials: {}, achievements: [], quote: null, story: null, intro_video_url: null, gallery: [] },
+  { id: "1", full_name: "Alina Russu", club: "Bigsport", sport: "running", photo_url: "/brand/imagery/runner-asphalt-line.jpg", total_points: 145, birthdate: "1992-04-12", bio: null, socials: {}, achievements: [], quote: null, story: null, intro_video_url: null, gallery: [] },
+  { id: "2", full_name: "Mihai Ciobanu", club: "Martz Fitness", sport: "crossfit", photo_url: "/brand/imagery/runner-overhead.jpg", total_points: 128, birthdate: "1988-09-03", bio: null, socials: {}, achievements: [], quote: null, story: null, intro_video_url: null, gallery: [] },
+  { id: "3", full_name: "Irina Balan", club: "Jiva Yoga", sport: "yoga", photo_url: "/brand/imagery/yoga-rooftop.jpg", total_points: 110, birthdate: "1990-07-20", bio: null, socials: {}, achievements: [], quote: null, story: null, intro_video_url: null, gallery: [] },
+  { id: "4", full_name: "Victor Moraru", club: "Premier Fitness", sport: "strength", photo_url: "/brand/imagery/runner-forest.jpg", total_points: 92, birthdate: "1985-02-14", bio: null, socials: {}, achievements: [], quote: null, story: null, intro_video_url: null, gallery: [] },
+  { id: "5", full_name: "Oxana Lupu", club: "Alexia", sport: "pilates", photo_url: "/brand/imagery/golf-sunset.jpg", total_points: 84, birthdate: "1993-11-05", bio: null, socials: {}, achievements: [], quote: null, story: null, intro_video_url: null, gallery: [] },
+  { id: "6", full_name: "Andrei Popescu", club: "Aquaterra", sport: "triathlon", photo_url: "/brand/imagery/runner-asphalt-line.jpg", total_points: 71, birthdate: "1986-06-18", bio: null, socials: {}, achievements: [], quote: null, story: null, intro_video_url: null, gallery: [] },
+  { id: "7", full_name: "Natalia Gincu", club: "Bigsport", sport: "functional", photo_url: "/brand/imagery/park-crowd.jpg", total_points: 60, birthdate: "1991-03-09", bio: null, socials: {}, achievements: [], quote: null, story: null, intro_video_url: null, gallery: [] },
+  { id: "8", full_name: "Dmitrii Unguryanu", club: "Martz Fitness", sport: "boxing", photo_url: "/brand/imagery/runner-overhead.jpg", total_points: 48, birthdate: "1989-08-25", bio: null, socials: {}, achievements: [], quote: null, story: null, intro_video_url: null, gallery: [] },
 ];
+
+type HeroStats = {
+  trainers: number;
+  clubs: number;
+  pointsAwarded: number;
+};
 
 async function getData() {
   try {
     const supabase = await createClient();
-    const [challengesRes, leaderboardRes] = await Promise.all([
-      supabase.from("challenges").select("*").eq("active", true).order("points", { ascending: false }).limit(4),
-      supabase.from("leaderboard").select("*").limit(8),
-    ]);
+    const [challengesRes, leaderboardRes, prizesRes, trainersCount, clubsCount, pointsAgg] =
+      await Promise.all([
+        supabase
+          .from("challenges")
+          .select("*")
+          .eq("active", true)
+          .order("sort_order", { ascending: false })
+          .order("created_at", { ascending: false })
+          .limit(4),
+        supabase.from("leaderboard").select("*").limit(8),
+        supabase
+          .from("products")
+          .select("*")
+          .eq("active", true)
+          .eq("featured", true)
+          .order("sort_order", { ascending: false })
+          .order("created_at", { ascending: false })
+          .limit(6),
+        supabase
+          .from("profiles")
+          .select("*", { count: "exact", head: true })
+          .eq("role", "trainer")
+          .eq("is_active", true),
+        supabase
+          .from("clubs")
+          .select("*", { count: "exact", head: true })
+          .eq("active", true),
+        supabase
+          .from("point_transactions")
+          .select("amount")
+          .gt("amount", 0),
+      ]);
+    const pointsTotal = (pointsAgg.data ?? []).reduce(
+      (sum, t) => sum + (t.amount as number),
+      0,
+    );
     return {
       challenges: (challengesRes.data as Challenge[] | null) ?? null,
       leaderboard: (leaderboardRes.data as LeaderboardRow[] | null) ?? null,
+      prizes: (prizesRes.data as Product[] | null) ?? null,
+      stats: {
+        trainers: trainersCount.count ?? 0,
+        clubs: clubsCount.count ?? 0,
+        pointsAwarded: pointsTotal,
+      } as HeroStats,
     };
   } catch {
-    return { challenges: null, leaderboard: null };
+    return { challenges: null, leaderboard: null, prizes: null, stats: null };
   }
 }
 
+function formatStat(n: number, fallback: string, suffix = ""): string {
+  if (n <= 0) return fallback;
+  // round up to nearest 10 for trainers, integer for others
+  return `${n.toLocaleString("en-US").replace(/,/g, " ")}${suffix}`;
+}
+
+const PRODUCT_KIND_LABEL: Record<Product["kind"], string> = {
+  merch: "merch",
+  gear: "gear",
+  service: "service",
+  digital: "digital",
+  perk: "perk",
+};
+
 export default async function Home() {
-  const { challenges, leaderboard } = await getData();
+  const { challenges, leaderboard, prizes, stats } = await getData();
   const chs = challenges && challenges.length > 0 ? challenges : (FALLBACK_CHALLENGES as Challenge[]);
   const lb = leaderboard && leaderboard.length > 0 ? leaderboard : FALLBACK_LEADERBOARD;
   const trainers = lb.slice(0, 8);
+
+  // PRIZES: from DB if any featured, else fallback static
+  const prizeViews: PrizeView[] = prizes && prizes.length > 0
+    ? prizes.map((p, i) => ({
+        id: p.id,
+        title: p.title,
+        desc: p.description ?? "",
+        points: p.price_points,
+        kind: PRODUCT_KIND_LABEL[p.kind] ?? p.kind,
+        img: p.cover_url ?? FALLBACK_PRIZES[i % FALLBACK_PRIZES.length].img,
+      }))
+    : FALLBACK_PRIZES;
+
+  // HERO STATS: live numbers if available, else hardcoded fallback
+  const heroStats: [string, string][] = stats && stats.trainers > 0
+    ? [
+        [`${stats.trainers}+`, "active coaches"],
+        [String(stats.clubs), "partner clubs"],
+        [formatStat(stats.pointsAwarded, "32 000"), "points awarded"],
+      ]
+    : [
+        ["120+", "active coaches"],
+        ["8", "partner clubs"],
+        ["32 000", "points awarded"],
+      ];
 
   return (
     <div className="bg-white">
       <SiteHeader onBlue />
 
       {/* HERO */}
-      <section className="bg-[var(--om-blue)] text-white pt-24 relative overflow-hidden">
+      <section className="bg-[var(--om-blue)] text-white relative overflow-hidden" style={{ paddingTop: 96, paddingBottom: 72 }}>
         <div className="container-om">
-          <div className="grid md:grid-cols-[1.25fr_1fr] gap-12 items-end">
+          <div className="grid md:grid-cols-[1.25fr_1fr] gap-16 items-end">
             <div>
-              <div className="eyebrow eyebrow-w">ambasadori om · сезон 2026</div>
+              <div className="eyebrow eyebrow-w">ambasadori om · season 2026</div>
               <h1
                 className="font-display"
                 style={{
@@ -82,39 +167,35 @@ export default async function Home() {
                   margin: "20px 0 28px",
                 }}
               >
-                ты тренируешь людей.
+                you train people.
                 <br />
-                мы тренируем тебя.
+                we train you.
               </h1>
               <p
                 className="font-body"
                 style={{
                   fontSize: 18,
-                  lineHeight: 1.4,
-                  maxWidth: 480,
+                  lineHeight: 1.5,
+                  maxWidth: 520,
                   opacity: 0.9,
-                  margin: "0 0 32px",
+                  margin: "0 0 40px",
                 }}
               >
-                программа лояльности OM для тренеров Молдовы. простые челленджи. реальные баллы. экипировка, курсы, гаджеты и слоты на события.
+                OM&apos;s loyalty programme for coaches in Moldova. simple challenges. real points. gear, courses, gadgets and event slots.
               </p>
-              <div className="flex gap-3 items-center mb-16 flex-wrap">
+              <div className="flex gap-3 items-center flex-wrap" style={{ marginBottom: 80 }}>
                 <Link href="/login" className="btn btn-white">
-                  стать амбассадором
+                  become an ambassador
                 </Link>
                 <Link href="/leaderboard" className="btn btn-outline-w">
-                  смотреть лидерборд
+                  view leaderboard
                 </Link>
               </div>
               <div
-                className="grid grid-cols-3 pt-7 border-t border-white/20"
-                style={{ marginRight: 48 }}
+                className="grid grid-cols-3"
+                style={{ marginRight: 24, paddingTop: 28, gap: 24 }}
               >
-                {[
-                  ["120+", "активных тренеров"],
-                  ["8", "клубов-партнёров"],
-                  ["32 000", "баллов начислено"],
-                ].map(([n, l]) => (
+                {heroStats.map(([n, l]) => (
                   <div key={l}>
                     <div
                       className="font-display"
@@ -147,18 +228,17 @@ export default async function Home() {
             />
           </div>
         </div>
-        <div style={{ height: 18, background: "#fff" }} />
       </section>
 
       {/* MANIFESTO STRIP */}
       <section className="bg-white border-b border-[var(--om-ink-100)]">
-        <div className="container-om py-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+        <div className="container-om flex flex-col md:flex-row justify-between items-start md:items-center gap-6" style={{ paddingTop: 40, paddingBottom: 40 }}>
           <div
             className="font-display flex-1"
             style={{ fontWeight: 800, fontSize: 22, letterSpacing: "-0.02em" }}
           >
-            здоровое тело начинается с хорошей воды.{" "}
-            <span style={{ color: "var(--om-blue)" }}>OM — твоё ежедневное решение.</span>
+            a healthy body starts with good water.{" "}
+            <span style={{ color: "var(--om-blue)" }}>OM — your daily decision.</span>
           </div>
           <div
             className="font-mono"
@@ -169,19 +249,19 @@ export default async function Home() {
               letterSpacing: "0.08em",
             }}
           >
-            — алина руссу, top coach 2026
+            — alina russu, top coach 2026
           </div>
         </div>
       </section>
 
       {/* HOW IT WORKS */}
-      <section id="how" className="bg-white relative" style={{ padding: "96px 0" }}>
+      <section id="how" className="bg-white relative" style={{ padding: "112px 0" }}>
         <div
           className="om-stripes-blue-soft"
           style={{ position: "absolute", inset: 0, pointerEvents: "none" }}
         />
         <div className="container-om relative">
-          <div className="eyebrow">как работает</div>
+          <div className="eyebrow">how it works</div>
           <h2
             className="font-display"
             style={{
@@ -193,22 +273,22 @@ export default async function Home() {
               maxWidth: 900,
             }}
           >
-            четыре шага от первого
+            four steps from your first
             <br />
-            челленджа до реального приза.
+            challenge to a real prize.
           </h2>
           <div className="grid md:grid-cols-4 gap-0">
             {[
-              ["01", "вступаешь", "получаешь доступ к личному кабинету и свой промокод."],
-              ["02", "выполняешь челленджи", "сторис, опросы, регистрации — каждый месяц новый набор."],
-              ["03", "копишь баллы", "каждая активность = баллы. всё прозрачно в кабинете."],
-              ["04", "забираешь приз", "экипировка, курсы, гаджеты, слоты на события."],
+              ["01", "join", "get access to your personal dashboard and your own promo code."],
+              ["02", "do challenges", "stories, surveys, registrations — a fresh set every month."],
+              ["03", "earn points", "every activity = points. fully transparent in your dashboard."],
+              ["04", "claim a prize", "gear, courses, gadgets, slots at events."],
             ].map(([n, t, d], i) => (
               <div
                 key={n}
                 style={{
                   borderTop: "4px solid var(--om-blue)",
-                  padding: "20px 24px 0 0",
+                  padding: "24px 28px 32px 0",
                   borderRight: i < 3 ? "1px solid var(--om-ink-100)" : "none",
                 }}
               >
@@ -216,7 +296,7 @@ export default async function Home() {
                   className="font-mono"
                   style={{ fontSize: 11, color: "var(--om-blue)", fontWeight: 700 }}
                 >
-                  {n} · шаг
+                  {n} · step
                 </div>
                 <div
                   className="font-display"
@@ -247,11 +327,11 @@ export default async function Home() {
       </section>
 
       {/* CHALLENGES */}
-      <section id="challenges" className="bg-[var(--om-ink-50)]" style={{ padding: "96px 0" }}>
+      <section id="challenges" className="bg-[var(--om-ink-50)]" style={{ padding: "112px 0" }}>
         <div className="container-om">
-          <div className="flex justify-between items-end mb-12 gap-6 flex-wrap">
+          <div className="flex justify-between items-end gap-6 flex-wrap" style={{ marginBottom: 56 }}>
             <div>
-              <div className="eyebrow">челленджи сезона</div>
+              <div className="eyebrow">season challenges</div>
               <h2
                 className="font-display mt-4"
                 style={{
@@ -262,12 +342,12 @@ export default async function Home() {
                   margin: 0,
                 }}
               >
-                простые действия.
+                simple actions.
                 <br />
-                реальные баллы.
+                real points.
               </h2>
             </div>
-            <Link href="/login" className="lk">все 12 челленджей →</Link>
+            <Link href="/login" className="lk">all 12 challenges →</Link>
           </div>
           <div className="grid md:grid-cols-2 border border-[var(--om-ink-100)]">
             {chs.slice(0, 4).map((ch, i) => (
@@ -286,11 +366,11 @@ export default async function Home() {
                     minHeight: 220,
                   }}
                 />
-                <div className="p-6 sm:p-7 flex flex-col justify-between">
+                <div className="flex flex-col justify-between" style={{ padding: "28px 32px" }}>
                   <div>
                     <div className="flex justify-between items-start gap-3 mb-4">
                       <span className="chip">{CHALLENGE_KINDS[i] ?? "auto"}</span>
-                      <span className="chip chip-blue">+{ch.points} баллов</span>
+                      <span className="chip chip-blue">+{ch.points} pts</span>
                     </div>
                     <div
                       className="font-display"
@@ -322,9 +402,9 @@ export default async function Home() {
                       className="font-mono"
                       style={{ fontSize: 11, color: "var(--om-ink-500)" }}
                     >
-                      открой кабинет, чтобы участвовать
+                      open dashboard to participate
                     </span>
-                    <Link href="/login" className="lk">войти →</Link>
+                    <Link href="/login" className="lk">log in →</Link>
                   </div>
                 </div>
               </article>
@@ -334,11 +414,11 @@ export default async function Home() {
       </section>
 
       {/* TRAINERS GRID */}
-      <section id="trainers" className="bg-white" style={{ padding: "96px 0" }}>
+      <section id="trainers" className="bg-white" style={{ padding: "112px 0" }}>
         <div className="container-om">
-          <div className="flex justify-between items-end mb-12 gap-6 flex-wrap">
+          <div className="flex justify-between items-end gap-6 flex-wrap" style={{ marginBottom: 56 }}>
             <div>
-              <div className="eyebrow">амбассадоры</div>
+              <div className="eyebrow">ambassadors</div>
               <h2
                 className="font-display mt-4"
                 style={{
@@ -349,12 +429,12 @@ export default async function Home() {
                   margin: 0,
                 }}
               >
-                реальные тренеры.
+                real coaches.
                 <br />
-                реальные истории.
+                real stories.
               </h2>
             </div>
-            <Link href="/leaderboard" className="lk">смотреть лидерборд →</Link>
+            <Link href="/leaderboard" className="lk">view leaderboard →</Link>
           </div>
           <div className="grid grid-cols-2 md:grid-cols-4 border border-[var(--om-ink-100)]">
             {trainers.map((t, i) => (
@@ -375,7 +455,7 @@ export default async function Home() {
                     backgroundColor: "var(--om-ink-100)",
                   }}
                 />
-                <div className="p-4 sm:p-[18px]">
+                <div style={{ padding: "20px 22px" }}>
                   <div className="flex justify-between items-baseline">
                     <div
                       className="font-display"
@@ -418,7 +498,7 @@ export default async function Home() {
                         letterSpacing: "0.08em",
                       }}
                     >
-                      баллы
+                      points
                     </span>
                     <span
                       className="font-display"
@@ -442,12 +522,12 @@ export default async function Home() {
       {/* PRIZES */}
       <section
         className="bg-[var(--om-ink-900)] text-white relative overflow-hidden"
-        style={{ padding: "96px 0" }}
+        style={{ padding: "112px 0" }}
       >
         <div className="container-om">
-          <div className="flex justify-between items-end mb-12 gap-6 flex-wrap">
+          <div className="flex justify-between items-end gap-6 flex-wrap" style={{ marginBottom: 56 }}>
             <div>
-              <div className="eyebrow eyebrow-w">призы сезона</div>
+              <div className="eyebrow eyebrow-w">season prizes</div>
               <h2
                 className="font-display mt-4"
                 style={{
@@ -458,9 +538,9 @@ export default async function Home() {
                   margin: 0,
                 }}
               >
-                тренируй. зарабатывай.
+                train. earn.
                 <br />
-                <span style={{ color: "var(--om-blue)" }}>забирай.</span>
+                <span style={{ color: "var(--om-blue)" }}>claim.</span>
               </h2>
             </div>
             <span
@@ -472,13 +552,13 @@ export default async function Home() {
                 textAlign: "right",
               }}
             >
-              никаких лотерей. никаких розыгрышей. баллы → приз, напрямую.
+              no lotteries. no draws. points → prize, directly.
             </span>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 border border-white/10">
-            {PRIZES.map((p, i) => (
+            {prizeViews.map((p, i) => (
               <article
-                key={i}
+                key={p.id}
                 className="relative overflow-hidden"
                 style={{
                   aspectRatio: "4/5",
@@ -542,8 +622,9 @@ export default async function Home() {
       </section>
 
       {/* MANIFESTO BLUE */}
-      <section className="bg-[var(--om-blue)] text-white">
-        <div className="om-stripes-band" style={{ padding: "96px 0" }}>
+      <section className="bg-[var(--om-blue)] text-white relative overflow-hidden">
+        <div className="om-stripes-band" style={{ position: "absolute", inset: 0, opacity: 0.32, pointerEvents: "none" }} />
+        <div style={{ padding: "120px 0" }} className="relative">
           <div className="container-om">
             <h2
               className="font-display"
@@ -556,7 +637,7 @@ export default async function Home() {
                 maxWidth: 1100,
               }}
             >
-              мы — бренд, который вдохновляет тебя выбирать лучшую версию себя.
+              we are a brand that inspires you to choose the best version of yourself.
             </h2>
             <div
               className="font-mono mt-8"
@@ -567,7 +648,7 @@ export default async function Home() {
                 letterSpacing: "0.08em",
               }}
             >
-              манифест бренда OM · 2026
+              OM brand manifesto · 2026
             </div>
           </div>
         </div>

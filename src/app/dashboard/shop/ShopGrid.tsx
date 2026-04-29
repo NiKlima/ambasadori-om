@@ -5,21 +5,21 @@ import type { Product } from "@/lib/types";
 import { OrderButton } from "./OrderButton";
 
 const KIND_LABEL: Record<Product["kind"], string> = {
-  merch: "мерч",
-  gear: "экипировка",
-  service: "сервис",
-  digital: "цифровое",
-  perk: "привилегия",
+  merch: "merch",
+  gear: "gear",
+  service: "service",
+  digital: "digital",
+  perk: "perk",
 };
 
 const FILTERS = ["all", "merch", "gear", "service", "digital", "perk"] as const;
 const FILTER_LABEL: Record<(typeof FILTERS)[number], string> = {
-  all: "все",
-  merch: "мерч",
-  gear: "экипировка",
-  service: "сервис",
-  digital: "цифровое",
-  perk: "привилегия",
+  all: "all",
+  merch: "merch",
+  gear: "gear",
+  service: "service",
+  digital: "digital",
+  perk: "perk",
 };
 
 type Filter = (typeof FILTERS)[number];
@@ -68,7 +68,7 @@ export function ShopGrid({
           }}
         >
           <div>
-            <div className="eyebrow eyebrow-w">шоп · сезон 2026</div>
+            <div className="eyebrow eyebrow-w">shop · season 2026</div>
             <h1
               className="font-display"
               style={{
@@ -79,15 +79,15 @@ export function ShopGrid({
                 margin: "12px 0 0",
               }}
             >
-              тренируй. зарабатывай.{" "}
-              <span style={{ color: "var(--om-blue)" }}>забирай.</span>
+              train. earn.{" "}
+              <span style={{ color: "var(--om-blue)" }}>claim.</span>
             </h1>
           </div>
           <div
             className="bg-[var(--om-blue)]"
             style={{ padding: "22px 26px", textAlign: "right" }}
           >
-            <div className="eyebrow eyebrow-w">твой баланс</div>
+            <div className="eyebrow eyebrow-w">your balance</div>
             <div
               className="font-display"
               style={{
@@ -99,17 +99,17 @@ export function ShopGrid({
               }}
             >
               {balance}{" "}
-              <span style={{ fontSize: 22, opacity: 0.85 }}>баллов</span>
+              <span style={{ fontSize: 22, opacity: 0.85 }}>pts</span>
             </div>
           </div>
         </div>
       </section>
 
-      <div className="container-om" style={{ padding: "32px 0 80px" }}>
+      <div className="container-om" style={{ paddingTop: 40, paddingBottom: 96 }}>
         {/* Filter bar */}
         <div
           className="bg-white border border-[var(--om-ink-100)] flex justify-between items-center flex-wrap gap-3"
-          style={{ padding: "16px 20px", marginBottom: 16 }}
+          style={{ padding: "18px 22px", marginBottom: 20 }}
         >
           <div className="flex gap-2 flex-wrap">
             {FILTERS.map((f) => (
@@ -132,7 +132,7 @@ export function ShopGrid({
               letterSpacing: "0.08em",
             }}
           >
-            сорт: цена ↑
+sort: price ↑
           </div>
         </div>
 
@@ -183,14 +183,14 @@ export function ShopGrid({
                         className="chip chip-blue absolute"
                         style={{ top: 12, right: 12 }}
                       >
-                        можно забрать
+can claim
                       </span>
                     )}
                   </div>
                   <div
                     className="flex justify-between items-end gap-3"
                     style={{
-                      padding: "16px 20px 18px",
+                      padding: "20px 22px 18px",
                       borderTop: "1px solid var(--om-ink-100)",
                     }}
                   >
@@ -216,7 +216,7 @@ export function ShopGrid({
                             letterSpacing: "0.06em",
                           }}
                         >
-                          осталось: {p.stock}
+stock: {p.stock}
                         </div>
                       )}
                     </div>
@@ -241,15 +241,15 @@ export function ShopGrid({
                           letterSpacing: "0.06em",
                         }}
                       >
-                        баллов
+pts
                       </div>
                     </div>
                   </div>
                   <div
                     style={{
-                      padding: "0 20px 18px",
+                      padding: "0 22px 22px",
                       borderTop: "1px solid var(--om-ink-100)",
-                      paddingTop: 14,
+                      paddingTop: 16,
                     }}
                   >
                     {stockEmpty ? (
@@ -262,7 +262,7 @@ export function ShopGrid({
                           letterSpacing: "0.06em",
                         }}
                       >
-                        закончилось
+out of stock
                       </p>
                     ) : isOpen ? (
                       <OrderButton
@@ -279,8 +279,8 @@ export function ShopGrid({
                         style={{ width: "100%" }}
                       >
                         {affordable
-                          ? `заказать за ${p.price_points}`
-                          : "не хватает баллов"}
+                          ? `claim for ${p.price_points}`
+                          : "not enough points"}
                       </button>
                     )}
                   </div>
@@ -301,8 +301,8 @@ export function ShopGrid({
             }}
           >
             {products.length === 0
-              ? "каталог скоро откроется. заходи позже."
-              : "ничего не нашли по фильтру"}
+              ? "catalogue opens soon. check back later."
+              : "nothing matches this filter"}
           </div>
         )}
       </div>

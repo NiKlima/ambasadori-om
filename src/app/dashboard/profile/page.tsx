@@ -28,12 +28,12 @@ export default async function ProfilePage() {
     return (
       <div className="container-om py-10">
         <div className="bg-white border border-[var(--om-ink-100)] p-8">
-          <div className="eyebrow">профиль не найден</div>
+          <div className="eyebrow">profile not found</div>
           <p
             className="font-body mt-3"
             style={{ color: "var(--om-ink-500)", fontSize: 14 }}
           >
-            обратись к админу OM на ambasadori@om.md.
+            contact OM admin at ambasadori@om.md.
           </p>
         </div>
       </div>
@@ -46,12 +46,12 @@ export default async function ProfilePage() {
 
   return (
     <div
-      className="container-om grid md:grid-cols-[1.2fr_1fr] gap-6"
-      style={{ padding: "32px 0 80px" }}
+      className="container-om grid md:grid-cols-[1.2fr_1fr]"
+      style={{ paddingTop: 40, paddingBottom: 96, gap: 28 }}
     >
       {/* LEFT — form */}
       <div>
-        <div className="eyebrow">редактор профиля</div>
+        <div className="eyebrow">profile editor</div>
         <h1
           className="font-display"
           style={{
@@ -62,9 +62,9 @@ export default async function ProfilePage() {
             margin: "12px 0 28px",
           }}
         >
-          твоя карточка.
+your card.
           <br />
-          твоя история.
+          your story.
         </h1>
 
         <form
@@ -73,7 +73,7 @@ export default async function ProfilePage() {
           style={{ padding: "32px 36px", gap: 20 }}
         >
           <div>
-            <div style={FIELD_LABEL_STYLE}>имя и фамилия</div>
+            <div style={FIELD_LABEL_STYLE}>full name</div>
             <input
               className="input"
               name="full_name"
@@ -83,7 +83,7 @@ export default async function ProfilePage() {
           </div>
           <div className="grid md:grid-cols-2 gap-4">
             <div>
-              <div style={FIELD_LABEL_STYLE}>клуб</div>
+              <div style={FIELD_LABEL_STYLE}>club</div>
               <input
                 className="input"
                 name="club"
@@ -91,7 +91,7 @@ export default async function ProfilePage() {
               />
             </div>
             <div>
-              <div style={FIELD_LABEL_STYLE}>вид спорта</div>
+              <div style={FIELD_LABEL_STYLE}>sport</div>
               <input
                 className="input"
                 name="sport"
@@ -101,7 +101,7 @@ export default async function ProfilePage() {
           </div>
           <div className="grid md:grid-cols-2 gap-4">
             <div>
-              <div style={FIELD_LABEL_STYLE}>дата рождения</div>
+              <div style={FIELD_LABEL_STYLE}>birthdate</div>
               <input
                 className="input"
                 type="date"
@@ -117,11 +117,11 @@ export default async function ProfilePage() {
                   letterSpacing: "0.06em",
                 }}
               >
-                возраст считается сам
+age is computed automatically
               </p>
             </div>
             <div>
-              <div style={FIELD_LABEL_STYLE}>промокод (только админ)</div>
+              <div style={FIELD_LABEL_STYLE}>promo code (admin only)</div>
               <input
                 className="input"
                 defaultValue={profile.promo_code ?? ""}
@@ -140,28 +140,28 @@ export default async function ProfilePage() {
                   letterSpacing: "0.06em",
                 }}
               >
-                меняет только админ
+admin can change only
               </p>
             </div>
           </div>
           <div>
-            <div style={FIELD_LABEL_STYLE}>о себе</div>
+            <div style={FIELD_LABEL_STYLE}>about</div>
             <textarea
               className="input"
               name="bio"
               rows={3}
               defaultValue={profile.bio ?? ""}
-              placeholder="коротко о подходе, опыте и том, что важно для подопечных."
+              placeholder="briefly about your approach, experience and what matters to your clients."
               style={{ resize: "none", fontFamily: "var(--font-body)" }}
             />
           </div>
           <div>
-            <div style={FIELD_LABEL_STYLE}>цитата</div>
+            <div style={FIELD_LABEL_STYLE}>quote</div>
             <input
               className="input"
               name="quote"
               defaultValue={profile.quote ?? ""}
-              placeholder="одна сильная фраза о тренировках или о жизни."
+              placeholder="one strong line about training or life."
             />
             <p
               className="font-mono mt-2"
@@ -172,17 +172,17 @@ export default async function ProfilePage() {
                 letterSpacing: "0.06em",
               }}
             >
-              большой шрифт в карточке — то, что зацепит первым
+big type on the card — the thing that hooks first
             </p>
           </div>
           <div>
-            <div style={FIELD_LABEL_STYLE}>история · markdown</div>
+            <div style={FIELD_LABEL_STYLE}>story · markdown</div>
             <textarea
               className="input"
               name="story"
               rows={6}
               defaultValue={profile.story ?? ""}
-              placeholder="длинная история — путь к спорту, ключевые моменты, философия. поддерживается **markdown**."
+              placeholder="the long story — path to sport, key moments, philosophy. **markdown** is supported."
               style={{ resize: "none", fontFamily: "var(--font-body)" }}
             />
             <p
@@ -194,16 +194,16 @@ export default async function ProfilePage() {
                 letterSpacing: "0.06em",
               }}
             >
-              жирный, абзацы, списки — markdown
+bold, paragraphs, lists — markdown
             </p>
           </div>
           <div>
-            <div style={FIELD_LABEL_STYLE}>интро-видео · url</div>
+            <div style={FIELD_LABEL_STYLE}>intro video · url</div>
             <input
               className="input"
               name="intro_video_url"
               defaultValue={profile.intro_video_url ?? ""}
-              placeholder="https://youtu.be/… или https://…"
+              placeholder="https://youtu.be/… or https://…"
             />
             <p
               className="font-mono mt-2"
@@ -214,17 +214,17 @@ export default async function ProfilePage() {
                 letterSpacing: "0.06em",
               }}
             >
-              youtube · vimeo · прямой mp4
+youtube · vimeo · direct mp4
             </p>
           </div>
           <div>
-            <div style={FIELD_LABEL_STYLE}>регалии · по строке</div>
+            <div style={FIELD_LABEL_STYLE}>credentials · one per line</div>
             <textarea
               className="input"
               name="achievements"
               rows={4}
               defaultValue={achievements.join("\n")}
-              placeholder={"чемпион молдовы 2023\nтренер года в bigsport"}
+              placeholder={"Berlin Marathon 2024 — finisher\nCoach of the Year — Bigsport 2023"}
               style={{ resize: "none", fontFamily: "var(--font-mono)", fontSize: 13 }}
             />
           </div>
@@ -271,31 +271,31 @@ export default async function ProfilePage() {
             className="btn btn-blue"
             style={{ alignSelf: "flex-start", marginTop: 8 }}
           >
-            сохранить профиль
+save profile
           </button>
         </form>
       </div>
 
       {/* RIGHT — photo + gallery */}
-      <div className="flex flex-col gap-4">
+      <div className="flex flex-col" style={{ gap: 20 }}>
         <div>
-          <div className="eyebrow">главное фото</div>
+          <div className="eyebrow">main photo</div>
           <div
             className="bg-white border border-[var(--om-ink-100)] mt-3"
-            style={{ padding: "24px" }}
+            style={{ padding: "28px" }}
           >
             <PhotoUpload
               userId={user.id}
               currentUrl={profile.photo_url}
               field="photo_url"
-              label="фото профиля"
+              label="profile photo"
               accept="image/*"
               maxBytes={2 * 1024 * 1024}
             />
           </div>
         </div>
         <div>
-          <div className="eyebrow">галерея</div>
+          <div className="eyebrow">gallery</div>
           <div
             className="bg-white border border-[var(--om-ink-100)] mt-3"
             style={{ padding: "24px" }}

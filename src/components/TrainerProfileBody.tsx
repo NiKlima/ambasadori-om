@@ -54,7 +54,7 @@ function VideoEmbed({ url }: { url: string }) {
   }
   return (
     <a href={url} target="_blank" rel="noopener noreferrer" className="lk">
-      открыть видео →
+open video →
     </a>
   );
 }
@@ -122,7 +122,7 @@ export function TrainerProfileBody({
                   letterSpacing: "0.08em",
                 }}
               >
-                // личный манифест
+                // personal manifesto
               </div>
               <div
                 className="font-display"
@@ -143,7 +143,7 @@ export function TrainerProfileBody({
         <div className="p-8 md:p-11 flex flex-col justify-between gap-6">
           <div>
             <div className="eyebrow">
-              амбассадор{trainer.sport ? ` · ${trainer.sport}` : ""}
+              ambassador{trainer.sport ? ` · ${trainer.sport}` : ""}
             </div>
             <h1
               className="font-display"
@@ -172,10 +172,10 @@ export function TrainerProfileBody({
                 letterSpacing: "0.06em",
               }}
             >
-              {age != null && `${age} лет`}
+              {age != null && `${age} y.o.`}
               {age != null && trainer.club ? " · " : ""}
               {trainer.club}
-              {(age != null || trainer.club) ? " · Кишинёв" : "Кишинёв"}
+              {(age != null || trainer.club) ? " · Chișinău" : "Chișinău"}
             </div>
 
             {socials.length > 0 && (
@@ -213,7 +213,7 @@ export function TrainerProfileBody({
               className="pr-4"
               style={{ borderRight: "1px solid var(--om-ink-100)" }}
             >
-              <div className="eyebrow eyebrow-ink">баллы</div>
+              <div className="eyebrow eyebrow-ink">points</div>
               <div
                 className="font-display mt-1"
                 style={{
@@ -230,7 +230,7 @@ export function TrainerProfileBody({
               className="px-4"
               style={{ borderRight: "1px solid var(--om-ink-100)" }}
             >
-              <div className="eyebrow eyebrow-ink">место</div>
+              <div className="eyebrow eyebrow-ink">rank</div>
               <div
                 className="font-display mt-1"
                 style={{
@@ -239,11 +239,11 @@ export function TrainerProfileBody({
                   letterSpacing: "-0.04em",
                 }}
               >
-                {rank != null ? `№${rank}` : "—"}
+                {rank != null ? `#${rank}` : "—"}
               </div>
             </div>
             <div className="pl-4">
-              <div className="eyebrow eyebrow-ink">регалий</div>
+              <div className="eyebrow eyebrow-ink">awards</div>
               <div
                 className="font-display mt-1"
                 style={{
@@ -270,7 +270,7 @@ export function TrainerProfileBody({
           <div>
             {(trainer.story || trainer.bio) && (
               <>
-                <div className="eyebrow">история</div>
+                <div className="eyebrow">story</div>
                 <h2
                   className="font-display"
                   style={{
@@ -281,7 +281,7 @@ export function TrainerProfileBody({
                     margin: "10px 0 24px",
                   }}
                 >
-                  путь к финишу — путь к себе.
+                  the path to the finish — the path to yourself.
                 </h2>
                 {trainer.story ? (
                   <div className="om-prose">
@@ -306,7 +306,7 @@ export function TrainerProfileBody({
 
             {achievements.length > 0 && (
               <div className="mt-9">
-                <div className="eyebrow">регалии</div>
+                <div className="eyebrow">awards</div>
                 <ul
                   className="m-0 p-0 list-none flex flex-col mt-4 border border-[var(--om-ink-100)]"
                 >
@@ -343,7 +343,7 @@ export function TrainerProfileBody({
           <div>
             {trainer.intro_video_url && (
               <div className="mb-8">
-                <div className="eyebrow">видео-интро</div>
+                <div className="eyebrow">video intro</div>
                 <div className="mt-3 border border-[var(--om-ink-100)]">
                   <VideoEmbed url={trainer.intro_video_url} />
                 </div>
@@ -352,7 +352,7 @@ export function TrainerProfileBody({
 
             {gallery.length > 0 && (
               <div>
-                <div className="eyebrow">галерея</div>
+                <div className="eyebrow">gallery</div>
                 <div
                   className="grid grid-cols-2 mt-3 border border-[var(--om-ink-100)]"
                 >
@@ -383,7 +383,7 @@ export function TrainerProfileBody({
                       letterSpacing: "0.06em",
                     }}
                   >
-                    + {gallery.length - 4} ещё
+                    + {gallery.length - 4} more
                   </div>
                 )}
               </div>
@@ -411,7 +411,7 @@ export function TrainerProfileBody({
               letterSpacing: "0.08em",
             }}
           >
-            амбассадор 2026
+ambassador 2026
           </span>
         </div>
         <div

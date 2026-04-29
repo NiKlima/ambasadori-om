@@ -13,14 +13,14 @@ export async function submitChallenge(formData: FormData) {
 
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
-  if (!user) return { error: "Не авторизован" };
+  if (!user) return { error: "Not authorised" };
 
   const { data: challenge } = await supabase
     .from("challenges")
     .select("kind, ai_prompt, ai_check")
     .eq("id", challengeId)
     .single();
-  if (!challenge) return { error: "Челлендж не найден" };
+  if (!challenge) return { error: "Challenge not found" };
 
   let photo_url: string | null = null;
   let video_url: string | null = null;
@@ -78,7 +78,7 @@ export async function submitChallenge(formData: FormData) {
         })
         .eq("id", created.id);
     } catch {
-      // AI упал — оставляем pending для ручной модерации
+      // AI failed — leave pending for manual review
     }
   }
 

@@ -41,7 +41,7 @@ export function SurveyForm({ challengeId, ref, questions }: Props) {
         style={{ padding: "24px 28px" }}
       >
         <div>
-          <div style={FIELD_LABEL_STYLE}>имя</div>
+          <div style={FIELD_LABEL_STYLE}>name</div>
           <input className="input" name="name" required />
         </div>
         <div>
@@ -62,7 +62,7 @@ export function SurveyForm({ challengeId, ref, questions }: Props) {
               letterSpacing: "0.06em",
             }}
           >
-            email нужен только чтобы исключить повторное прохождение
+email is used only to prevent duplicate submissions
           </p>
         </div>
       </div>
@@ -73,7 +73,7 @@ export function SurveyForm({ challengeId, ref, questions }: Props) {
           className="bg-white border border-[var(--om-ink-100)] grid gap-3"
           style={{ padding: "24px 28px" }}
         >
-          <div className="eyebrow">вопрос {i + 1}</div>
+          <div className="eyebrow">question {i + 1}</div>
           <div
             className="font-display"
             style={{
@@ -132,7 +132,7 @@ export function SurveyForm({ challengeId, ref, questions }: Props) {
       >
         <input type="checkbox" name="consent" required style={{ marginTop: 3 }} />
         <span>
-          согласен на обработку персональных данных по{" "}
+i agree to processing of personal data under the{" "}
           <a
             href="/privacy"
             target="_blank"
@@ -140,7 +140,7 @@ export function SurveyForm({ challengeId, ref, questions }: Props) {
             className="lk"
             style={{ display: "inline" }}
           >
-            политике конфиденциальности
+            privacy policy
           </a>
           .
         </span>
@@ -169,7 +169,7 @@ export function SurveyForm({ challengeId, ref, questions }: Props) {
         className="btn btn-blue"
         style={{ alignSelf: "flex-start" }}
       >
-        {pending ? "отправляем…" : "отправить ответы →"}
+{pending ? "sending…" : "submit answers →"}
       </button>
     </form>
   );

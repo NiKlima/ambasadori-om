@@ -8,7 +8,7 @@ export default async function ChallengesPage() {
   if (!user) return null;
 
   const [{ data: challenges }, { data: submissions }, { data: profile }] = await Promise.all([
-    supabase.from("challenges").select("*").eq("active", true).order("points", { ascending: false }),
+    supabase.from("challenges").select("*").eq("active", true).order("sort_order", { ascending: false }).order("points", { ascending: false }),
     supabase.from("submissions").select("*").eq("trainer_id", user.id).order("created_at", { ascending: false }),
     supabase.from("profiles").select("promo_code").eq("id", user.id).single(),
   ]);

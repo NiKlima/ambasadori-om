@@ -12,6 +12,7 @@ export default async function ShopPage() {
       .from("products")
       .select("*")
       .eq("active", true)
+      .order("sort_order", { ascending: false })
       .order("price_points", { ascending: true }),
     supabase.from("point_transactions").select("amount").eq("trainer_id", user.id),
   ]);

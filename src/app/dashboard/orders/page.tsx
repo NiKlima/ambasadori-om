@@ -4,10 +4,10 @@ import { formatDate } from "@/lib/utils";
 import type { Order, OrderStatus, Product } from "@/lib/types";
 
 const STATUS_LABEL: Record<OrderStatus, string> = {
-  pending: "в обработке",
-  approved: "подтверждён",
-  fulfilled: "выдан",
-  cancelled: "отменён",
+  pending: "pending",
+  approved: "approved",
+  fulfilled: "fulfilled",
+  cancelled: "cancelled",
 };
 
 const STATUS_COLOR: Record<OrderStatus, string> = {
@@ -52,7 +52,7 @@ export default async function OrdersPage() {
           style={{ position: "absolute", inset: 0, opacity: 0.25 }}
         />
         <div className="container-om relative">
-          <div className="eyebrow eyebrow-w">мои заказы</div>
+          <div className="eyebrow eyebrow-w">my orders</div>
           <h1
             className="font-display"
             style={{
@@ -63,7 +63,7 @@ export default async function OrdersPage() {
               margin: "12px 0 0",
             }}
           >
-            {total === 0 ? "ещё ни одного." : `${total} ${pluralOrder(total)}.`}
+            {total === 0 ? "no orders yet." : `${total} ${total === 1 ? "prize claimed" : "prizes claimed"}.`}
           </h1>
           {total > 0 && (
             <div
@@ -75,16 +75,16 @@ export default async function OrdersPage() {
                 letterSpacing: "0.08em",
               }}
             >
-              <span>{counts.fulfilled} выдано</span>
-              <span>· {counts.approved} подтверждено</span>
-              <span>· {counts.pending} в обработке</span>
-              <span>· {counts.cancelled} отменено</span>
+              <span>{counts.fulfilled} fulfilled</span>
+              <span>· {counts.approved} approved</span>
+              <span>· {counts.pending} pending</span>
+              <span>· {counts.cancelled} cancelled</span>
             </div>
           )}
         </div>
       </section>
 
-      <div className="container-om" style={{ padding: "32px 0 80px" }}>
+      <div className="container-om" style={{ paddingTop: 40, paddingBottom: 96 }}>
         {orders.length > 0 ? (
           <div className="bg-white border border-[var(--om-ink-100)]">
             {orders.map((o, i) => (
@@ -93,8 +93,8 @@ export default async function OrdersPage() {
                 className="grid items-center"
                 style={{
                   gridTemplateColumns: "180px 1fr 200px 140px",
-                  gap: 24,
-                  padding: "20px 24px",
+                  gap: 28,
+                  padding: "24px 28px",
                   borderBottom:
                     i < orders.length - 1
                       ? "1px solid var(--om-ink-100)"
@@ -134,7 +134,7 @@ export default async function OrdersPage() {
                       letterSpacing: "0.06em",
                     }}
                   >
-                    заказ · {formatDate(o.created_at)}
+order · {formatDate(o.created_at)}
                   </div>
                   {o.trainer_note && (
                     <div
@@ -157,7 +157,7 @@ export default async function OrdersPage() {
                         lineHeight: 1.55,
                       }}
                     >
-                      от OM: {o.admin_note}
+from OM: {o.admin_note}
                     </div>
                   )}
                 </div>
@@ -192,19 +192,19 @@ export default async function OrdersPage() {
             className="bg-white border border-[var(--om-ink-100)]"
             style={{ padding: "48px 32px", textAlign: "center" }}
           >
-            <div className="eyebrow">пусто</div>
+            <div className="eyebrow">empty</div>
             <p
               className="font-body mt-3"
               style={{ color: "var(--om-ink-500)", fontSize: 15 }}
             >
-              заказов пока нет. накопи баллы и забирай мерч, экипировку и привилегии.
+              no orders yet. earn points and claim merch, gear and perks.
             </p>
             <Link
               href="/dashboard/shop"
               className="btn btn-blue mt-5"
               style={{ display: "inline-flex" }}
             >
-              открыть шоп →
+              open shop →
             </Link>
           </div>
         )}
@@ -213,10 +213,3 @@ export default async function OrdersPage() {
   );
 }
 
-function pluralOrder(n: number): string {
-  const mod10 = n % 10;
-  const mod100 = n % 100;
-  if (mod10 === 1 && mod100 !== 11) return "заказ забран";
-  if (mod10 >= 2 && mod10 <= 4 && (mod100 < 12 || mod100 > 14)) return "заказа забрано";
-  return "заказов забрано";
-}
