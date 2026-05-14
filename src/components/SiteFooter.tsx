@@ -17,7 +17,7 @@ const COLUMNS: { title: string; items: { label: string; href?: string }[] }[] = 
     items: [
       { label: "log in", href: "/login" },
       { label: "become an ambassador", href: "/login" },
-      { label: "partners", href: "/#clubs" },
+      { label: "partner clubs", href: "/clubs" },
     ],
   },
   {

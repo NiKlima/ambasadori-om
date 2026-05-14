@@ -154,7 +154,7 @@ export default async function Home() {
       {/* HERO */}
       <section className="bg-[var(--om-blue)] text-white relative overflow-hidden" style={{ paddingTop: 96, paddingBottom: 72 }}>
         <div className="container-om">
-          <div className="grid md:grid-cols-[1.25fr_1fr] gap-16 items-end">
+          <div className="grid md:grid-cols-[1.25fr_1fr] gap-16 items-stretch">
             <div>
               <div className="eyebrow eyebrow-w">ambasadori om · season 2026</div>
               <h1
@@ -219,11 +219,11 @@ export default async function Home() {
               </div>
             </div>
             <div
-              className="bg-img"
+              className="bg-img hidden md:block"
               style={{
-                aspectRatio: "4/5",
                 backgroundImage: "url(/brand/imagery/runner-asphalt-line.jpg)",
-                marginBottom: -1,
+                minHeight: 560,
+                alignSelf: "stretch",
               }}
             />
           </div>
