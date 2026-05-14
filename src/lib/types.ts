@@ -4,6 +4,7 @@ export type ChallengeKind = "photo_ai" | "video_ai" | "survey_trainee" | "manual
 export type ProductKind = "merch" | "gear" | "service" | "digital" | "perk";
 export type OrderStatus = "pending" | "approved" | "fulfilled" | "cancelled";
 export type EventKind = "race" | "live" | "workshop" | "community";
+export type EventStatus = "draft" | "pending" | "approved" | "rejected";
 
 export type Profile = {
   id: string;
@@ -69,6 +70,27 @@ export type Event = {
   link: string | null;
   active: boolean;
   sort_order: number;
+  status: EventStatus;
+  created_by: string | null;
+  moderator_note: string | null;
+  moderated_by: string | null;
+  moderated_at: string | null;
+  host_trainer_id: string | null;
+  host_club_id: string | null;
+  registration_enabled: boolean;
+  max_participants: number | null;
+  created_at: string;
+};
+
+export type EventRegistration = {
+  id: string;
+  event_id: string;
+  user_id: string | null;
+  name: string;
+  email: string;
+  phone: string | null;
+  note: string | null;
+  consent: boolean;
   created_at: string;
 };
 

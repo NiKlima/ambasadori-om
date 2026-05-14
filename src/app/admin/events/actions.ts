@@ -23,20 +23,25 @@ function parseEventForm(formData: FormData) {
   const location = String(formData.get("location") ?? "").trim() || null;
   const link = String(formData.get("link") ?? "").trim() || null;
   const sort_order = Number(formData.get("sort_order") ?? 0);
+  const host_trainer_id = String(formData.get("host_trainer_id") ?? "").trim() || null;
+  const host_club_id = String(formData.get("host_club_id") ?? "").trim() || null;
+  const registration_enabled = formData.get("registration_enabled") === "on";
+  const maxRaw = String(formData.get("max_participants") ?? "").trim();
+  const max_participants = maxRaw === "" ? null : Number(maxRaw);
   return {
     title, description, cover_url_input, kind, starts_at_raw, ends_at_raw,
-    location, link, sort_order,
+    location, link, sort_order, host_trainer_id, host_club_id,
+    registration_enabled, max_participants,
   };
 }
 
 export async function createEvent(formData: FormData): Promise<void> {
-  const { supabase } = await assertAdmin();
+  const { supabase, user } = await assertAdmin();
   const f = parseEventForm(formData);
   if (!f.title || !f.starts_at_raw) return;
   const starts_at = new Date(f.starts_at_raw).toISOString();
   const ends_at = f.ends_at_raw ? new Date(f.ends_at_raw).toISOString() : null;
 
-  // file upload приоритетнее url-input
   const cover = formData.get("cover") as File | null;
   let cover_url: string | null = f.cover_url_input;
   if (cover && cover.size > 0) {
@@ -54,6 +59,15 @@ export async function createEvent(formData: FormData): Promise<void> {
     location: f.location,
     link: f.link,
     sort_order: f.sort_order,
+    host_trainer_id: f.host_trainer_id,
+    host_club_id: f.host_club_id,
+    registration_enabled: f.registration_enabled,
+    max_participants: f.max_participants,
+    // admin-created events bypass moderation
+    status: "approved",
+    created_by: user.id,
+    moderated_by: user.id,
+    moderated_at: new Date().toISOString(),
   });
   revalidatePath("/admin/events");
   revalidatePath("/events");
@@ -78,6 +92,10 @@ export async function updateEvent(formData: FormData): Promise<void> {
     location: f.location,
     link: f.link,
     sort_order: f.sort_order,
+    host_trainer_id: f.host_trainer_id,
+    host_club_id: f.host_club_id,
+    registration_enabled: f.registration_enabled,
+    max_participants: f.max_participants,
   };
   if (f.cover_url_input) patch.cover_url = f.cover_url_input;
 
@@ -90,7 +108,45 @@ export async function updateEvent(formData: FormData): Promise<void> {
   await supabase.from("events").update(patch).eq("id", id);
   revalidatePath("/admin/events");
   revalidatePath("/events");
+  revalidatePath(`/events/${id}`);
   revalidatePath("/");
+}
+
+export async function approveEvent(formData: FormData): Promise<void> {
+  const { supabase, user } = await assertAdmin();
+  const id = String(formData.get("id") ?? "");
+  const note = String(formData.get("moderator_note") ?? "").trim() || null;
+  if (!id) return;
+  await supabase
+    .from("events")
+    .update({
+      status: "approved",
+      moderator_note: note,
+      moderated_by: user.id,
+      moderated_at: new Date().toISOString(),
+    })
+    .eq("id", id);
+  revalidatePath("/admin/events");
+  revalidatePath("/events");
+  revalidatePath("/");
+}
+
+export async function rejectEvent(formData: FormData): Promise<void> {
+  const { supabase, user } = await assertAdmin();
+  const id = String(formData.get("id") ?? "");
+  const note = String(formData.get("moderator_note") ?? "").trim() || null;
+  if (!id) return;
+  await supabase
+    .from("events")
+    .update({
+      status: "rejected",
+      moderator_note: note,
+      moderated_by: user.id,
+      moderated_at: new Date().toISOString(),
+    })
+    .eq("id", id);
+  revalidatePath("/admin/events");
+  revalidatePath("/events");
 }
 
 export async function toggleEvent(formData: FormData): Promise<void> {
@@ -110,4 +166,13 @@ export async function deleteEvent(formData: FormData): Promise<void> {
   await supabase.from("events").delete().eq("id", id);
   revalidatePath("/admin/events");
   revalidatePath("/events");
+}
+
+export async function deleteRegistration(formData: FormData): Promise<void> {
+  const { supabase } = await assertAdmin();
+  const id = String(formData.get("id") ?? "");
+  const eventId = String(formData.get("event_id") ?? "");
+  if (!id) return;
+  await supabase.from("event_registrations").delete().eq("id", id);
+  if (eventId) revalidatePath(`/admin/events/${eventId}/registrations`);
 }

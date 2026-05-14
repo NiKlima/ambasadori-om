@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
 import { createClient } from "@/lib/supabase/server";
@@ -14,10 +15,10 @@ const KIND_LABEL: Record<string, string> = {
 const FALLBACK_IMG = "/brand/imagery/park-crowd.jpg";
 
 const FALLBACK: Event[] = [
-  { id: "f1", title: "Chișinău 10K", description: "the main spring road race.", cover_url: "/brand/imagery/runner-asphalt-line.jpg", kind: "race", starts_at: "2026-05-25T08:00:00Z", ends_at: null, location: "Valea Morilor park", link: null, active: true, sort_order: 0, created_at: new Date().toISOString() },
-  { id: "f2", title: "OM Live with ambassadors", description: "live stream with the network coaches.", cover_url: "/brand/imagery/yoga-rooftop.jpg", kind: "live", starts_at: "2026-05-12T19:00:00Z", ends_at: null, location: "Instagram @om", link: null, active: true, sort_order: 0, created_at: new Date().toISOString() },
-  { id: "f3", title: "rooftop yoga · sunrise", description: "at sunrise in the city center.", cover_url: "/brand/imagery/yoga-rooftop.jpg", kind: "community", starts_at: "2026-06-02T06:30:00Z", ends_at: null, location: "Press House", link: null, active: true, sort_order: 0, created_at: new Date().toISOString() },
-  { id: "f4", title: "trail half marathon", description: "through the Codrii forest paths.", cover_url: "/brand/imagery/runner-forest.jpg", kind: "race", starts_at: "2026-06-14T07:00:00Z", ends_at: null, location: "Codrii forest", link: null, active: true, sort_order: 0, created_at: new Date().toISOString() },
+  { id: "f1", title: "Chișinău 10K", description: "the main spring road race.", cover_url: "/brand/imagery/runner-asphalt-line.jpg", kind: "race", starts_at: "2026-05-25T08:00:00Z", ends_at: null, location: "Valea Morilor park", link: null, active: true, sort_order: 0, status: "approved", created_by: null, moderator_note: null, moderated_by: null, moderated_at: null, host_trainer_id: null, host_club_id: null, registration_enabled: false, max_participants: null, created_at: new Date().toISOString() },
+  { id: "f2", title: "OM Live with ambassadors", description: "live stream with the network coaches.", cover_url: "/brand/imagery/yoga-rooftop.jpg", kind: "live", starts_at: "2026-05-12T19:00:00Z", ends_at: null, location: "Instagram @om", link: null, active: true, sort_order: 0, status: "approved", created_by: null, moderator_note: null, moderated_by: null, moderated_at: null, host_trainer_id: null, host_club_id: null, registration_enabled: false, max_participants: null, created_at: new Date().toISOString() },
+  { id: "f3", title: "rooftop yoga · sunrise", description: "at sunrise in the city center.", cover_url: "/brand/imagery/yoga-rooftop.jpg", kind: "community", starts_at: "2026-06-02T06:30:00Z", ends_at: null, location: "Press House", link: null, active: true, sort_order: 0, status: "approved", created_by: null, moderator_note: null, moderated_by: null, moderated_at: null, host_trainer_id: null, host_club_id: null, registration_enabled: false, max_participants: null, created_at: new Date().toISOString() },
+  { id: "f4", title: "trail half marathon", description: "through the Codrii forest paths.", cover_url: "/brand/imagery/runner-forest.jpg", kind: "race", starts_at: "2026-06-14T07:00:00Z", ends_at: null, location: "Codrii forest", link: null, active: true, sort_order: 0, status: "approved", created_by: null, moderator_note: null, moderated_by: null, moderated_at: null, host_trainer_id: null, host_club_id: null, registration_enabled: false, max_participants: null, created_at: new Date().toISOString() },
 ];
 
 export default async function EventsPage() {
@@ -28,6 +29,7 @@ export default async function EventsPage() {
       .from("events")
       .select("*")
       .eq("active", true)
+      .eq("status", "approved")
       .order("sort_order", { ascending: false })
       .order("starts_at", { ascending: true });
     if (data && data.length > 0) events = data as Event[];
@@ -222,10 +224,14 @@ export default async function EventsPage() {
                     >
                       register →
                     </a>
+                  ) : spotlight.registration_enabled ? (
+                    <Link href={`/events/${spotlight.id}/register`} className="btn btn-white">
+                      register →
+                    </Link>
                   ) : (
-                    <span className="btn btn-white" style={{ opacity: 0.7 }}>
-                      details soon
-                    </span>
+                    <Link href={`/events/${spotlight.id}`} className="btn btn-white">
+                      details →
+                    </Link>
                   )}
                 </div>
               </div>
@@ -367,19 +373,34 @@ export default async function EventsPage() {
                           >
                             register →
                           </a>
-                        ) : (
-                          <span
+                        ) : e.registration_enabled ? (
+                          <Link
+                            href={`/events/${e.id}/register`}
                             className="font-display"
                             style={{
                               fontWeight: 800,
                               fontSize: 12,
-                              opacity: 0.7,
+                              color: "#fff",
                               letterSpacing: "0.04em",
                               textTransform: "uppercase",
                             }}
                           >
-                            soon →
-                          </span>
+                            register →
+                          </Link>
+                        ) : (
+                          <Link
+                            href={`/events/${e.id}`}
+                            className="font-display"
+                            style={{
+                              fontWeight: 800,
+                              fontSize: 12,
+                              color: "#fff",
+                              letterSpacing: "0.04em",
+                              textTransform: "uppercase",
+                            }}
+                          >
+                            details →
+                          </Link>
                         )}
                       </div>
                     </div>
