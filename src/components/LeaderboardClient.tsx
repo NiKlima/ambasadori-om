@@ -117,25 +117,27 @@ export function LeaderboardClient({
 
       {/* Top 3 podium */}
       {podium.length === 3 && (
-        <section className="bg-[var(--om-ink-50)]" style={{ padding: "48px 0" }}>
-          <div className="container-om grid grid-cols-1 md:grid-cols-[1fr_1.15fr_1fr] gap-4 items-end">
+        <section className="bg-[var(--om-ink-50)]" style={{ padding: "56px 0" }}>
+          <div className="container-om grid grid-cols-1 md:grid-cols-[1fr_1.15fr_1fr] gap-4 items-stretch">
             {[
-              { row: podium[1], rank: 2, h: 280, bg: "var(--om-ink-900)", fg: "#fff", border: "none" as const, av: undefined as "blue" | "ink" | "default" | undefined, stripes: false },
-              { row: podium[0], rank: 1, h: 340, bg: "var(--om-blue)", fg: "#fff", border: "none" as const, av: "default" as const, stripes: true },
-              { row: podium[2], rank: 3, h: 250, bg: "#fff", fg: "var(--om-ink-900)", border: "1px solid var(--om-ink-100)", av: "blue" as const, stripes: false },
+              { row: podium[1], rank: 2, bg: "var(--om-ink-900)", fg: "#fff", border: "none" as const, av: undefined as "blue" | "ink" | "default" | undefined, stripes: false },
+              { row: podium[0], rank: 1, bg: "var(--om-blue)", fg: "#fff", border: "none" as const, av: "default" as const, stripes: true },
+              { row: podium[2], rank: 3, bg: "#fff", fg: "var(--om-ink-900)", border: "1px solid var(--om-ink-100)", av: "blue" as const, stripes: false },
             ].map((t) => {
               const isOne = t.rank === 1;
               const isThree = t.rank === 3;
               return (
-                <div
+                <a
                   key={t.row.id}
-                  className="relative overflow-hidden"
+                  href={`/trainers/${t.row.id}`}
+                  className="relative block"
                   style={{
                     background: t.bg,
                     color: t.fg,
-                    height: t.h,
+                    minHeight: isOne ? 420 : 380,
                     padding: "28px",
                     border: t.border,
+                    textDecoration: "none",
                   }}
                 >
                   {t.stripes && (
@@ -219,7 +221,7 @@ export function LeaderboardClient({
                       </div>
                     </div>
                   </div>
-                </div>
+                </a>
               );
             })}
           </div>

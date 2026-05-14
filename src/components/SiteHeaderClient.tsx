@@ -22,8 +22,10 @@ type Props = {
 export function SiteHeaderClient({ user, role, onBlue = false }: Props) {
   const pathname = usePathname();
 
+  // active = только точное совпадение реального маршрута, без якорей.
+  // на landing (`/`) никакая nav-ссылка не подсвечивается, кроме hover.
   const isActive = (href: string) => {
-    if (href.startsWith("/#")) return pathname === "/";
+    if (href.startsWith("/#")) return false;
     if (href === "/leaderboard") return pathname.startsWith("/leaderboard");
     if (href === "/events") return pathname.startsWith("/events");
     return pathname === href;
@@ -62,19 +64,9 @@ export function SiteHeaderClient({ user, role, onBlue = false }: Props) {
               <Link
                 key={item.href}
                 href={item.href}
-                className="font-display font-extrabold text-[13px] tracking-[-0.005em] pb-[2px]"
-                style={{
-                  color: active
-                    ? onBlue
-                      ? "#fff"
-                      : "var(--om-blue)"
-                    : onBlue
-                    ? "rgba(255,255,255,.75)"
-                    : "var(--om-ink-900)",
-                  borderBottom: active
-                    ? `2px solid ${onBlue ? "#fff" : "var(--om-blue)"}`
-                    : "2px solid transparent",
-                }}
+                className={`nav-link font-display font-extrabold text-[13px] tracking-[-0.005em] pb-[2px] ${
+                  active ? "is-active" : ""
+                } ${onBlue ? "nav-link-on-blue" : "nav-link-on-white"}`}
               >
                 {item.label}
               </Link>

@@ -92,12 +92,9 @@ export function SiteFooter() {
           ))}
         </div>
 
-        <div className="flex flex-col sm:flex-row justify-between gap-2 py-6 pb-8">
+        <div className="py-6 pb-8">
           <span className="font-mono text-[11px]" style={{ opacity: 0.5 }}>
             © {new Date().getFullYear()} OM water · Chișinău
-          </span>
-          <span className="font-mono text-[11px]" style={{ opacity: 0.5 }}>
-            designed for trainers · brand by NORM.
           </span>
         </div>
       </div>

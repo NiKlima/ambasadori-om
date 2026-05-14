@@ -187,6 +187,24 @@ html, body {
     #fff 0 var(--stripe-thickness),
     var(--om-blue) var(--stripe-thickness) calc(var(--stripe-thickness) + var(--stripe-gap-2x)));
 }
+/* Site header nav links: active OR hover → underline. Otherwise transparent. */
+.nav-link {
+  border-bottom: 2px solid transparent;
+  transition: border-color 0.15s ease, color 0.15s ease;
+}
+.nav-link-on-white { color: var(--om-ink-900); }
+.nav-link-on-white:hover,
+.nav-link-on-white.is-active {
+  color: var(--om-blue);
+  border-bottom-color: var(--om-blue);
+}
+.nav-link-on-blue { color: rgba(255,255,255,.75); }
+.nav-link-on-blue:hover,
+.nav-link-on-blue.is-active {
+  color: #fff;
+  border-bottom-color: #fff;
+}
+
 /* Stripe overlays disabled per design v5 — DOM stays for backward compat,
    visually hidden. To restore: remove `display:none` block and uncomment
    the original definitions below. */

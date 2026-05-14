@@ -289,7 +289,6 @@ export default async function Home() {
                 style={{
                   borderTop: "4px solid var(--om-blue)",
                   padding: "24px 28px 32px 0",
-                  borderRight: i < 3 ? "1px solid var(--om-ink-100)" : "none",
                 }}
               >
                 <div
