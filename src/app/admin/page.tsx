@@ -120,7 +120,7 @@ export default async function AdminTrainersPage() {
                   padding: "24px 28px",
                 }}
               >
-                <form action={updateTrainer} className="grid md:grid-cols-2 gap-4" encType="multipart/form-data">
+                <form action={updateTrainer} className="grid md:grid-cols-2 gap-4">
                   <input type="hidden" name="id" value={t.id} />
 
                   <div className="md:col-span-2">

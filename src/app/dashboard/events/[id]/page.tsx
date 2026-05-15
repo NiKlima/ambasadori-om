@@ -147,29 +147,31 @@ export default async function MyEventPage({ params }: { params: Params }) {
       )}
 
       {editable ? (
-        <form
-          action={updateMyEvent}
-          className="bg-white border border-[var(--om-ink-100)] grid md:grid-cols-2 gap-4"
-          style={{ padding: "32px 36px" }}
-        >
-          <input type="hidden" name="id" value={ev.id} />
-          <EventFormFields defaults={ev} clubs={clubs} />
-          <div className="md:col-span-2 flex gap-3 flex-wrap" style={{ marginTop: 8 }}>
-            <button type="submit" className="btn btn-blue">
-              {ev.status === "rejected" ? "resubmit for review" : "save changes"}
-            </button>
-            <form action={withdrawMyEvent}>
-              <input type="hidden" name="id" value={ev.id} />
-              <button
-                type="submit"
-                className="btn btn-outline"
-                style={{ borderColor: "var(--om-magenta)", color: "var(--om-magenta)" }}
-              >
-                withdraw
+        <div className="grid gap-4">
+          <form
+            action={updateMyEvent}
+            className="bg-white border border-[var(--om-ink-100)] grid md:grid-cols-2 gap-4"
+            style={{ padding: "32px 36px" }}
+          >
+            <input type="hidden" name="id" value={ev.id} />
+            <EventFormFields defaults={ev} clubs={clubs} />
+            <div className="md:col-span-2" style={{ marginTop: 8 }}>
+              <button type="submit" className="btn btn-blue">
+                {ev.status === "rejected" ? "resubmit for review" : "save changes"}
               </button>
-            </form>
-          </div>
-        </form>
+            </div>
+          </form>
+          <form action={withdrawMyEvent} className="flex">
+            <input type="hidden" name="id" value={ev.id} />
+            <button
+              type="submit"
+              className="btn btn-outline"
+              style={{ borderColor: "var(--om-magenta)", color: "var(--om-magenta)" }}
+            >
+              withdraw event
+            </button>
+          </form>
+        </div>
       ) : (
         <div
           className="bg-white border border-[var(--om-ink-100)]"
