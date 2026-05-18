@@ -469,3 +469,19 @@ textarea.input { line-height: 1.5; resize: vertical; }
 @media (max-width: 640px) {
   header.sticky { min-height: 56px; }
 }
+
+/* KPI values can be 5+ digits (points totals). Scale them down on phones so
+   they fit inside the card without overflowing. */
+@media (max-width: 640px) {
+  .kpi { padding: 16px 18px; }
+  .kpi .value { font-size: 36px; }
+}
+
+/* Tabular numbers inside dashboards/leaderboards stay aligned and don't
+   randomly overflow due to proportional glyph widths. */
+.kpi .value,
+.lb-row > * { font-variant-numeric: tabular-nums; }
+
+/* Container padding shrinks on phones; also forbid container itself from
+   exceeding viewport (fixes edge cases with nested containers). */
+.container-om { max-width: min(var(--container-max), 100%); }

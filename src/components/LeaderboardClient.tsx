@@ -153,7 +153,7 @@ export function LeaderboardClient({
                       className="font-display"
                       style={{
                         fontWeight: 900,
-                        fontSize: isOne ? 96 : 72,
+                        fontSize: isOne ? "clamp(56px, 12vw, 96px)" : "clamp(40px, 9vw, 72px)",
                         letterSpacing: "-0.04em",
                         lineHeight: 0.85,
                         opacity: isThree ? 0.18 : 0.4,

@@ -6,10 +6,10 @@ const COLUMNS: { title: string; items: { label: string; href?: string }[] }[] = 
     title: "programme",
     items: [
       { label: "how it works", href: "/#how" },
-      { label: "challenges", href: "/#challenges" },
+      { label: "challenges", href: "/challenges" },
       { label: "leaderboard", href: "/leaderboard" },
       { label: "events", href: "/events" },
-      { label: "FAQ", href: "/#faq" },
+      { label: "trainers", href: "/trainers" },
     ],
   },
   {

@@ -27,8 +27,8 @@ export default async function MySurveysPage() {
   const promo = profile?.promo_code ?? null;
 
   const hdrs = await headers();
-  const proto = hdrs.get("x-forwarded-proto") ?? "http";
-  const host = hdrs.get("host") ?? "localhost:3000";
+  const host = hdrs.get("x-forwarded-host") ?? hdrs.get("host") ?? "localhost:3000";
+  const proto = hdrs.get("x-forwarded-proto") ?? (host.startsWith("localhost") ? "http" : "https");
   const origin = `${proto}://${host}`;
 
   const list = (challenges ?? []) as Challenge[];
