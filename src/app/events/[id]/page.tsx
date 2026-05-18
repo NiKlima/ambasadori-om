@@ -5,6 +5,7 @@ import { SiteFooter } from "@/components/SiteFooter";
 import { createClient } from "@/lib/supabase/server";
 import { formatDate } from "@/lib/utils";
 import type { Event, EventKind } from "@/lib/types";
+import { findFallbackEvent } from "@/lib/fallback-events";
 
 const KIND_LABEL: Record<EventKind, string> = {
   race: "race",
@@ -27,7 +28,7 @@ export async function generateMetadata({ params }: { params: Params }) {
       .eq("id", id)
       .eq("status", "approved")
       .eq("active", true)
-      .single();
+      .maybeSingle();
     if (data) {
       return {
         title: `${data.title} · OM Ambasadori`,
@@ -35,6 +36,13 @@ export async function generateMetadata({ params }: { params: Params }) {
       };
     }
   } catch {}
+  const fb = findFallbackEvent(id);
+  if (fb) {
+    return {
+      title: `${fb.title} · OM Ambasadori`,
+      description: fb.description ?? undefined,
+    };
+  }
   return { title: "event · OM Ambasadori" };
 }
 
@@ -48,8 +56,8 @@ export default async function EventDetailPage({ params }: { params: Params }) {
     .eq("id", id)
     .eq("active", true)
     .eq("status", "approved")
-    .single();
-  const ev = evRaw as Event | null;
+    .maybeSingle();
+  const ev = (evRaw as Event | null) ?? findFallbackEvent(id);
   if (!ev) notFound();
 
   // host info

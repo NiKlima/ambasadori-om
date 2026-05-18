@@ -4,6 +4,7 @@ import { SiteFooter } from "@/components/SiteFooter";
 import { createClient } from "@/lib/supabase/server";
 import { formatDate } from "@/lib/utils";
 import type { Event } from "@/lib/types";
+import { FALLBACK_EVENTS } from "@/lib/fallback-events";
 
 const KIND_LABEL: Record<string, string> = {
   race: "race",
@@ -14,15 +15,8 @@ const KIND_LABEL: Record<string, string> = {
 
 const FALLBACK_IMG = "/brand/imagery/park-crowd.jpg";
 
-const FALLBACK: Event[] = [
-  { id: "f1", title: "Chișinău 10K", description: "the main spring road race.", cover_url: "/brand/imagery/runner-asphalt-line.jpg", kind: "race", starts_at: "2026-05-25T08:00:00Z", ends_at: null, location: "Valea Morilor park", link: null, active: true, sort_order: 0, status: "approved", created_by: null, moderator_note: null, moderated_by: null, moderated_at: null, host_trainer_id: null, host_club_id: null, registration_enabled: false, max_participants: null, created_at: new Date().toISOString() },
-  { id: "f2", title: "OM Live with ambassadors", description: "live stream with the network coaches.", cover_url: "/brand/imagery/yoga-rooftop.jpg", kind: "live", starts_at: "2026-05-12T19:00:00Z", ends_at: null, location: "Instagram @om", link: null, active: true, sort_order: 0, status: "approved", created_by: null, moderator_note: null, moderated_by: null, moderated_at: null, host_trainer_id: null, host_club_id: null, registration_enabled: false, max_participants: null, created_at: new Date().toISOString() },
-  { id: "f3", title: "rooftop yoga · sunrise", description: "at sunrise in the city center.", cover_url: "/brand/imagery/yoga-rooftop.jpg", kind: "community", starts_at: "2026-06-02T06:30:00Z", ends_at: null, location: "Press House", link: null, active: true, sort_order: 0, status: "approved", created_by: null, moderator_note: null, moderated_by: null, moderated_at: null, host_trainer_id: null, host_club_id: null, registration_enabled: false, max_participants: null, created_at: new Date().toISOString() },
-  { id: "f4", title: "trail half marathon", description: "through the Codrii forest paths.", cover_url: "/brand/imagery/runner-forest.jpg", kind: "race", starts_at: "2026-06-14T07:00:00Z", ends_at: null, location: "Codrii forest", link: null, active: true, sort_order: 0, status: "approved", created_by: null, moderator_note: null, moderated_by: null, moderated_at: null, host_trainer_id: null, host_club_id: null, registration_enabled: false, max_participants: null, created_at: new Date().toISOString() },
-];
-
 export default async function EventsPage() {
-  let events: Event[] = FALLBACK;
+  let events: Event[] = FALLBACK_EVENTS;
   try {
     const supabase = await createClient();
     const { data } = await supabase

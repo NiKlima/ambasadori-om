@@ -6,9 +6,9 @@ import { Logo } from "@/components/ui/Logo";
 
 const NAV: { href: string; label: string }[] = [
   { href: "/#how", label: "how it works" },
-  { href: "/#challenges", label: "challenges" },
+  { href: "/challenges", label: "challenges" },
   { href: "/clubs", label: "clubs" },
-  { href: "/#trainers", label: "trainers" },
+  { href: "/trainers", label: "trainers" },
   { href: "/leaderboard", label: "leaderboard" },
   { href: "/events", label: "events" },
 ];
@@ -29,6 +29,8 @@ export function SiteHeaderClient({ user, role, onBlue = false }: Props) {
     if (href === "/leaderboard") return pathname.startsWith("/leaderboard");
     if (href === "/events") return pathname.startsWith("/events");
     if (href === "/clubs") return pathname.startsWith("/clubs");
+    if (href === "/challenges") return pathname.startsWith("/challenges");
+    if (href === "/trainers") return pathname === "/trainers" || pathname.startsWith("/trainers/");
     return pathname === href;
   };
 

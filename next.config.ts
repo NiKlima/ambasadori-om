@@ -14,6 +14,17 @@ const nextConfig: NextConfig = {
       { protocol: "https", hostname: supabaseHost, pathname: "/storage/v1/object/public/**" },
     ],
   },
+  experimental: {
+    // Server actions must accept POSTs from these origins (prod domain + Vercel previews + local dev)
+    serverActions: {
+      allowedOrigins: [
+        "omactiv.md",
+        "www.omactiv.md",
+        "*.vercel.app",
+        "localhost:3000",
+      ],
+    },
+  },
 };
 
 export default nextConfig;

@@ -5,6 +5,7 @@ import { SiteFooter } from "@/components/SiteFooter";
 import { createClient } from "@/lib/supabase/server";
 import { formatDate } from "@/lib/utils";
 import type { Event } from "@/lib/types";
+import { findFallbackEvent } from "@/lib/fallback-events";
 import { RegistrationForm } from "./RegistrationForm";
 
 type Params = Promise<{ id: string }>;
@@ -21,9 +22,10 @@ export default async function EventRegisterPage({ params }: { params: Params }) 
     .eq("id", id)
     .eq("active", true)
     .eq("status", "approved")
-    .single();
-  const ev = evRaw as Event | null;
+    .maybeSingle();
+  const ev = (evRaw as Event | null) ?? findFallbackEvent(id);
   if (!ev) notFound();
+  // fallback events не имеют real registration_enabled — 404 для /register
   if (!ev.registration_enabled) notFound();
 
   // preset for logged-in users
