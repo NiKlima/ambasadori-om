@@ -1,7 +1,8 @@
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
 import { LeaderboardClient } from "@/components/LeaderboardClient";
-import { createClient } from "@/lib/supabase/server";
+// Service-role bypass: leaderboard view hidden from anon by RLS until migration 009.
+import { createAdminClient } from "@/lib/supabase/admin";
 import type { LeaderboardRow } from "@/lib/types";
 
 const STORYTELLING_DEFAULTS = { quote: null, story: null, intro_video_url: null, gallery: [] };
@@ -21,7 +22,7 @@ export default async function LeaderboardPage() {
   let rows: LeaderboardRow[] = FALLBACK;
   let clubNames: string[] = [];
   try {
-    const supabase = await createClient();
+    const supabase = createAdminClient();
     const [rowsRes, clubsRes] = await Promise.all([
       supabase.from("leaderboard").select("*"),
       supabase
@@ -31,7 +32,7 @@ export default async function LeaderboardPage() {
         .order("sort_order", { ascending: false }),
     ]);
     if (rowsRes.data && rowsRes.data.length > 0) rows = rowsRes.data as LeaderboardRow[];
-    if (clubsRes.data) clubNames = clubsRes.data.map((c) => c.name as string);
+    if (clubsRes.data) clubNames = clubsRes.data.map((c: { name: string }) => c.name);
   } catch {}
   const clubsCount = clubNames.length || 8;
 

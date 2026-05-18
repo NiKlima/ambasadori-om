@@ -1,7 +1,8 @@
 import Link from "next/link";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
-import { createClient } from "@/lib/supabase/server";
+// Service-role bypass: profiles/leaderboard hidden from anon by RLS until migration 009.
+import { createAdminClient } from "@/lib/supabase/admin";
 import type { LeaderboardRow } from "@/lib/types";
 
 export const metadata = {
@@ -22,7 +23,7 @@ export default async function TrainersPage() {
   let rows: LeaderboardRow[] = FALLBACK;
   let clubsCount = 8;
   try {
-    const supabase = await createClient();
+    const supabase = createAdminClient();
     const [{ data: lbData }, { count }] = await Promise.all([
       supabase
         .from("leaderboard")
