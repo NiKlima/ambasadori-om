@@ -49,7 +49,7 @@ export async function createEvent(formData: FormData): Promise<void> {
     if (uploaded) cover_url = uploaded;
   }
 
-  await supabase.from("events").insert({
+  const { error } = await supabase.from("events").insert({
     title: f.title,
     description: f.description,
     cover_url,
@@ -69,6 +69,7 @@ export async function createEvent(formData: FormData): Promise<void> {
     moderated_by: user.id,
     moderated_at: new Date().toISOString(),
   });
+  if (error) throw new Error(error.message);
   revalidatePath("/admin/events");
   revalidatePath("/events");
   revalidatePath("/");
@@ -105,7 +106,8 @@ export async function updateEvent(formData: FormData): Promise<void> {
     if (uploaded) patch.cover_url = uploaded;
   }
 
-  await supabase.from("events").update(patch).eq("id", id);
+  const { error } = await supabase.from("events").update(patch).eq("id", id);
+  if (error) throw new Error(error.message);
   revalidatePath("/admin/events");
   revalidatePath("/events");
   revalidatePath(`/events/${id}`);
@@ -117,7 +119,7 @@ export async function approveEvent(formData: FormData): Promise<void> {
   const id = String(formData.get("id") ?? "");
   const note = String(formData.get("moderator_note") ?? "").trim() || null;
   if (!id) return;
-  await supabase
+  const { error } = await supabase
     .from("events")
     .update({
       status: "approved",
@@ -126,6 +128,7 @@ export async function approveEvent(formData: FormData): Promise<void> {
       moderated_at: new Date().toISOString(),
     })
     .eq("id", id);
+  if (error) throw new Error(error.message);
   revalidatePath("/admin/events");
   revalidatePath("/events");
   revalidatePath("/");
@@ -136,7 +139,7 @@ export async function rejectEvent(formData: FormData): Promise<void> {
   const id = String(formData.get("id") ?? "");
   const note = String(formData.get("moderator_note") ?? "").trim() || null;
   if (!id) return;
-  await supabase
+  const { error } = await supabase
     .from("events")
     .update({
       status: "rejected",
@@ -145,6 +148,7 @@ export async function rejectEvent(formData: FormData): Promise<void> {
       moderated_at: new Date().toISOString(),
     })
     .eq("id", id);
+  if (error) throw new Error(error.message);
   revalidatePath("/admin/events");
   revalidatePath("/events");
 }
@@ -154,7 +158,8 @@ export async function toggleEvent(formData: FormData): Promise<void> {
   const id = String(formData.get("id") ?? "");
   const active = formData.get("active") === "true";
   if (!id) return;
-  await supabase.from("events").update({ active: !active }).eq("id", id);
+  const { error } = await supabase.from("events").update({ active: !active }).eq("id", id);
+  if (error) throw new Error(error.message);
   revalidatePath("/admin/events");
   revalidatePath("/events");
 }
@@ -163,7 +168,8 @@ export async function deleteEvent(formData: FormData): Promise<void> {
   const { supabase } = await assertAdmin();
   const id = String(formData.get("id") ?? "");
   if (!id) return;
-  await supabase.from("events").delete().eq("id", id);
+  const { error } = await supabase.from("events").delete().eq("id", id);
+  if (error) throw new Error(error.message);
   revalidatePath("/admin/events");
   revalidatePath("/events");
 }

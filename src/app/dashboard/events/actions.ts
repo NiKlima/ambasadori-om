@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/supabase/admin";
 import { uploadCover } from "@/lib/upload";
 
 async function assertTrainer() {
@@ -37,9 +38,10 @@ export async function proposeEvent(formData: FormData): Promise<void> {
   const starts_at = new Date(f.starts_at_raw).toISOString();
   const ends_at = f.ends_at_raw ? new Date(f.ends_at_raw).toISOString() : null;
 
+  // covers bucket is admin-only by RLS, so a trainer-context client would silently fail to upload.
   const cover = formData.get("cover") as File | null;
   const cover_url = cover && cover.size > 0
-    ? await uploadCover(supabase, "covers", "events", cover)
+    ? await uploadCover(createAdminClient(), "covers", "events", cover)
     : null;
 
   const { data, error } = await supabase
@@ -110,7 +112,7 @@ export async function updateMyEvent(formData: FormData): Promise<void> {
 
   const cover = formData.get("cover") as File | null;
   if (cover && cover.size > 0) {
-    const uploaded = await uploadCover(supabase, "covers", "events", cover);
+    const uploaded = await uploadCover(createAdminClient(), "covers", "events", cover);
     if (uploaded) patch.cover_url = uploaded;
   }
 
