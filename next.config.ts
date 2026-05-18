@@ -23,6 +23,7 @@ const nextConfig: NextConfig = {
         "*.vercel.app",
         "localhost:3000",
       ],
+      bodySizeLimit: "10mb",
     },
   },
 };
