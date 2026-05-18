@@ -1,9 +1,7 @@
 import Link from "next/link";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
-// Service-role bypass: public read on challenges/products/profiles is blocked by RLS
-// until migration 009_audit_fixes is applied. Until then we read with service_role.
-import { createAdminClient } from "@/lib/supabase/admin";
+import { createClient } from "@/lib/supabase/server";
 import type { Challenge, LeaderboardRow, Product } from "@/lib/types";
 
 const FALLBACK_CHALLENGES: Partial<Challenge>[] = [
@@ -52,7 +50,7 @@ type HeroStats = {
 
 async function getData() {
   try {
-    const supabase = createAdminClient();
+    const supabase = await createClient();
     const [challengesRes, leaderboardRes, prizesRes, trainersCount, clubsCount, pointsAgg] =
       await Promise.all([
         supabase

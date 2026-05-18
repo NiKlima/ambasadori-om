@@ -4,15 +4,14 @@ import Link from "next/link";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
 import { TrainerProfileBody } from "@/components/TrainerProfileBody";
-// Service-role bypass: leaderboard view hidden from anon by RLS until migration 009.
-import { createAdminClient } from "@/lib/supabase/admin";
+import { createClient } from "@/lib/supabase/server";
 import type { LeaderboardRow } from "@/lib/types";
 
 type Params = Promise<{ id: string }>;
 
 async function fetchTrainer(id: string): Promise<LeaderboardRow | null> {
   try {
-    const supabase = createAdminClient();
+    const supabase = await createClient();
     const { data } = await supabase.from("leaderboard").select("*").eq("id", id).maybeSingle();
     return (data as LeaderboardRow | null) ?? null;
   } catch {
@@ -22,7 +21,7 @@ async function fetchTrainer(id: string): Promise<LeaderboardRow | null> {
 
 async function fetchRank(id: string): Promise<number | undefined> {
   try {
-    const supabase = createAdminClient();
+    const supabase = await createClient();
     const { data } = await supabase
       .from("leaderboard")
       .select("id, total_points")

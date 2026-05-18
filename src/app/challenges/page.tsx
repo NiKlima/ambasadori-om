@@ -1,8 +1,7 @@
 import Link from "next/link";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
-// Service-role bypass: challenges hidden from anon by RLS until migration 009.
-import { createAdminClient } from "@/lib/supabase/admin";
+import { createClient } from "@/lib/supabase/server";
 import type { Challenge, ChallengeKind } from "@/lib/types";
 
 export const metadata = {
@@ -37,7 +36,7 @@ const FALLBACK_CHALLENGES: Partial<Challenge>[] = [
 export default async function ChallengesPage() {
   let challenges: Challenge[] = [];
   try {
-    const supabase = createAdminClient();
+    const supabase = await createClient();
     const { data } = await supabase
       .from("challenges")
       .select("*")

@@ -1,8 +1,7 @@
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
 import { LeaderboardClient } from "@/components/LeaderboardClient";
-// Service-role bypass: leaderboard view hidden from anon by RLS until migration 009.
-import { createAdminClient } from "@/lib/supabase/admin";
+import { createClient } from "@/lib/supabase/server";
 import type { LeaderboardRow } from "@/lib/types";
 
 const STORYTELLING_DEFAULTS = { quote: null, story: null, intro_video_url: null, gallery: [] };
@@ -22,7 +21,7 @@ export default async function LeaderboardPage() {
   let rows: LeaderboardRow[] = FALLBACK;
   let clubNames: string[] = [];
   try {
-    const supabase = createAdminClient();
+    const supabase = await createClient();
     const [rowsRes, clubsRes] = await Promise.all([
       supabase.from("leaderboard").select("*"),
       supabase
