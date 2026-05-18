@@ -193,20 +193,23 @@ export default async function Home() {
               </div>
               <div
                 className="grid grid-cols-3"
-                style={{ marginRight: 24, paddingTop: 28, gap: 24 }}
+                style={{ marginRight: 24, paddingTop: 28, gap: 16 }}
               >
                 {heroStats.map(([n, l]) => (
-                  <div key={l}>
+                  <div key={l} style={{ minWidth: 0 }}>
                     <div
                       className="font-display"
                       style={{
                         fontWeight: 900,
-                        fontSize: 44,
+                        fontSize: "clamp(28px, 9vw, 44px)",
                         letterSpacing: "-0.03em",
                         lineHeight: 1,
+                        whiteSpace: "nowrap",
+                        overflow: "hidden",
+                        textOverflow: "ellipsis",
                       }}
                     >
-                      {n}
+                      {String(n).replace(/ /g, " ")}
                     </div>
                     <div
                       className="font-mono mt-1"

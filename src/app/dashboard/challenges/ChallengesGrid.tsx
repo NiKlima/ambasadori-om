@@ -186,7 +186,7 @@ sort: by points ↓
               >
                 <div
                   className="bg-img relative"
-                  style={{ backgroundImage: `url(${cover})` }}
+                  style={{ backgroundImage: `url(${cover})`, aspectRatio: "16/10" }}
                 >
                   <div className="absolute" style={{ top: 14, left: 14 }}>
                     <span
