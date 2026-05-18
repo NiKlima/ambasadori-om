@@ -33,7 +33,7 @@ export default async function HistoryPage() {
           }}
         />
         <div
-          className="container-om relative grid items-end gap-6"
+          className="container-om relative grid items-end gap-6 om-grid-responsive"
           style={{ gridTemplateColumns: "1.4fr 1fr" }}
         >
           <div>

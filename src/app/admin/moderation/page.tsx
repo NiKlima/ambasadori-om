@@ -44,7 +44,7 @@ export default async function ModerationPage() {
       {/* Section hero */}
       <section className="bg-white border-b border-[var(--om-ink-100)]">
         <div
-          className="grid items-end gap-4"
+          className="grid items-end gap-4 om-grid-responsive"
           style={{
             padding: "0",
             gridTemplateColumns: "1.5fr 1fr 1fr 1fr",
@@ -82,7 +82,7 @@ export default async function ModerationPage() {
         {list.map((s) => (
           <div
             key={s.id}
-            className="bg-white border border-[var(--om-ink-100)] grid items-stretch"
+            className="bg-white border border-[var(--om-ink-100)] grid items-stretch om-grid-responsive"
             style={{
               gridTemplateColumns: "240px 1fr 280px",
             }}

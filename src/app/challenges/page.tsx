@@ -121,7 +121,7 @@ export default async function ChallengesPage() {
               return (
                 <article
                   key={ch.id ?? i}
-                  className="bg-white border border-[var(--om-ink-100)] grid"
+                  className="bg-white border border-[var(--om-ink-100)] grid om-grid-responsive"
                   style={{ gridTemplateColumns: "260px 1fr", minHeight: 280 }}
                 >
                   <div

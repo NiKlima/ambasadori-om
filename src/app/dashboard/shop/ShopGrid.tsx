@@ -60,7 +60,7 @@ export function ShopGrid({
           style={{ position: "absolute", inset: 0 }}
         />
         <div
-          className="container-om relative h-full grid items-end"
+          className="container-om relative h-full grid items-end om-grid-responsive"
           style={{
             gridTemplateColumns: "1.4fr 1fr",
             gap: 24,

@@ -178,7 +178,7 @@ sort: by points ↓
             return (
               <article
                 key={ch.id}
-                className="bg-white border border-[var(--om-ink-100)] grid"
+                className="bg-white border border-[var(--om-ink-100)] grid om-grid-responsive"
                 style={{
                   gridTemplateColumns: "260px 1fr",
                   minHeight: 280,
@@ -336,7 +336,7 @@ get link
         {/* Streak callout */}
         {challenges.length > 0 && (
           <div
-            className="bg-[var(--om-ink-900)] text-white relative overflow-hidden grid items-center"
+            className="bg-[var(--om-ink-900)] text-white relative overflow-hidden grid items-center om-grid-responsive"
             style={{
               marginTop: 24,
               padding: "40px 44px",

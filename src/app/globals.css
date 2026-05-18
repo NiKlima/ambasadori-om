@@ -162,7 +162,7 @@
 }
 
 /* ---------- Base ---------- */
-* { box-sizing: border-box; }
+* { box-sizing: border-box; min-width: 0; }
 html, body {
   margin: 0;
   padding: 0;
@@ -172,7 +172,11 @@ html, body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   letter-spacing: var(--ls-body);
+  /* Guard: any rogue overflowing element must not cause a horizontal page scroll on mobile. */
+  overflow-x: hidden;
+  max-width: 100vw;
 }
+img, video, iframe, svg { max-width: 100%; height: auto; }
 
 /* ============================================================================
    STRIPE MOTIF — brand signature
@@ -401,3 +405,67 @@ textarea.input { line-height: 1.5; resize: vertical; }
 .om-prose a { color: var(--om-blue); text-decoration: underline; }
 .om-prose h1, .om-prose h2, .om-prose h3 { font-family: var(--font-display); font-weight: 800; margin: 24px 0 12px; letter-spacing: var(--ls-heading); }
 .om-prose blockquote { border-left: 3px solid var(--om-blue); padding-left: 16px; margin: 16px 0; color: var(--fg-muted); font-style: italic; }
+
+/* ============================================================================
+   RESPONSIVE — mobile-first overrides
+   Most layouts are designed at desktop widths with fixed inline grids;
+   these rules collapse them gracefully under 768px without rewriting JSX.
+   ============================================================================ */
+
+/* Tighter side padding on small screens (32px → 16px) */
+@media (max-width: 640px) {
+  :root { --gutter: 16px; }
+}
+
+/* Leaderboard row — stack into 2 lines so the 6 fixed columns don't push the
+   page wider than the viewport. Rank + avatar + name on top, stats below. */
+@media (max-width: 900px) {
+  .lb-row {
+    grid-template-columns: 48px 1fr auto;
+    grid-template-areas:
+      "rank name points"
+      "rank meta meta";
+    column-gap: 12px;
+    row-gap: 4px;
+    padding: 14px 16px;
+  }
+  .lb-row.head { display: none; }
+  .lb-row .rank { grid-area: rank; font-size: 22px; }
+  .lb-row > :nth-child(2) { grid-area: name; min-width: 0; }
+  .lb-row > :nth-child(3) { grid-area: meta; font-size: 12px; color: var(--fg-muted); }
+  .lb-row > :nth-child(4),
+  .lb-row > :nth-child(5) { display: none; }
+  .lb-row > :nth-child(6) { grid-area: points; font-weight: 800; }
+}
+
+/* Inline grids (set via JSX style={{gridTemplateColumns:...}}) — on mobile,
+   collapse any explicit grid-template-columns set on .grid / [class*="grid"]
+   to a single column. Tailwind's grid-cols-* class wins (it sets the same
+   property with !important via CSS specificity tie-breaker only if marked).
+   Use a more specific selector. */
+@media (max-width: 640px) {
+  /* Inline-styled containers fall back to single column on phones. */
+  .om-grid-responsive {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* Hero / display headings — guarantee no single word overflows on mobile.
+   inline clamp() like `clamp(64px, 10vw, 168px)` produces 64px at 375px
+   viewport — that's wider than e.g. the cyrillic word "сообщество". */
+@media (max-width: 640px) {
+  h1, h2, .font-display {
+    overflow-wrap: anywhere;
+    word-wrap: break-word;
+  }
+}
+
+/* Long URLs / emails inside cards on mobile */
+@media (max-width: 640px) {
+  a { overflow-wrap: anywhere; }
+}
+
+/* Sticky header height tightens slightly on mobile */
+@media (max-width: 640px) {
+  header.sticky { min-height: 56px; }
+}

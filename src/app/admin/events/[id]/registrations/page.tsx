@@ -82,7 +82,7 @@ export default async function EventRegistrationsPage({ params }: { params: Param
           {regs.map((r, i) => (
             <div
               key={r.id}
-              className="grid items-start"
+              className="grid items-start om-grid-responsive"
               style={{
                 gridTemplateColumns: "1fr 220px 180px auto",
                 gap: 16,

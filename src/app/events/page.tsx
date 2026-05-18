@@ -140,7 +140,7 @@ export default async function EventsPage() {
           <div className="container-om" style={{ padding: "56px 0" }}>
             <div className="eyebrow">next event</div>
             <div
-              className="grid mt-4 border border-[var(--om-ink-100)]"
+              className="grid mt-4 border border-[var(--om-ink-100)] om-grid-responsive"
               style={{ gridTemplateColumns: "minmax(0, 1.4fr) minmax(0, 1fr)" }}
             >
               <div
@@ -245,7 +245,7 @@ export default async function EventsPage() {
               upcoming · {moreUpcoming.length} more
             </div>
             <div
-              className="grid border border-[var(--om-ink-100)]"
+              className="grid border border-[var(--om-ink-100)] om-grid-responsive"
               style={{ gridTemplateColumns: "repeat(3, 1fr)" }}
             >
               {moreUpcoming.map((e, i) => {
@@ -445,7 +445,7 @@ export default async function EventsPage() {
               look back.
             </h2>
             <div
-              className="grid"
+              className="grid om-grid-responsive"
               style={{ gridTemplateColumns: "repeat(3, 1fr)", gap: 16 }}
             >
               {past.map((p) => (

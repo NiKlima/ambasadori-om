@@ -121,7 +121,7 @@ your link.
           return (
             <div
               key={ch.id}
-              className="bg-white border border-[var(--om-ink-100)] grid"
+              className="bg-white border border-[var(--om-ink-100)] grid om-grid-responsive"
               style={{
                 gridTemplateColumns: "minmax(0, 1.5fr) minmax(0, 1fr)",
                 minHeight: 240,
